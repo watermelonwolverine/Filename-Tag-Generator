@@ -1,7 +1,8 @@
 import tkinter
-from tkinter import ttk, BOTH, LEFT, RIGHT, Y, VERTICAL, Canvas, Frame, NW, Checkbutton, BooleanVar
+from tkinter import ttk, BOTH, LEFT, RIGHT, Y, VERTICAL, Canvas, Frame, NW, Checkbutton, IntVar
 from typing import List, Dict
 
+from ftg.__constants import on_state_value, off_state_value, mixed_state_value
 from ftg.config import UIConfig
 from ftg.styles import Styles
 
@@ -12,13 +13,14 @@ class TagListWidget:
                  parent,
                  config: UIConfig,
                  tags: List[str],
-                 checkbox_values: Dict[str, BooleanVar],
+                 checkbox_values: Dict[str, IntVar],
                  styles: Styles):
 
         self.__config = config
         self.__tags = tags
         self.__checkbox_values = checkbox_values
         self.__styles = styles
+        self.check_buttons: List[Checkbutton] = []
 
         self.__root_frame = ttk.Frame(parent)
         self.__add_tag_list()
@@ -105,20 +107,23 @@ class TagListWidget:
         row = 0
 
         for tag in sorted(self.__tags):
-            boolean_Var = self.__checkbox_values[tag.lower()]
+            int_var = self.__checkbox_values[tag]
 
-            checkbutton = Checkbutton(tag_list_grid_frame,
-                                      text=tag,
-                                      variable=boolean_Var,
-                                      onvalue=True,
-                                      offvalue=False,
-                                      indicatoron=False)
+            check_button = Checkbutton(tag_list_grid_frame,
+                                       text=tag.capitalize(),
+                                       variable=int_var,
+                                       onvalue=on_state_value,
+                                       offvalue=off_state_value,
+                                       tristatevalue=mixed_state_value,
+                                       indicatoron=False)
 
-            checkbutton["font"] = self.__styles.get_normal_font()
+            check_button["font"] = self.__styles.get_normal_font()
 
-            checkbutton.grid(column=1,
-                             row=row,
-                             sticky=tkinter.EW)
+            check_button.grid(column=1,
+                              row=row,
+                              sticky=tkinter.EW)
+
+            self.check_buttons.append(check_button)
 
             first_letter = tag[0]
             label_text = ""

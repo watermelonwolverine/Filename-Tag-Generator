@@ -1,4 +1,4 @@
-from tkinter import ttk, StringVar, BooleanVar, BOTTOM, BOTH, Tk, Frame, X, LEFT, Entry, Button, RIGHT, TOP, Y
+from tkinter import ttk, StringVar, BOTTOM, BOTH, Tk, Frame, X, LEFT, Entry, Button, RIGHT, TOP, Y, IntVar
 from typing import Dict, List
 
 from tkinterdnd2 import TkinterDnD
@@ -22,7 +22,7 @@ class FtgWindowView:
 
         self.__styles: Styles = StylesImpl(self.__config.get_font_size())
 
-        self.__init_vars()
+        self.__init_checkbutton_vars()
 
         self.apply_button: Button
         self.clear_button: Button
@@ -39,17 +39,11 @@ class FtgWindowView:
     def as_tk(self):
         return self.__tk
 
-    def __init_vars(self):
-        self.checkbox_values = {}
+    def __init_checkbutton_vars(self):
+        self.checkbox_values: Dict[str, IntVar] = {}
 
         for tag in self.__tags:
-            self.checkbox_values[tag.lower()] = BooleanVar()
-
-        self.basename_string_var: StringVar = StringVar()
-        self.path_to_selected_file_var: StringVar = StringVar()
-        self.extension_string_var: StringVar = StringVar()
-        self.filename_result_string_var: StringVar = StringVar()
-        self.search_result_string_var: StringVar = StringVar()
+            self.checkbox_values[tag] = IntVar()
 
     def __build_ui(self,
                    tk: Tk) -> None:
@@ -76,13 +70,14 @@ class FtgWindowView:
 
         self.__add_buttons(root_frame, BOTTOM)
 
-        CategoriesWidget(root_frame,
-                         self.__config,
-                         self.__categories,
-                         self.checkbox_values,
-                         self.__styles).as_frame().pack(side=BOTTOM,
-                                                        fill=BOTH,
-                                                        expand=True)
+        self.categories_widget = CategoriesWidget(root_frame,
+                                                  self.__config,
+                                                  self.__categories,
+                                                  self.checkbox_values,
+                                                  self.__styles)
+        self.categories_widget.as_frame().pack(side=BOTTOM,
+                                               fill=BOTH,
+                                               expand=True)
 
     def __create_path_to_selected_file_frame(self,
                                              parent_frame: Frame) -> Frame:
@@ -93,8 +88,10 @@ class FtgWindowView:
                   font=self.__styles.get_normal_font(),
                   width=13).pack(side=LEFT)
 
+        self.selected_file_string_var: StringVar = StringVar()
+
         entry = ttk.Entry(frame,
-                          textvariable=self.path_to_selected_file_var,
+                          textvariable=self.selected_file_string_var,
                           font=self.__styles.get_normal_font(),
                           state="readonly")
 
@@ -117,14 +114,16 @@ class FtgWindowView:
                   font=self.__styles.get_normal_font(),
                   width=13).pack(side=LEFT)
 
-        basename_entry = Entry(frame,
-                               textvariable=self.basename_string_var,
-                               font=self.__styles.get_normal_font())
+        self.basename_string_var: StringVar = StringVar()
 
-        basename_entry.pack(side=LEFT,
-                            padx=self.__config.get_padding_small(),
-                            fill=X,
-                            expand=True)
+        self.basename_entry = Entry(frame,
+                                    textvariable=self.basename_string_var,
+                                    font=self.__styles.get_normal_font())
+
+        self.basename_entry.pack(side=LEFT,
+                                 padx=self.__config.get_padding_small(),
+                                 fill=X,
+                                 expand=True)
 
     def __add_extension_input(self,
                               parent_frame: Frame) -> None:
@@ -138,12 +137,16 @@ class FtgWindowView:
                   font=self.__styles.get_normal_font(),
                   width=13).pack(side=LEFT)
 
-        Entry(frame,
-              textvariable=self.extension_string_var,
-              font=self.__styles.get_normal_font()).pack(side=LEFT,
-                                                         padx=self.__config.get_padding_small(),
-                                                         fill=X,
-                                                         expand=True)
+        self.extension_string_var: StringVar = StringVar()
+
+        self.extension_entry = Entry(frame,
+                                     textvariable=self.extension_string_var,
+                                     font=self.__styles.get_normal_font())
+
+        self.extension_entry.pack(side=LEFT,
+                                  padx=self.__config.get_padding_small(),
+                                  fill=X,
+                                  expand=True)
 
     def __add_result_frame(self,
                            parent_frame: Frame,
@@ -166,18 +169,19 @@ class FtgWindowView:
                   width=8).pack(side=LEFT)
 
         self.apply_button = Button(frame,
-                                   text="Apply",
-                                   command=lambda: self.__apply_filename_to_selected_file())
+                                   text="Apply")
 
         self.apply_button["font"] = self.__styles.get_normal_font()
 
-        entry = Entry(frame,
-                      textvariable=self.filename_result_string_var,
-                      font=self.__styles.get_normal_font())
+        self.filename_result_string_var: StringVar = StringVar()
 
-        entry.pack(fill=BOTH,
-                   expand=True,
-                   side=LEFT)
+        self.filename_entry = Entry(frame,
+                                    textvariable=self.filename_result_string_var,
+                                    font=self.__styles.get_normal_font())
+
+        self.filename_entry.pack(fill=BOTH,
+                                 expand=True,
+                                 side=LEFT)
 
     def __add_buttons(self,
                       parent_frame: Frame,
@@ -213,11 +217,12 @@ class FtgWindowView:
                                   fill=X,
                                   expand=True)
 
-    def show_selected_file_widgets(self):
+    def show_selected_file_frame(self):
         self.__path_to_selected_file_frame.pack(fill=X,
                                                 pady=self.__config.get_padding_small(),
                                                 side=TOP)
 
+    def show_apply_button(self):
         self.apply_button.pack(fill=Y,
                                padx=self.__config.get_padding_small(),
                                side=RIGHT)
