@@ -3,7 +3,7 @@ import json
 import click
 
 from ftg.config import FtgConfigImpl
-from ftg.ftg_window import FtgWindow
+from ftg.ftg_window_controller import FtgWindowController
 
 
 def read_categories_file(path_to_tags_file):
@@ -14,9 +14,9 @@ def read_categories_file(path_to_tags_file):
 def main(path_to_tags_file):
     config = FtgConfigImpl()
     categories = read_categories_file(path_to_tags_file)
-    ftg_window = FtgWindow(config,
-                           categories)
-    ftg_window.start()
+    ftg_window_controller = FtgWindowController(config,
+                                                categories)
+    ftg_window_controller.start()
 
 
 @click.command()
