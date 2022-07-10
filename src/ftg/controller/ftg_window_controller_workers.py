@@ -1,17 +1,17 @@
-from ftg.config import FtgConfig
-from ftg.controller.ftg_context import FtgContext
+from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.applier import FtgApplier
 from ftg.controller.workers.clearer import FtgClearer
 from ftg.controller.workers.reverter import FtgReverter
 from ftg.controller.workers.utils import FtgUtils
 from ftg.utils.filename_generator import FilenameGeneratorImpl
+from ftg.utils.program_config import ProgramConfig
 
 
-class FtgWorkers:
+class FtgWindowControllerWorkers:
 
     def __init__(self,
-                 config: FtgConfig,
-                 context: FtgContext):
+                 config: ProgramConfig,
+                 context: FtgWindowControllerContext):
         filename_generator = FilenameGeneratorImpl(config.get_filename_config())
 
         self.utils: FtgUtils = FtgUtils(context,

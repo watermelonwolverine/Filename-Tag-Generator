@@ -1,5 +1,5 @@
 from ftg.__constants import ON_STATE_VALUE
-from ftg.controller.ftg_context import FtgContext
+from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.clearer import FtgClearer
 from ftg.utils.filename_generator import FilenameGenerator
 
@@ -7,7 +7,7 @@ from ftg.utils.filename_generator import FilenameGenerator
 class FtgReverter:
 
     def __init__(self,
-                 context: FtgContext,
+                 context: FtgWindowControllerContext,
                  clearer: FtgClearer,
                  filename_generator: FilenameGenerator):
         self.__context = context

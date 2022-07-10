@@ -1,8 +1,6 @@
-import os
 from typing import List, Dict
 
 from ftg.__constants import ON_STATE_VALUE, OFF_STATE_VALUE, MIXED_STATE_VALUE
-from ftg.utils.filename_generator import FilenameGenerator
 
 
 def get_check_button_tri_states(all_tags: List[str],
@@ -31,12 +29,11 @@ def get_check_button_tri_states(all_tags: List[str],
     return states
 
 
-def override_tags(all_tags: List[str],
-                  old_tags: List[str],
+def override_tags(old_tags: List[str],
                   override_tag_states: Dict[str, int]) -> List[str]:
     tag_states: Dict[str, bool] = {}
 
-    for tag in all_tags:
+    for tag in override_tag_states.keys():
         if override_tag_states[tag] == ON_STATE_VALUE \
                 or override_tag_states[tag] == OFF_STATE_VALUE:
             tag_states[tag] = override_tag_states[tag] == ON_STATE_VALUE
@@ -45,7 +42,7 @@ def override_tags(all_tags: List[str],
 
     result: List[str] = []
 
-    for tag in all_tags:
+    for tag in override_tag_states.keys():
         if tag_states[tag]:
             result.append(tag)
 
@@ -60,39 +57,3 @@ def get_sorted_tags(categories_dict: Dict) -> List[str]:
             if tag not in result:
                 result.append(tag)
     return sorted(result)
-
-
-def extract_tags_for_selected_files(filename_generator: FilenameGenerator,
-                                    paths: List[str]) -> Dict[str, List[str]]:
-    result: Dict[str, List[str]] = {}
-
-    for path in paths:
-        _, filename = os.path.split(path)
-        reversion_result = filename_generator.revert(filename)
-        result[path] = reversion_result.tags
-
-    return result
-
-
-def extract_extensions_for_selected_files(filename_generator: FilenameGenerator,
-                                          paths: List[str]) -> Dict[str, str]:
-    result: Dict[str, str] = {}
-
-    for path in paths:
-        _, filename = os.path.split(path)
-        reversion_result = filename_generator.revert(filename)
-        result[path] = reversion_result.extension
-
-    return result
-
-
-def extract_basenames_for_selected_files(filename_generator: FilenameGenerator,
-                                         paths: List[str]) -> Dict[str, str]:
-    result: Dict[str, str] = {}
-
-    for path in paths:
-        _, filename = os.path.split(path)
-        reversion_result = filename_generator.revert(filename)
-        result[path] = reversion_result.basename
-
-    return result

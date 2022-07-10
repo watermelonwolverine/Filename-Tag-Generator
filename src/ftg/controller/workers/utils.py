@@ -1,11 +1,11 @@
-from ftg.controller.ftg_context import FtgContext
+from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.utils.filename_generator import FilenameGenerator
 
 
 class FtgUtils:
 
     def __init__(self,
-                 context: FtgContext,
+                 context: FtgWindowControllerContext,
                  filename_generator: FilenameGenerator):
         self.__context = context
         self.__filename_generator = filename_generator

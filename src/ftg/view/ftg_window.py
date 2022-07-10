@@ -3,12 +3,12 @@ from typing import Dict, List
 
 from tkinterdnd2 import TkinterDnD
 
-from ftg.view.category_widget import CategoriesWidget
-from ftg.config import UIConfig
-from ftg.styles import Styles, StylesImpl
+from ftg.utils.program_config import UIConfig
+from ftg.view.categories_widget import CategoriesWidget
+from ftg.view.styles import Styles, StylesImpl
 
 
-class FtgWindowView:
+class FtgWindow:
 
     def __init__(self,
                  config: UIConfig,

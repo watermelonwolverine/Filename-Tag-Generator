@@ -2,9 +2,10 @@ import os
 from tkinter import messagebox, DISABLED
 from typing import List, Dict
 
+import ftg.utils.filename_utils
 from ftg.__constants import READONLY, MULTIPLE_FILES_SELECTED, SINGLE_FILE_SELECTED
-from ftg.controller.ftg_context import FtgContext
-from ftg.controller.ftg_workers import FtgWorkers
+from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
+from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.utils import tag_utils
 from ftg.utils.filename_generator import FilenameGenerator
 
@@ -12,8 +13,8 @@ from ftg.utils.filename_generator import FilenameGenerator
 class FtgDropper:
 
     def __init__(self,
-                 context: FtgContext,
-                 workers: FtgWorkers,
+                 context: FtgWindowControllerContext,
+                 workers: FtgWindowControllerWorkers,
                  filename_generator: FilenameGenerator):
         self.__context = context
         self.__workers = workers
@@ -35,7 +36,7 @@ class FtgDropper:
             self.__context.view.extension_string_var.set(MULTIPLE_FILES_SELECTED)
             self.__workers.utils.enable_checkbutton_indicators(True)
 
-            self.__context.tags_for_selected_files = tag_utils.extract_tags_for_selected_files(
+            self.__context.tags_for_selected_files = ftg.utils.filename_utils.extract_tags_for_selected_files(
                 self.__filename_generator,
                 paths)
             self.__set_checkbutton_tristates(self.__context.tags_for_selected_files)

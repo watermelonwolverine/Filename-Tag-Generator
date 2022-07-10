@@ -3,17 +3,18 @@ import shutil
 from tkinter import messagebox
 from typing import List
 
+import ftg.utils.filename_utils
 from ftg.__constants import ON_STATE_VALUE
-from ftg.controller.ftg_context import FtgContext
+from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
+from ftg.controller.workers.utils import FtgUtils
 from ftg.utils import tag_utils
 from ftg.utils.filename_generator import FilenameGenerator
-from ftg.controller.workers.utils import FtgUtils
 
 
 class FtgApplier:
 
     def __init__(self,
-                 context: FtgContext,
+                 context: FtgWindowControllerContext,
                  filename_generator: FilenameGenerator,
                  utils: FtgUtils):
         self.__context = context
@@ -35,10 +36,10 @@ class FtgApplier:
 
         elif len(self.__context.selected_files) > 1:
 
-            extensions = tag_utils.extract_extensions_for_selected_files(
+            extensions = ftg.utils.filename_utils.extract_extensions_for_selected_files(
                 self.__filename_generator,
                 self.__context.selected_files)
-            basenames = tag_utils.extract_basenames_for_selected_files(
+            basenames = ftg.utils.filename_utils.extract_basenames_for_selected_files(
                 self.__filename_generator,
                 self.__context.selected_files)
 
@@ -49,7 +50,6 @@ class FtgApplier:
                 override_tag_states = {tag: int_var.get() for tag, int_var in
                                        self.__context.view.checkbox_values.items()}
                 override_tags = tag_utils.override_tags(
-                    self.__context.tags,
                     old_tags,
                     override_tag_states)
 
@@ -64,7 +64,7 @@ class FtgApplier:
                 new_selected_files.append(new_path)
 
             self.__context.selected_files = new_selected_files
-            self.__context.tags_for_selected_files = tag_utils.extract_tags_for_selected_files(
+            self.__context.tags_for_selected_files = ftg.utils.filename_utils.extract_tags_for_selected_files(
                 self.__filename_generator,
                 new_selected_files)
 

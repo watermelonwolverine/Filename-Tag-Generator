@@ -3,8 +3,8 @@ from tkinter import ttk, BOTH, LEFT, RIGHT, Y, VERTICAL, Canvas, Frame, NW, Chec
 from typing import List, Dict
 
 from ftg.__constants import ON_STATE_VALUE, OFF_STATE_VALUE, MIXED_STATE_VALUE
-from ftg.config import UIConfig
-from ftg.styles import Styles
+from ftg.utils.program_config import UIConfig
+from ftg.view.styles import Styles
 
 
 class TagListWidget:

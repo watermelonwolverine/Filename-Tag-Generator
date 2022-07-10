@@ -1,13 +1,13 @@
 from ftg.__constants import NORMAL, MULTIPLE_FILES_SELECTED, OFF_STATE_VALUE
-from ftg.controller.ftg_context import FtgContext
-from ftg.utils.filename_generator import FilenameGenerator
+from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.utils import FtgUtils
+from ftg.utils.filename_generator import FilenameGenerator
 
 
 class FtgClearer:
 
     def __init__(self,
-                 context: FtgContext,
+                 context: FtgWindowControllerContext,
                  filename_generator: FilenameGenerator,
                  utils: FtgUtils):
         self.__context = context

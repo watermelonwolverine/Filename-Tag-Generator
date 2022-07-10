@@ -2,29 +2,29 @@ from typing import Dict, List
 
 from tkdnd import DND_FILES
 
-from ftg.config import FtgConfig
-from ftg.controller.ftg_context import FtgContext
-from ftg.controller.ftg_workers import FtgWorkers
+from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
+from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.utils import tag_utils
-from ftg.view.ftg_window_view import FtgWindowView
+from ftg.utils.program_config import ProgramConfig
+from ftg.view.ftg_window import FtgWindow
 
 
 class FtgWindowController:
 
     def __init__(self,
-                 config: FtgConfig,
+                 config: ProgramConfig,
                  categories: Dict[str, List[str]]):
         tags = tag_utils.get_sorted_tags(categories)
 
-        view = FtgWindowView(config.get_ui_config(),
-                             categories,
-                             tags)
+        view = FtgWindow(config.get_ui_config(),
+                         categories,
+                         tags)
 
-        self.__context = FtgContext(tags,
-                                    view)
+        self.__context = FtgWindowControllerContext(tags,
+                                                    view)
 
-        self.__workers = FtgWorkers(config,
-                                    self.__context)
+        self.__workers = FtgWindowControllerWorkers(config,
+                                                    self.__context)
 
         self.__configure_view(view)
 
@@ -32,7 +32,7 @@ class FtgWindowController:
         self.__context.view.as_tk().mainloop()
 
     def __configure_view(self,
-                         view: FtgWindowView):
+                         view: FtgWindow):
         view.as_tk().drop_target_register(DND_FILES)
         view.as_tk().dnd_bind('<<Drop>>', lambda event: self.__workers.dropper.drop_files(event))
 

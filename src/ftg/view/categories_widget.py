@@ -1,8 +1,8 @@
 from tkinter import ttk, BOTH, LEFT, Label, Checkbutton, IntVar
 from typing import Dict, List
 
-from ftg.config import UIConfig
-from ftg.styles import Styles
+from ftg.utils.program_config import UIConfig
+from ftg.view.styles import Styles
 from ftg.view.tag_list_widget import TagListWidget
 
 

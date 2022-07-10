@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import List
 
-from ftg.config import FilenameConfig
+from ftg.utils.program_config import FilenameConfig
 
 
 class ReversionResult:

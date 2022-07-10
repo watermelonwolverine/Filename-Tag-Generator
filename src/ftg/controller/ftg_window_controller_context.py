@@ -1,13 +1,13 @@
 from typing import List, Dict
 
-from ftg.view.ftg_window_view import FtgWindowView
+from ftg.view.ftg_window import FtgWindow
 
 
-class FtgContext:
+class FtgWindowControllerContext:
 
     def __init__(self,
                  tags: List[str],
-                 view: FtgWindowView):
+                 view: FtgWindow):
         self.tags = tags
         self.view = view
         self.selected_files = []
