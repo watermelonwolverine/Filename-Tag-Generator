@@ -4,6 +4,7 @@ from tkinter import messagebox
 from typing import List
 
 from ftg.__constants import ON_STATE_VALUE
+from ftg.controller import tag_utils
 from ftg.controller.filename_generator import FilenameGenerator
 from ftg.controller.ftg_context import FtgContext
 from ftg.controller.utils import FtgUtils
@@ -45,7 +46,7 @@ class FtgApplier:
                 old_tags = self.__context.tags_for_selected_files[old_path]
                 override_tag_states = {tag: int_var.get() for tag, int_var in
                                        self.__context.view.checkbox_values.items()}
-                override_tags = self.__utils.override_tags(
+                override_tags = tag_utils.override_tags(
                     self.__context.tags,
                     old_tags,
                     override_tag_states)
