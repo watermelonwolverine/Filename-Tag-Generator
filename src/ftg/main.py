@@ -4,7 +4,7 @@ from typing import List, Dict
 import click
 
 from ftg.config import FtgConfigImpl
-from ftg.ftg_window_controller import FtgWindowController
+from ftg.controller.ftg_window_controller import FtgWindowController
 
 
 def read_categories_file(path_to_tags_file):

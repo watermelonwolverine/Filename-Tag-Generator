@@ -1,3 +1,3 @@
-on_state_value = 1
-off_state_value = 0
-mixed_state_value = -1
+ON_STATE_VALUE = 1
+OFF_STATE_VALUE = 0
+MIXED_STATE_VALUE = -1

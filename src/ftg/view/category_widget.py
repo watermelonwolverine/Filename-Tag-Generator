@@ -3,7 +3,7 @@ from typing import Dict, List
 
 from ftg.config import UIConfig
 from ftg.styles import Styles
-from ftg.tag_list_widget import TagListWidget
+from ftg.view.tag_list_widget import TagListWidget
 
 
 class CategoriesWidget:

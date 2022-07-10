@@ -3,7 +3,7 @@ from typing import Dict, List
 
 from tkinterdnd2 import TkinterDnD
 
-from ftg.category_widget import CategoriesWidget
+from ftg.view.category_widget import CategoriesWidget
 from ftg.config import UIConfig
 from ftg.styles import Styles, StylesImpl
 

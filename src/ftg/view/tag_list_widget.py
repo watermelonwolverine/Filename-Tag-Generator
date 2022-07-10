@@ -2,7 +2,7 @@ import tkinter
 from tkinter import ttk, BOTH, LEFT, RIGHT, Y, VERTICAL, Canvas, Frame, NW, Checkbutton, IntVar
 from typing import List, Dict
 
-from ftg.__constants import on_state_value, off_state_value, mixed_state_value
+from ftg.__constants import ON_STATE_VALUE, OFF_STATE_VALUE, MIXED_STATE_VALUE
 from ftg.config import UIConfig
 from ftg.styles import Styles
 
@@ -112,9 +112,9 @@ class TagListWidget:
             check_button = Checkbutton(tag_list_grid_frame,
                                        text=tag.capitalize(),
                                        variable=int_var,
-                                       onvalue=on_state_value,
-                                       offvalue=off_state_value,
-                                       tristatevalue=mixed_state_value,
+                                       onvalue=ON_STATE_VALUE,
+                                       offvalue=OFF_STATE_VALUE,
+                                       tristatevalue=MIXED_STATE_VALUE,
                                        indicatoron=False)
 
             check_button["font"] = self.__styles.get_normal_font()
