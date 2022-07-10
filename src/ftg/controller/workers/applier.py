@@ -92,6 +92,11 @@ class FtgApplier:
                       new_filename: str) -> str:
         folder, old_filename = os.path.split(old_path)
 
+        if len(new_filename) > 255:
+            messagebox.showerror(title="Filename too long",
+                                 message=F"Unable to rename {old_filename} to {new_filename}. Filename is too long.")
+            return old_path
+
         new_path = os.path.join(folder,
                                 new_filename)
 

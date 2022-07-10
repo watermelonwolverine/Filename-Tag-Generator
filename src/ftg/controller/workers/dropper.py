@@ -23,9 +23,15 @@ class FtgDropper:
     def drop_files(self,
                    event) -> None:
 
-        self.__workers.clearer.clear()
-
         paths = self.extract_paths(event.data)
+
+        for path in paths:
+            if not os.path.isfile(path):
+                messagebox.showerror(title="Error",
+                                     message="Only files are supported")
+                return
+
+        self.__workers.clearer.clear()
 
         if len(paths) > 1:
             self.__context.view.basename_entry.configure(state=READONLY)
@@ -67,14 +73,17 @@ class FtgDropper:
     def extract_paths(self,
                       drop_event_data: str) -> List[str]:
 
-        paths: List[str] = drop_event_data.split(" ")
-
+        # the syntax is very weird
+        if "{" in drop_event_data and "}" in drop_event_data:
+            paths: List[str] = drop_event_data.split("} ")
+        else:
+            paths: List[str] = drop_event_data.split(" ")
         result = []
 
         for path in paths:
             trimmed_path = self.trim_path(path)
-            normed_path = os.path.normpath(trimmed_path)
-            result.append(normed_path)
+            real_path = os.path.realpath(trimmed_path)
+            result.append(real_path)
 
         return result
 
@@ -82,9 +91,8 @@ class FtgDropper:
                   path: str):
         result = path
 
-        if result.startswith('{'):
-            result = result.lstrip('{')
-            result = result.rstrip('}')
+        result = result.lstrip('{')
+        result = result.rstrip('}')
 
         return result
 
