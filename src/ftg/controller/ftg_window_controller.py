@@ -3,9 +3,9 @@ from typing import Dict, List
 from tkdnd import DND_FILES
 
 from ftg.config import FtgConfig
-from ftg.controller import tag_utils
 from ftg.controller.ftg_context import FtgContext
-from ftg.controller.workers import FtgWorkers
+from ftg.controller.ftg_workers import FtgWorkers
+from ftg.utils import tag_utils
 from ftg.view.ftg_window_view import FtgWindowView
 
 

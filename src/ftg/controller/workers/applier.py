@@ -4,10 +4,10 @@ from tkinter import messagebox
 from typing import List
 
 from ftg.__constants import ON_STATE_VALUE
-from ftg.controller import tag_utils
-from ftg.controller.filename_generator import FilenameGenerator
 from ftg.controller.ftg_context import FtgContext
-from ftg.controller.utils import FtgUtils
+from ftg.utils import tag_utils
+from ftg.utils.filename_generator import FilenameGenerator
+from ftg.controller.workers.utils import FtgUtils
 
 
 class FtgApplier:
@@ -35,9 +35,11 @@ class FtgApplier:
 
         elif len(self.__context.selected_files) > 1:
 
-            extensions = self.__utils.extract_extensions_for_selected_files(
+            extensions = tag_utils.extract_extensions_for_selected_files(
+                self.__filename_generator,
                 self.__context.selected_files)
-            basenames = self.__utils.extract_basenames_for_selected_files(
+            basenames = tag_utils.extract_basenames_for_selected_files(
+                self.__filename_generator,
                 self.__context.selected_files)
 
             new_selected_files = [path for path in self.__context.selected_files]
@@ -62,7 +64,9 @@ class FtgApplier:
                 new_selected_files.append(new_path)
 
             self.__context.selected_files = new_selected_files
-            self.__context.tags_for_selected_files = self.__utils.extract_tags_for_selected_files(new_selected_files)
+            self.__context.tags_for_selected_files = tag_utils.extract_tags_for_selected_files(
+                self.__filename_generator,
+                new_selected_files)
 
         else:
             messagebox.showerror(title="Unexpected Error",

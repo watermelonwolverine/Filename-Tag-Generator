@@ -3,18 +3,21 @@ from tkinter import messagebox, DISABLED
 from typing import List, Dict
 
 from ftg.__constants import READONLY, MULTIPLE_FILES_SELECTED, SINGLE_FILE_SELECTED
-from ftg.controller import tag_utils
 from ftg.controller.ftg_context import FtgContext
-from ftg.controller.workers import FtgWorkers
+from ftg.controller.ftg_workers import FtgWorkers
+from ftg.utils import tag_utils
+from ftg.utils.filename_generator import FilenameGenerator
 
 
 class FtgDropper:
 
     def __init__(self,
                  context: FtgContext,
-                 workers: FtgWorkers):
+                 workers: FtgWorkers,
+                 filename_generator: FilenameGenerator):
         self.__context = context
         self.__workers = workers
+        self.__filename_generator = filename_generator
 
     def drop_files(self,
                    event) -> None:
@@ -32,7 +35,9 @@ class FtgDropper:
             self.__context.view.extension_string_var.set(MULTIPLE_FILES_SELECTED)
             self.__workers.utils.enable_checkbutton_indicators(True)
 
-            self.__context.tags_for_selected_files = self.__workers.utils.extract_tags_for_selected_files(paths)
+            self.__context.tags_for_selected_files = tag_utils.extract_tags_for_selected_files(
+                self.__filename_generator,
+                paths)
             self.__set_checkbutton_tristates(self.__context.tags_for_selected_files)
             self.__context.view.show_apply_button()
 

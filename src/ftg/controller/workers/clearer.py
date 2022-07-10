@@ -1,7 +1,7 @@
-from ftg.controller.filename_generator import FilenameGenerator
+from ftg.__constants import NORMAL, MULTIPLE_FILES_SELECTED, OFF_STATE_VALUE
 from ftg.controller.ftg_context import FtgContext
-from ftg.__constants import NORMAL, MULTIPLE_FILES_SELECTED
-from ftg.controller.utils import FtgUtils
+from ftg.utils.filename_generator import FilenameGenerator
+from ftg.controller.workers.utils import FtgUtils
 
 
 class FtgClearer:
@@ -15,7 +15,7 @@ class FtgClearer:
         self.__utils = utils
 
     def clear(self):
-        self.__utils.clear_checkboxes()
+        self.clear_checkboxes()
 
         self.__context.view.filename_entry.configure(state=NORMAL)
         self.__context.view.basename_entry.configure(state=NORMAL)
@@ -36,3 +36,7 @@ class FtgClearer:
         self.__context.view.revert_button.configure(state=NORMAL)
 
         self.__utils.enable_checkbutton_indicators(False)
+
+    def clear_checkboxes(self):
+        for int_var in self.__context.view.checkbox_values.values():
+            int_var.set(OFF_STATE_VALUE)
