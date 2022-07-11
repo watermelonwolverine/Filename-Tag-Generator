@@ -37,6 +37,11 @@ def extract_paths(drop_event_data: str) -> List[str]:
 
             for pos in range(0, len(remaining_data)):
 
+                if pos == len(remaining_data) - 1:
+                    result.append(remaining_data[1:-1])
+                    remaining_data = ""
+                    break
+
                 if remaining_data[pos] == "{":
                     opens += 1
 
@@ -44,8 +49,7 @@ def extract_paths(drop_event_data: str) -> List[str]:
                     opens -= 1
                     close_on_next_space = opens == 0
 
-                elif pos == len(remaining_data) - 1 or \
-                        remaining_data[pos] == " " and close_on_next_space:
+                elif remaining_data[pos] == " " and close_on_next_space:
                     result.append(remaining_data[1:pos - 1])
                     remaining_data = remaining_data[pos + 1:]
                     break

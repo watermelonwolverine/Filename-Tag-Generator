@@ -39,7 +39,7 @@ class FilenameGeneratorImpl(FilenameGenerator):
                           tags: List[str],
                           extension: str) -> str:
 
-        concatenated_tags = self.__config.get_tags_separator().join(tags)
+        concatenated_tags = self.__config.get_tags_separator().join(sorted(tags))
 
         joins = []
 
@@ -64,6 +64,8 @@ class FilenameGeneratorImpl(FilenameGenerator):
     def __get_adjusted_base_name(self,
                                  basename: str) -> str:
         result = basename.upper()
+
+        result = result.strip(" ")
 
         result = result.replace(" ",
                                 self.__config.get_basename_spacer())
