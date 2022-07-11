@@ -1,11 +1,14 @@
 from tkinter import ttk, StringVar, BOTTOM, BOTH, Tk, Frame, X, LEFT, Entry, Button, RIGHT, TOP, Y, IntVar
-from typing import Dict, List
+from typing import Dict, List, Literal
 
 from tkinterdnd2 import TkinterDnD
 
 from ftg.utils.program_config import UIConfig
 from ftg.view.categories_widget import CategoriesWidget
 from ftg.view.styles import Styles, StylesImpl
+
+SIDE = Literal["left", "right", "top", "bottom"]
+input_label_width = 13
 
 
 class FtgWindow:
@@ -66,17 +69,22 @@ class FtgWindow:
 
         self.__add_extension_input(root_frame)
 
-        self.__add_result_frame(root_frame, BOTTOM)
+        self.__add_result_frame(root_frame,
+                                BOTTOM)
 
-        self.__add_buttons(root_frame, BOTTOM)
+        self.__add_buttons(root_frame,
+                           BOTTOM)
 
         self.categories_widget = CategoriesWidget(root_frame,
                                                   self.__config,
                                                   self.__categories,
                                                   self.checkbox_values,
                                                   self.__styles)
+
         self.categories_widget.as_frame().pack(side=BOTTOM,
                                                fill=BOTH,
+                                               padx=self.__config.get_padding_big(),
+                                               pady=self.__config.get_padding_small(),
                                                expand=True)
 
     def __create_path_to_selected_file_frame(self,
@@ -86,7 +94,7 @@ class FtgWindow:
         ttk.Label(frame,
                   text="Selected File",
                   font=self.__styles.get_normal_font(),
-                  width=13).pack(side=LEFT)
+                  width=input_label_width).pack(side=LEFT)
 
         self.selected_file_string_var: StringVar = StringVar()
 
@@ -112,7 +120,7 @@ class FtgWindow:
         ttk.Label(frame,
                   text="Basename",
                   font=self.__styles.get_normal_font(),
-                  width=13).pack(side=LEFT)
+                  width=input_label_width).pack(side=LEFT)
 
         self.basename_string_var: StringVar = StringVar()
 
@@ -135,7 +143,7 @@ class FtgWindow:
         ttk.Label(frame,
                   text="Extension",
                   font=self.__styles.get_normal_font(),
-                  width=13).pack(side=LEFT)
+                  width=input_label_width).pack(side=LEFT)
 
         self.extension_string_var: StringVar = StringVar()
 
@@ -150,7 +158,7 @@ class FtgWindow:
 
     def __add_result_frame(self,
                            parent_frame: Frame,
-                           side) -> None:
+                           side: SIDE) -> None:
         frame = ttk.Frame(parent_frame)
         frame.pack(side=side,
                    fill=X)
@@ -166,7 +174,7 @@ class FtgWindow:
         ttk.Label(frame,
                   text="Filename",
                   font=self.__styles.get_normal_font(),
-                  width=8).pack(side=LEFT)
+                  width=input_label_width).pack(side=LEFT)
 
         self.apply_button = Button(frame,
                                    text="Apply")
@@ -185,7 +193,7 @@ class FtgWindow:
 
     def __add_buttons(self,
                       parent_frame: Frame,
-                      side) -> None:
+                      side: SIDE) -> None:
         frame = ttk.Frame(parent_frame)
         frame.pack(fill=X,
                    pady=self.__config.get_padding_big(),
