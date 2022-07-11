@@ -6,6 +6,7 @@ import ftg.utils.filename_utils
 from ftg.__constants import READONLY, MULTIPLE_FILES_SELECTED, SINGLE_FILE_SELECTED
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
+from ftg.controller.workers.drop_event_data_processor import extract_paths
 from ftg.utils import tag_utils
 from ftg.utils.filename_generator import FilenameGenerator
 
@@ -23,7 +24,7 @@ class FtgDropper:
     def drop_files(self,
                    event) -> None:
 
-        paths = self.extract_paths(event.data)
+        paths = extract_paths(event.data)
 
         for path in paths:
             if not os.path.isfile(path):
@@ -69,32 +70,6 @@ class FtgDropper:
         self.__context.view.generate_button.configure(state=DISABLED)
         self.__context.view.revert_button.configure(state=DISABLED)
         self.__context.selected_files = paths
-
-    def extract_paths(self,
-                      drop_event_data: str) -> List[str]:
-
-        # the syntax is very weird
-        if "{" in drop_event_data and "}" in drop_event_data:
-            paths: List[str] = drop_event_data.split("} ")
-        else:
-            paths: List[str] = drop_event_data.split(" ")
-        result = []
-
-        for path in paths:
-            trimmed_path = self.trim_path(path)
-            real_path = os.path.realpath(trimmed_path)
-            result.append(real_path)
-
-        return result
-
-    def trim_path(self,
-                  path: str):
-        result = path
-
-        result = result.lstrip('{')
-        result = result.rstrip('}')
-
-        return result
 
     def __set_checkbutton_tristates(self,
                                     tags_for_selected_paths: Dict[str, List[str]]) -> None:
