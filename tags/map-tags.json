@@ -23,6 +23,7 @@
     "Altar",
     "Camp",
     "City",
+    "Excavation",
     "Field",
     "Garden",
     "Harbor",
@@ -40,6 +41,8 @@
     "Wreck"
   ],
   "Biome": [
+    "Arctic",
+    "Clouds",
     "Desert",
     "Forest",
     "Grassland",
@@ -48,6 +51,7 @@
     "Savanna",
     "Sea",
     "Shrubland",
+    "Space",
     "Tropical",
     "Tundra",
     "Underground",
@@ -56,12 +60,13 @@
     "Woodland"
   ],
   "Nature": [
-
     "Beach",
     "Cave",
     "Chasm",
+    "Clearing",
     "Cliff",
     "Coast",
+    "Coral",
     "Creek",
     "Dirt",
     "Dungeon",
@@ -72,6 +77,7 @@
     "Island",
     "Lava",
     "Moss",
+    "Pit",
     "Pond",
     "River",
     "Rock",
@@ -82,6 +88,7 @@
     "Wilderness"
   ],
   "Special": [
+    "Autumn",
     "Abandoned",
     "Animated",
     "Ambush",
@@ -101,7 +108,9 @@
     "Magic",
     "Organic",
     "Phased",
+    "Spring",
     "Teleporter",
-    "Treasure"
+    "Treasure",
+    "Winter"
   ]
 }

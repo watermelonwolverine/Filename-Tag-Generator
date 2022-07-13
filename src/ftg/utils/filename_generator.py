@@ -83,19 +83,21 @@ class FilenameGeneratorImpl(FilenameGenerator):
 
         full_filename_splits = full_filename.split(".")
 
-        filename = full_filename_splits[0]
         if len(full_filename_splits) > 1:
-            extension = full_filename_splits[1]
+            filename = ".".join(full_filename_splits[0:-1])
+            extension = full_filename_splits[-1]
         else:
+            filename = full_filename_splits[0]
             extension = ""
 
         filename_splits = filename.split(self.__config.get_basename_tags_separator())
 
-        basename = filename_splits[0]
-
         if len(filename_splits) > 1:
-            tags = filename_splits[1].split(self.__config.get_tags_separator())
+
+            basename = self.__config.get_basename_tags_separator().join(filename_splits[0:-1])
+            tags = filename_splits[-1].split(self.__config.get_tags_separator())
         else:
+            basename = filename_splits[0]
             tags = []
 
         return ReversionResult(basename,
