@@ -1,14 +1,12 @@
 {
-  "Structures": [
+  "Buildings": [
     "Arena",
-    "Bridge",
     "Building",
     "Castle",
     "Crypt",
     "Dungeon",
     "Forge",
     "Fortress",
-    "Gate",
     "House",
     "Keep",
     "Library",
@@ -16,16 +14,17 @@
     "Tavern",
     "Temple",
     "Tomb",
-    "Tower",
-    "Wall"
+    "Tower"
   ],
   "Civilization": [
     "Altar",
+    "Bridge",
     "Camp",
     "City",
     "Excavation",
     "Field",
     "Garden",
+    "Gate",
     "Harbor",
     "Mine",
     "Road",
@@ -38,7 +37,8 @@
     "Street",
     "Trail",
     "Village",
-    "Wreck"
+    "Wreck",
+    "Wall"
   ],
   "Biome": [
     "Arctic",
@@ -106,6 +106,7 @@
     "Lair",
     "Layered",
     "Magic",
+    "Multipart",
     "Organic",
     "Phased",
     "Spring",
