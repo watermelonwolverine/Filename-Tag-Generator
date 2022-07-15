@@ -4,6 +4,7 @@ from typing import List, Dict
 
 from ftg.__constants import ON_STATE_VALUE, OFF_STATE_VALUE, MIXED_STATE_VALUE
 from ftg.utils.program_config import UIConfig
+from ftg.utils.tag import Tag
 from ftg.view.styles import Styles
 
 
@@ -12,7 +13,7 @@ class TagListWidget:
     def __init__(self,
                  parent,
                  config: UIConfig,
-                 tags: List[str],
+                 tags: List[Tag],
                  checkbox_values: Dict[str, IntVar],
                  styles: Styles):
 
@@ -107,10 +108,10 @@ class TagListWidget:
         row = 0
 
         for tag in sorted(self.__tags):
-            int_var = self.__checkbox_values[tag]
+            int_var = self.__checkbox_values[tag.letter_code]
 
             check_button = Checkbutton(tag_list_grid_frame,
-                                       text=tag.capitalize(),
+                                       text=tag.full_name,
                                        variable=int_var,
                                        onvalue=ON_STATE_VALUE,
                                        offvalue=OFF_STATE_VALUE,
@@ -125,7 +126,7 @@ class TagListWidget:
 
             self.check_buttons.append(check_button)
 
-            first_letter = tag[0]
+            first_letter = tag.letter_code[0]
             label_text = ""
             if first_letter != current_first_letter:
                 label_text = first_letter

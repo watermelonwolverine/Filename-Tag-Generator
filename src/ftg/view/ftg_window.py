@@ -4,6 +4,7 @@ from typing import Dict, List, Literal
 from tkinterdnd2 import TkinterDnD
 
 from ftg.utils.program_config import UIConfig
+from ftg.utils.tag import Tag
 from ftg.view.categories_widget import CategoriesWidget
 from ftg.view.styles import Styles, StylesImpl
 
@@ -15,8 +16,8 @@ class FtgWindow:
 
     def __init__(self,
                  config: UIConfig,
-                 categories: Dict[str, List[str]],
-                 tags: List[str]):
+                 tags: List[Tag],
+                 categories: Dict[str, List[Tag]]):
         self.__config = config
         self.__categories = categories
         self.__tags = tags
@@ -46,7 +47,7 @@ class FtgWindow:
         self.checkbox_values: Dict[str, IntVar] = {}
 
         for tag in self.__tags:
-            self.checkbox_values[tag] = IntVar()
+            self.checkbox_values[tag.letter_code] = IntVar()
 
     def __build_ui(self,
                    tk: Tk) -> None:

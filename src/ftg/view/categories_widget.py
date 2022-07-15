@@ -2,6 +2,7 @@ from tkinter import ttk, BOTH, LEFT, Label, Checkbutton, IntVar
 from typing import Dict, List
 
 from ftg.utils.program_config import UIConfig
+from ftg.utils.tag import Tag
 from ftg.view.styles import Styles
 from ftg.view.tag_list_widget import TagListWidget
 
@@ -11,7 +12,7 @@ class CategoriesWidget:
     def __init__(self,
                  parent,
                  config: UIConfig,
-                 categories: Dict[str, List[str]],
+                 categories: Dict[str, List[Tag]],
                  checkbox_values: Dict[str, IntVar],
                  styles: Styles):
         self.__config = config

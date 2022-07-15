@@ -4,8 +4,8 @@ from tkdnd import DND_FILES
 
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
-from ftg.utils import tag_utils
 from ftg.utils.program_config import ProgramConfig
+from ftg.utils.tag import Tag
 from ftg.view.ftg_window import FtgWindow
 
 
@@ -13,12 +13,12 @@ class FtgWindowController:
 
     def __init__(self,
                  config: ProgramConfig,
-                 categories: Dict[str, List[str]]):
-        tags = tag_utils.get_sorted_tags(categories)
+                 tags: List[Tag],
+                 categories: Dict[str, List[Tag]]):
 
         view = FtgWindow(config.get_ui_config(),
-                         categories,
-                         tags)
+                         tags,
+                         categories)
 
         self.__context = FtgWindowControllerContext(tags,
                                                     view)
