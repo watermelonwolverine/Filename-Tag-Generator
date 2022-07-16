@@ -1,7 +1,8 @@
-from tkinter import ttk, BOTH, LEFT, Label, Checkbutton, IntVar
+from tkinter import ttk, BOTH, LEFT, Label, Checkbutton, IntVar, HORIZONTAL, X, BOTTOM, Canvas
 from typing import Dict, List
 
 from ftg.utils.program_config import UIConfig
+from ftg.utils.scroll_config import configure_canvas_and_interior_horizontal_scroll
 from ftg.utils.tag import Tag
 from ftg.view.styles import Styles
 from ftg.view.tag_list_widget import TagListWidget
@@ -36,8 +37,32 @@ class CategoriesWidget:
         return result
 
     def __add_categories(self) -> None:
+
+        if self.__config.get_horizontal_scrollbar_enabled():
+
+            scrollbar = ttk.Scrollbar(self.__root_frame,
+                                      orient=HORIZONTAL)
+            scrollbar.pack(side=BOTTOM,
+                           fill=X)
+
+            canvas = Canvas(self.__root_frame,
+                            xscrollcommand=scrollbar.set)
+
+            canvas.pack(side=LEFT,
+                        fill=BOTH,
+                        expand=True)
+
+            scrollbar.config(command=canvas.xview)
+
+            categories_frame = ttk.Frame(canvas)
+
+            configure_canvas_and_interior_horizontal_scroll(canvas,
+                                                            categories_frame)
+        else:
+            categories_frame = self.__root_frame
+
         for category_name, category_tags in self.__categories.items():
-            frame = ttk.Frame(self.__root_frame)
+            frame = ttk.Frame(categories_frame)
             frame.pack(fill=BOTH,
                        side=LEFT,
                        expand=True)

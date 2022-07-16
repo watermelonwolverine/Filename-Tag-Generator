@@ -11,11 +11,19 @@ class UIConfig(ABC):
     def get_padding_big(self) -> int:
         raise NotImplementedError()
 
+    def get_button_width(self) -> int:
+        raise NotImplementedError()
+
+    def get_horizontal_scrollbar_enabled(self) -> bool:
+        raise NotImplementedError()
+
 
 class UIConfigImpl(UIConfig):
     __font_size = 14
     __padding_big = 10
     __padding_small = 5
+    __button_width = 15
+    __horizontal_scrollbar_enabled = True
 
     def get_font_size(self) -> int:
         return self.__font_size
@@ -25,3 +33,9 @@ class UIConfigImpl(UIConfig):
 
     def get_padding_big(self) -> int:
         return self.__padding_big
+
+    def get_button_width(self) -> int:
+        return self.__button_width
+
+    def get_horizontal_scrollbar_enabled(self) -> bool:
+        return self.__horizontal_scrollbar_enabled

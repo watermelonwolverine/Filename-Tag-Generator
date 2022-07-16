@@ -1,15 +1,4 @@
 {
-  "Author": {
-    "ch": "Crosshead",
-    "u34": "uchi-deshi34"
-  },
-  "Type": {
-    "bmap": "Battle-Map",
-    "rmap": "Regional Map",
-    "tom": "Theater of Mind",
-    "tok": "Token",
-    "char": "Character Portrait"
-  },
   "Buildings": {
     "arena": "Arena",
     "building": "Building",
@@ -127,8 +116,20 @@
     "treasure": "Treasure",
     "winter": "Winter"
   },
+  "Type": {
+    "bmap": "Battle-Map",
+    "smap": "Settlement-Map",
+    "rmap": "Regional Map",
+    "tom": "Theater of Mind",
+    "tok": "Token",
+    "char": "Character Portrait"
+  },
+  "Author": {
+    "ch": "Crosshead",
+    "u34": "uchi-deshi34"
+  },
   "Module": {
     "cos": "Curse of Strahd",
-    "lmop": "Lost Mines of Phandelver"
+    "lmop": "LMoP"
   }
 }

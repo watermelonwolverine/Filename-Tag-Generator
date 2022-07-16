@@ -1,9 +1,11 @@
 import tkinter
-from tkinter import ttk, BOTH, LEFT, RIGHT, Y, VERTICAL, Canvas, Frame, NW, Checkbutton, IntVar
+from tkinter import ttk, BOTH, LEFT, RIGHT, Y, VERTICAL, Canvas, Frame, Checkbutton, IntVar
 from typing import List, Dict
 
 from ftg.__constants import ON_STATE_VALUE, OFF_STATE_VALUE, MIXED_STATE_VALUE
 from ftg.utils.program_config import UIConfig
+from ftg.utils.scroll_config import configure_mousewheel_vertical_scrolling, \
+    configure_canvas_and_interior_vertical_scroll
 from ftg.utils.tag import Tag
 from ftg.view.styles import Styles
 
@@ -53,52 +55,9 @@ class TagListWidget:
         tag_list_grid_frame.columnconfigure(0, weight=0)
         tag_list_grid_frame.columnconfigure(1, weight=1)
 
-        # from here: https://gist.github.com/JackTheEngineer/81df334f3dcff09fd19e4169dd560c59
-        self.__configure_canvas_and_interior(canvas, tag_list_grid_frame)
-        self.__configure_mousewheel_scrolling(canvas, tag_list_grid_frame)
+        configure_canvas_and_interior_vertical_scroll(canvas, tag_list_grid_frame)
+        configure_mousewheel_vertical_scrolling(canvas, tag_list_grid_frame)
         self.__add_tags_to_frame(tag_list_grid_frame)
-
-    def __configure_canvas_and_interior(self,
-                                        canvas: Canvas,
-                                        frame: Frame) -> None:
-        tag_list_frame_id = canvas.create_window(0, 0, window=frame,
-                                                 anchor=NW)
-
-        def _configure_interior(_):
-            # Update the scrollbars to match the size of the inner frame.
-            size = (frame.winfo_reqwidth(), frame.winfo_reqheight())
-            # noinspection PyTypeChecker
-            canvas.config(scrollregion="0 0 %s %s" % size)
-            if frame.winfo_reqwidth() != canvas.winfo_width():
-                # Update the canvas's width to fit the inner frame.
-                canvas.config(width=frame.winfo_reqwidth())
-
-        frame.bind('<Configure>', _configure_interior)
-
-        def _configure_canvas(_):
-            if frame.winfo_reqwidth() != canvas.winfo_width():
-                # Update the inner frame's width to fill the canvas.
-                canvas.itemconfigure(tag_list_frame_id, width=canvas.winfo_width())
-
-        canvas.bind('<Configure>', _configure_canvas)
-
-    def __configure_mousewheel_scrolling(self,
-                                         canvas: Canvas,
-                                         frame: Frame) -> None:
-
-        def _on_mousewheel(event):
-            # Don't scroll when everything is visible, avoid weird behavior
-            if frame.winfo_height() > canvas.winfo_height():
-                canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
-
-        def _bind_to_mousewheel(_):
-            canvas.bind_all("<MouseWheel>", _on_mousewheel)
-
-        def _unbind_from_mousewheel(_):
-            canvas.unbind_all("<MouseWheel>")
-
-        canvas.bind('<Enter>', _bind_to_mousewheel)
-        canvas.bind('<Leave>', _unbind_from_mousewheel)
 
     def __add_tags_to_frame(self,
                             tag_list_grid_frame: Frame) -> None:
@@ -116,7 +75,8 @@ class TagListWidget:
                                        onvalue=ON_STATE_VALUE,
                                        offvalue=OFF_STATE_VALUE,
                                        tristatevalue=MIXED_STATE_VALUE,
-                                       indicatoron=False)
+                                       indicatoron=False,
+                                       width=self.__config.get_button_width())
 
             check_button["font"] = self.__styles.get_normal_font()
 
