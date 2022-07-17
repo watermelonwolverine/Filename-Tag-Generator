@@ -1,5 +1,5 @@
 import os
-from tkinter import messagebox, DISABLED
+from tkinter import messagebox, DISABLED, NORMAL
 from typing import List, Dict
 
 import ftg.utils.filename_utils
@@ -47,11 +47,11 @@ class FtgDropper:
                 self.__filename_generator,
                 paths)
             self.__set_checkbutton_tristates(self.__context.tags_for_selected_files)
-            self.__context.view.show_apply_button()
+            self.__context.view.apply_button.configure(state=NORMAL)
 
         elif len(paths) == 1:
             self.__context.view.show_selected_file_frame()
-            self.__context.view.show_apply_button()
+            self.__context.view.apply_button.configure(state=NORMAL)
             self.__context.view.selected_file_string_var.set(paths[0])
 
             _, filename = os.path.split(paths[0])
@@ -74,8 +74,10 @@ class FtgDropper:
     def __set_checkbutton_tristates(self,
                                     tags_for_selected_paths: Dict[str, List[str]]) -> None:
 
-        states = tag_utils.get_check_button_tri_states(self.__context.tags,
+        tag_letter_codes = [tag.letter_code for tag in self.__context.tags]
+
+        states = tag_utils.get_check_button_tri_states(tag_letter_codes,
                                                        tags_for_selected_paths)
 
-        for tag in self.__context.tags:
+        for tag in tag_letter_codes:
             self.__context.view.checkbox_values[tag].set(states[tag])
