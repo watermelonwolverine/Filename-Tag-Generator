@@ -1,4 +1,6 @@
-from ftg.__constants import NORMAL, MULTIPLE_FILES_SELECTED, OFF_STATE_VALUE
+from tkinter import DISABLED
+
+from ftg.__constants import NORMAL, OFF_STATE_VALUE
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.utils import FtgUtils
 from ftg.utils.filename_generator import FilenameGenerator
@@ -20,13 +22,12 @@ class FtgClearer:
         self.__context.view.filename_entry.configure(state=NORMAL)
         self.__context.view.basename_entry.configure(state=NORMAL)
         self.__context.view.extension_entry.configure(state=NORMAL)
+        self.__context.view.apply_button.configure(state=DISABLED)
 
         self.__context.view.filename_result_string_var.set("")
         self.__context.view.selected_file_string_var.set("")
-        if self.__context.view.basename_string_var.get() == MULTIPLE_FILES_SELECTED:
-            self.__context.view.basename_string_var.set("")
-        if self.__context.view.extension_string_var.get() == MULTIPLE_FILES_SELECTED:
-            self.__context.view.extension_string_var.set("")
+        self.__context.view.basename_string_var.set("")
+        self.__context.view.extension_string_var.set("")
 
         self.__context.view.hide_selected_file_widgets()
 
