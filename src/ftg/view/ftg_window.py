@@ -1,4 +1,4 @@
-from tkinter import ttk, StringVar, BOTTOM, BOTH, Tk, Frame, X, LEFT, Entry, Button, RIGHT, TOP, IntVar, DISABLED
+from tkinter import ttk, StringVar, BOTTOM, BOTH, Tk, Frame, X, LEFT, Entry, Button, RIGHT, TOP, IntVar
 from typing import Dict, List, Literal
 
 from tkinterdnd2 import TkinterDnD
@@ -28,17 +28,9 @@ class FtgWindow:
 
         self.__init_checkbutton_vars()
 
-        self.apply_button: Button
-        self.clear_button: Button
-        self.generate_button: Button
-        self.revert_button: Button
-
-        self.__path_to_selected_file_container: Frame
-
         self.__build_ui(self.__tk)
 
-        self.__path_to_selected_file_frame = self.__create_path_to_selected_file_frame(
-            self.__path_to_selected_file_container)
+        self.__create_path_to_selected_file_frame(self.__path_to_selected_file_container)
 
     def as_tk(self):
         return self.__tk
@@ -66,6 +58,7 @@ class FtgWindow:
         self.__path_to_selected_file_container.pack(side=TOP,
                                                     fill=X,
                                                     expand=False)
+
         self.__add_basename_input(root_frame)
 
         self.__add_extension_input(root_frame)
@@ -73,8 +66,8 @@ class FtgWindow:
         self.__add_result_frame(root_frame,
                                 BOTTOM)
 
-        self.__add_buttons(root_frame,
-                           BOTTOM)
+        self.__add_file_manipulation_buttons(root_frame,
+                                             BOTTOM)
 
         self.categories_widget = CategoriesWidget(root_frame,
                                                   self.__config,
@@ -89,7 +82,7 @@ class FtgWindow:
                                                expand=True)
 
     def __create_path_to_selected_file_frame(self,
-                                             parent_frame: Frame) -> Frame:
+                                             parent_frame: Frame) -> None:
         frame = ttk.Frame(parent_frame)
 
         ttk.Label(frame,
@@ -109,7 +102,9 @@ class FtgWindow:
                    fill=X,
                    expand=True)
 
-        return frame
+        frame.pack(fill=X,
+                   pady=self.__config.get_padding_small(),
+                   side=TOP)
 
     def __add_basename_input(self,
                              parent_frame: Frame) -> None:
@@ -138,10 +133,9 @@ class FtgWindow:
                               parent_frame: Frame) -> None:
         frame = Frame(parent_frame)
 
-        if self.__config.get_show_extension_entry():
-            frame.pack(fill=X,
-                       pady=self.__config.get_padding_small(),
-                       side=TOP)
+        frame.pack(fill=X,
+                   pady=self.__config.get_padding_small(),
+                   side=TOP)
 
         ttk.Label(frame,
                   text="Extension",
@@ -193,29 +187,20 @@ class FtgWindow:
                                     text="Revert")
         self.revert_button['font'] = self.__styles.get_normal_font()
 
-        self.generate_button = Button(frame,
-                                      text="Generate")
-        self.generate_button["font"] = self.__styles.get_normal_font()
-
         self.revert_button.pack(side=RIGHT,
                                 padx=self.__config.get_padding_big(),
                                 fill=X)
 
-        self.generate_button.pack(side=RIGHT,
-                                  padx=self.__config.get_padding_big(),
-                                  fill=X)
-
-    def __add_buttons(self,
-                      parent_frame: Frame,
-                      side: SIDE) -> None:
+    def __add_file_manipulation_buttons(self,
+                                        parent_frame: Frame,
+                                        side: SIDE) -> None:
         frame = ttk.Frame(parent_frame)
         frame.pack(fill=X,
                    pady=self.__config.get_padding_small(),
                    side=side)
 
         self.apply_button = Button(frame,
-                                   text="Apply",
-                                   state=DISABLED)
+                                   text="Apply")
 
         self.apply_button["font"] = self.__styles.get_normal_font()
 
@@ -233,13 +218,3 @@ class FtgWindow:
                                padx=self.__config.get_padding_big(),
                                expand=True,
                                fill=BOTH)
-
-    def show_selected_file_frame(self):
-        self.__path_to_selected_file_frame.pack(fill=X,
-                                                pady=self.__config.get_padding_small(),
-                                                side=TOP)
-
-    def hide_selected_file_widgets(self):
-        self.__path_to_selected_file_frame.pack_forget()
-        # Weird but works. Otherwise, the frame stays the same size and leaves a big gap on the top.
-        self.__path_to_selected_file_container.configure(height=1)

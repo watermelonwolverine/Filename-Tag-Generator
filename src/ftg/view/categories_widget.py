@@ -38,28 +38,24 @@ class CategoriesWidget:
 
     def __add_categories(self) -> None:
 
-        if self.__config.get_horizontal_scrollbar_enabled():
+        scrollbar = ttk.Scrollbar(self.__root_frame,
+                                  orient=HORIZONTAL)
+        scrollbar.pack(side=BOTTOM,
+                       fill=X)
 
-            scrollbar = ttk.Scrollbar(self.__root_frame,
-                                      orient=HORIZONTAL)
-            scrollbar.pack(side=BOTTOM,
-                           fill=X)
+        canvas = Canvas(self.__root_frame,
+                        xscrollcommand=scrollbar.set)
 
-            canvas = Canvas(self.__root_frame,
-                            xscrollcommand=scrollbar.set)
+        canvas.pack(side=LEFT,
+                    fill=BOTH,
+                    expand=True)
 
-            canvas.pack(side=LEFT,
-                        fill=BOTH,
-                        expand=True)
+        scrollbar.config(command=canvas.xview)
 
-            scrollbar.config(command=canvas.xview)
+        categories_frame = ttk.Frame(canvas)
 
-            categories_frame = ttk.Frame(canvas)
-
-            configure_canvas_and_interior_horizontal_scroll(canvas,
-                                                            categories_frame)
-        else:
-            categories_frame = self.__root_frame
+        configure_canvas_and_interior_horizontal_scroll(canvas,
+                                                        categories_frame)
 
         for category_name, category_tags in self.__categories.items():
             frame = ttk.Frame(categories_frame)

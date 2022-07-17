@@ -1,6 +1,6 @@
 from tkinter import DISABLED
 
-from ftg.__constants import NORMAL, OFF_STATE_VALUE
+from ftg.__constants import NORMAL, OFF_STATE_VALUE, NO_FILE_SELECTED
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.utils import FtgUtils
 from ftg.utils.filename_generator import FilenameGenerator
@@ -17,6 +17,9 @@ class FtgClearer:
         self.__utils = utils
 
     def clear(self):
+        self.__context.selected_files = []
+        self.__context.tags_for_selected_files = {}
+
         self.clear_checkboxes()
 
         self.__context.view.filename_entry.configure(state=NORMAL)
@@ -29,11 +32,8 @@ class FtgClearer:
         self.__context.view.basename_string_var.set("")
         self.__context.view.extension_string_var.set("")
 
-        self.__context.view.hide_selected_file_widgets()
+        self.__context.view.selected_file_string_var.set(NO_FILE_SELECTED)
 
-        self.__context.clear()
-
-        self.__context.view.generate_button.configure(state=NORMAL)
         self.__context.view.revert_button.configure(state=NORMAL)
 
         self.__utils.enable_checkbutton_indicators(False)

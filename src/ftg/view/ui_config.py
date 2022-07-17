@@ -14,24 +14,12 @@ class UIConfig(ABC):
     def get_button_width(self) -> int:
         raise NotImplementedError()
 
-    def get_horizontal_scrollbar_enabled(self) -> bool:
-        raise NotImplementedError()
-
-    def get_show_extension_entry(self) -> bool:
-        raise NotImplementedError()
-
-    def get_show_full_name_entry(self) -> bool:
-        raise NotImplementedError()
-
 
 class UIConfigImpl(UIConfig):
     __font_size = 14
     __padding_big = 10
     __padding_small = 5
     __button_width = 15
-    __horizontal_scrollbar_enabled = True
-    __show_extension_entry = False
-    __show_full_name_entry = False
 
     def get_font_size(self) -> int:
         return self.__font_size
@@ -44,12 +32,3 @@ class UIConfigImpl(UIConfig):
 
     def get_button_width(self) -> int:
         return self.__button_width
-
-    def get_horizontal_scrollbar_enabled(self) -> bool:
-        return self.__horizontal_scrollbar_enabled
-
-    def get_show_extension_entry(self) -> bool:
-        return self.__show_extension_entry
-
-    def get_show_full_name_entry(self) -> bool:
-        return self.__show_full_name_entry

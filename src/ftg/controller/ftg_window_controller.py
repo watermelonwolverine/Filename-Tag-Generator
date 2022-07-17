@@ -15,7 +15,6 @@ class FtgWindowController:
                  config: ProgramConfig,
                  tags: List[Tag],
                  categories: Dict[str, List[Tag]]):
-
         view = FtgWindow(config.get_ui_config(),
                          tags,
                          categories)
@@ -29,6 +28,7 @@ class FtgWindowController:
         self.__configure_view(view)
 
     def start(self):
+        self.__workers.clearer.clear()
         self.__context.view.as_tk().mainloop()
 
     def __configure_view(self,
@@ -40,10 +40,30 @@ class FtgWindowController:
             self.__workers.reverter.revert(self.__context.view.filename_result_string_var.get())
 
         view.revert_button.configure(command=do_revert)
-        view.generate_button.configure(command=lambda: self.__generate())
         view.apply_button.configure(command=lambda: self.__workers.applier.apply())
         view.clear_button.configure(command=lambda: self.__workers.clearer.clear())
+
+        self.__add_listeners()
+
+    def __add_listeners(self):
+
+        def callback(*args, **kwargs):
+            self.__maybe_update()
+
+        for tag_var in self.__context.view.checkbox_values.values():
+            tag_var.trace_variable(mode="w",
+                                   callback=callback)
+
+        self.__context.view.extension_string_var.trace_variable(mode="w",
+                                                                callback=callback)
+
+        self.__context.view.basename_string_var.trace_variable(mode="w",
+                                                               callback=callback)
 
     def __generate(self) -> None:
         self.__context.view.filename_result_string_var.set(
             self.__workers.applier.generate_filename())
+
+    def __maybe_update(self):
+        if len(self.__context.selected_files) < 2:
+            self.__generate()

@@ -13,7 +13,3 @@ class FtgWindowControllerContext:
         self.view = view
         self.selected_files = []
         self.tags_for_selected_files: Dict[str, List[str]] = {}
-
-    def clear(self):
-        self.selected_files = []
-        self.tags_for_selected_files = {}

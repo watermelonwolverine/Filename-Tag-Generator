@@ -1,5 +1,6 @@
 from tkinter import Canvas, Frame, NW
 
+
 # from here: https://gist.github.com/JackTheEngineer/81df334f3dcff09fd19e4169dd560c59
 def configure_canvas_and_interior_vertical_scroll(canvas: Canvas,
                                                   frame: Frame) -> None:

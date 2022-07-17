@@ -5,5 +5,5 @@ MIXED_STATE_VALUE = -1
 NORMAL = "normal"
 READONLY = "readonly"
 
-MULTIPLE_FILES_SELECTED = ""
-SINGLE_FILE_SELECTED = ""
+MULTIPLE_FILES_SELECTED = "Multiple files selected"
+NO_FILE_SELECTED = "No file selected"
