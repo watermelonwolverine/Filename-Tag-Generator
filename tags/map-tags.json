@@ -118,18 +118,23 @@
   },
   "Type": {
     "bmap": "Battle-Map",
-    "smap": "Settlement-Map",
+    "bmapbblock" : "Battle-Map B-Block",
+    "charpo": "Character Portrait",
+    "charto": "Character Token",
+    "moto": "Monster Token",
     "rmap": "Regional Map",
-    "tom": "Theater of Mind",
-    "tok": "Token",
-    "char": "Character Portrait"
+    "smap": "Settlement-Map",
+    "tom": "Theater of Mind"
   },
   "Author": {
     "ch": "Crosshead",
-    "u34": "uchi-deshi34"
+    "u34": "uchi-deshi34",
+    "forad" : "Forgotten Advent..."
   },
   "Module": {
     "cos": "Curse of Strahd",
-    "lmop": "LMoP"
+    "dico": "Divine Contention",
+    "doip": "Dragons of Ice...",
+    "lmop": "Lost Mines of Ph..."
   }
 }
