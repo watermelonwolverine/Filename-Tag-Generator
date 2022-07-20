@@ -71,6 +71,9 @@ class FtgApplier:
         else:
             messagebox.showerror(title="Unexpected Error",
                                  message="An unexpected error occurred.")
+            return
+
+        self.__context.changes_are_pending = False
 
     def generate_filename(self) -> str:
         return self.__filename_generator.generate_filename(

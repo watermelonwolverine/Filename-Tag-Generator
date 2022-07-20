@@ -3,7 +3,7 @@ from tkinter import messagebox, DISABLED, NORMAL
 from typing import List, Dict
 
 import ftg.utils.filename_utils
-from ftg.__constants import READONLY, MULTIPLE_FILES_SELECTED
+from ftg.__constants import READONLY, MULTIPLE_FILES_SELECTED, NO
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.controller.workers.drop_event_data_processor import extract_paths
@@ -30,6 +30,13 @@ class FtgDropper:
             if not os.path.isfile(path):
                 messagebox.showerror(title="Error",
                                      message="Only files are supported")
+                return
+
+        if self.__context.changes_are_pending:
+            result = messagebox.askquestion(title="Pending Changes",
+                                            message="You have unsaved changes. Do you want to discard them?")
+
+            if result == NO:
                 return
 
         self.__workers.clearer.clear()
@@ -64,6 +71,7 @@ class FtgDropper:
 
         self.__context.view.filename_entry.configure(state=READONLY)
         self.__context.view.revert_button.configure(state=DISABLED)
+        self.__context.changes_are_pending = False  # have to do this after setting all the checkboxes and stuff
 
     def __set_checkbutton_tristates(self,
                                     tags_for_selected_paths: Dict[str, List[str]]) -> None:

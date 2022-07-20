@@ -7,3 +7,6 @@ READONLY = "readonly"
 
 MULTIPLE_FILES_SELECTED = "Multiple files selected"
 NO_FILE_SELECTED = "No file selected"
+
+YES = "yes"
+NO = "no"

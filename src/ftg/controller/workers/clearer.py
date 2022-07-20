@@ -17,6 +17,7 @@ class FtgClearer:
         self.__utils = utils
 
     def clear(self):
+        self.__context.changes_are_pending = False
         self.__context.selected_files = []
         self.__context.tags_for_selected_files = {}
 

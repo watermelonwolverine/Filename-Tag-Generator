@@ -9,6 +9,7 @@ class FtgWindowControllerContext:
     def __init__(self,
                  tags: List[Tag],
                  view: FtgWindow):
+        self.changes_are_pending = False
         self.tags = tags
         self.view = view
         self.selected_files = []

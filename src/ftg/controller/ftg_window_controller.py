@@ -47,8 +47,9 @@ class FtgWindowController:
 
     def __add_listeners(self):
 
+        # noinspection PyUnusedLocal
         def callback(*args, **kwargs):
-            self.__maybe_update()
+            self.__something_changed()
 
         for tag_var in self.__context.view.checkbox_values.values():
             tag_var.trace_variable(mode="w",
@@ -64,6 +65,9 @@ class FtgWindowController:
         self.__context.view.filename_result_string_var.set(
             self.__workers.applier.generate_filename())
 
-    def __maybe_update(self):
+    def __something_changed(self):
+        if len(self.__context.selected_files) > 0:
+            self.__context.changes_are_pending = True
+
         if len(self.__context.selected_files) < 2:
             self.__generate()
