@@ -3,7 +3,7 @@ from tkinter import messagebox, DISABLED, NORMAL
 from typing import List, Dict
 
 import ftg.utils.filename_utils
-from ftg.__constants import READONLY, MULTIPLE_FILES_SELECTED, NO
+from ftg.__constants import READONLY, MULTIPLE_FILES_SELECTED, NO, PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.controller.workers.drop_event_data_processor import extract_paths
@@ -33,8 +33,8 @@ class FtgDropper:
                 return
 
         if self.__context.changes_are_pending:
-            result = messagebox.askquestion(title="Pending Changes",
-                                            message="You have unsaved changes. Do you want to discard them?")
+            result = messagebox.askquestion(title=PENDING_CHANGES_TITLE,
+                                            message=PENDING_CHANGES_MESSAGE)
 
             if result == NO:
                 return

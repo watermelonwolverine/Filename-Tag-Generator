@@ -1,7 +1,9 @@
+from tkinter import messagebox
 from typing import Dict, List
 
 from tkdnd import DND_FILES
 
+from ftg.__constants import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE, NO
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.utils.program_config import ProgramConfig
@@ -48,26 +50,43 @@ class FtgWindowController:
     def __add_listeners(self):
 
         # noinspection PyUnusedLocal
-        def callback(*args, **kwargs):
-            self.__something_changed()
+        def on_change_callback(*args, **kwargs):
+            self.__on_change_callback()
 
         for tag_var in self.__context.view.checkbox_values.values():
             tag_var.trace_variable(mode="w",
-                                   callback=callback)
+                                   callback=on_change_callback)
 
         self.__context.view.extension_string_var.trace_variable(mode="w",
-                                                                callback=callback)
+                                                                callback=on_change_callback)
 
         self.__context.view.basename_string_var.trace_variable(mode="w",
-                                                               callback=callback)
+                                                               callback=on_change_callback)
+
+        # noinspection PyUnusedLocal
+        def on_close_callback(*args, **kwargs):
+            self.__on_close_callback()
+
+        self.__context.view.as_tk().protocol("WM_DELETE_WINDOW",
+                                             on_close_callback)
 
     def __generate(self) -> None:
         self.__context.view.filename_result_string_var.set(
             self.__workers.applier.generate_filename())
 
-    def __something_changed(self):
+    def __on_change_callback(self):
         if len(self.__context.selected_files) > 0:
             self.__context.changes_are_pending = True
 
         if len(self.__context.selected_files) < 2:
             self.__generate()
+
+    def __on_close_callback(self):
+        if self.__context.changes_are_pending:
+            result = messagebox.askquestion(title=PENDING_CHANGES_TITLE,
+                                            message=PENDING_CHANGES_MESSAGE)
+
+            if result == NO:
+                return
+
+        self.__context.view.as_tk().destroy()
