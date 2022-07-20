@@ -10,7 +10,7 @@ class FtgWindowControllerContext:
                  tags: List[Tag],
                  view: FtgWindow):
         self.changes_are_pending = False
-        self.tags = tags
-        self.view = view
-        self.selected_files = []
+        self.tags: List[Tag] = tags
+        self.view: FtgWindow = view
+        self.selected_files: List[str] = []
         self.tags_for_selected_files: Dict[str, List[str]] = {}

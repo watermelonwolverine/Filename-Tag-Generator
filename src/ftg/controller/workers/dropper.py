@@ -43,15 +43,16 @@ class FtgDropper:
 
         self.__context.selected_files = paths
 
+        self.__context.tags_for_selected_files = ftg.utils.filename_utils.extract_tags_for_selected_files(
+            self.__filename_generator,
+            paths)
+
         if len(paths) > 1:
             self.__context.view.basename_entry.configure(state=READONLY)
             self.__context.view.extension_entry.configure(state=READONLY)
             self.__context.view.selected_file_string_var.set(MULTIPLE_FILES_SELECTED)
             self.__workers.utils.enable_checkbutton_indicators(True)
 
-            self.__context.tags_for_selected_files = ftg.utils.filename_utils.extract_tags_for_selected_files(
-                self.__filename_generator,
-                paths)
             self.__set_checkbutton_tristates(self.__context.tags_for_selected_files)
             self.__context.view.apply_button.configure(state=NORMAL)
 
@@ -73,9 +74,53 @@ class FtgDropper:
         self.__context.view.revert_button.configure(state=DISABLED)
         self.__context.changes_are_pending = False  # have to do this after setting all the checkboxes and stuff
 
+        self.__check_for_unknown_tags()
+
+    def __check_for_unknown_tags(self):
+        tag_lettercodes = [tag.letter_code for tag in self.__context.tags]
+
+        unrecognized_tags: Dict[str, List[str]] = {}
+
+        for abs_path_to_selected_file in self.__context.selected_files:
+            tags = self.__context.tags_for_selected_files[abs_path_to_selected_file]
+
+            unrecognized_tags_for_file = []
+
+            for tag in tags:
+                if tag not in tag_lettercodes:
+                    unrecognized_tags_for_file.append(tag)
+
+            if len(unrecognized_tags_for_file) > 0:
+                unrecognized_tags[abs_path_to_selected_file] = unrecognized_tags_for_file
+
+        nb = 0
+
+        for abs_path_to_file, tags in unrecognized_tags.items():
+
+            _, filename = os.path.split(abs_path_to_file)
+
+            joined_tags = ", ".join(tags)
+
+            message_queue = F"{nb + 1}/{len(unrecognized_tags)}"
+
+            message = "WARNING\n" \
+                      "\n" \
+                      F"{filename} contains unknown tags which will get lost when you apply:\n" \
+                      "\n" \
+                      F"{joined_tags}\n" \
+                      "\n" \
+                      F"({message_queue})"
+
+            should_continue = messagebox.askokcancel(title="Unknown Tag",
+                                                     message=message)
+
+            if not should_continue:
+                break
+
+            nb += 1
+
     def __set_checkbutton_tristates(self,
                                     tags_for_selected_paths: Dict[str, List[str]]) -> None:
-
         tag_letter_codes = [tag.letter_code for tag in self.__context.tags]
 
         states = tag_utils.get_check_button_tri_states(tag_letter_codes,
