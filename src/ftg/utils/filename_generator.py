@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import List
 
-from ftg.utils.program_config import FilenameConfig
+from ftg.utils.program_config import NamingConfig
 
 
 class ReversionResult:
@@ -31,7 +31,7 @@ class FilenameGenerator(ABC):
 class FilenameGeneratorImpl(FilenameGenerator):
 
     def __init__(self,
-                 config: FilenameConfig):
+                 config: NamingConfig):
         self.__config = config
 
     def generate_filename(self,

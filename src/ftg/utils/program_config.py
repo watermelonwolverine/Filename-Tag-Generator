@@ -1,6 +1,9 @@
+import json
 from abc import ABC
+from typing import Dict
 
-from ftg.utils.filename_config import FilenameConfig, FilenameConfigImpl
+from ftg.__constants import UTF_8
+from ftg.utils.filename_config import NamingConfig, NamingConfigImpl
 from ftg.view.ui_config import UIConfig, UIConfigImpl
 
 
@@ -9,16 +12,59 @@ class ProgramConfig(ABC):
     def get_ui_config(self) -> UIConfig:
         raise NotImplementedError()
 
-    def get_filename_config(self) -> FilenameConfig:
+    def get_filename_config(self) -> NamingConfig:
         raise NotImplementedError()
 
 
 class ProgramConfigImpl(ProgramConfig):
-    __ui_config = UIConfigImpl()
-    __filename_config = FilenameConfigImpl()
+    # defaults
+    __default_ui_config = UIConfigImpl()
+    __default_naming_config = NamingConfigImpl()
+
+    # json keys
+    UI_CONFIG = "ui-config"
+    NAMING_CONFIG = "naming-config"
+
+    def __init__(self,
+                 ui_config=__default_ui_config,
+                 naming_config=__default_naming_config):
+
+        self.__ui_config = ui_config
+        self.__naming_config = naming_config
 
     def get_ui_config(self) -> UIConfig:
         return self.__ui_config
 
-    def get_filename_config(self) -> FilenameConfig:
-        return self.__filename_config
+    def get_filename_config(self) -> NamingConfig:
+        return self.__naming_config
+
+    @classmethod
+    def parse_file(cls,
+                   path_to_file: str) -> ProgramConfig:
+        with open(path_to_file, "rt", encoding=UTF_8) as fh:
+            json_str = fh.read()
+            return cls.parse_json_str(json_str)
+
+    @classmethod
+    def parse_json_str(cls,
+                       json_str: str) -> ProgramConfig:
+        json_dict = json.loads(json_str)
+
+        return cls.parse_dict(json_dict)
+
+    @classmethod
+    def parse_dict(cls,
+                   json_dict: Dict[str, Dict]) -> ProgramConfig:
+
+        if cls.UI_CONFIG in json_dict.keys():
+            ui_config = UIConfigImpl.parse_dict(json_dict.get(cls.UI_CONFIG))
+        else:
+            ui_config = cls.__default_ui_config
+
+        if cls.NAMING_CONFIG in json_dict.keys():
+            naming_config = NamingConfigImpl.parse_dict(json_dict.get(cls.NAMING_CONFIG))
+        else:
+            naming_config = cls.__default_naming_config
+
+        return ProgramConfigImpl(ui_config=ui_config,
+                                 naming_config=naming_config)

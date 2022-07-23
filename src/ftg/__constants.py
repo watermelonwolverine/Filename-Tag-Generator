@@ -13,3 +13,5 @@ NO = "no"
 
 PENDING_CHANGES_TITLE = "Pending Changes"
 PENDING_CHANGES_MESSAGE = "You have unsaved changes. Do you want to discard them?"
+
+UTF_8 = "UTF-8"
