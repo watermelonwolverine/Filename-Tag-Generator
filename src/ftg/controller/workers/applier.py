@@ -8,14 +8,14 @@ from ftg.__constants import ON_STATE_VALUE
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.utils import FtgUtils
 from ftg.utils import tag_utils
-from ftg.utils.filename_generator import FilenameGenerator
+from ftg.utils.filename_generator import NameGenerator
 
 
 class FtgApplier:
 
     def __init__(self,
                  context: FtgWindowControllerContext,
-                 filename_generator: FilenameGenerator,
+                 filename_generator: NameGenerator,
                  utils: FtgUtils):
         self.__context = context
         self.__filename_generator = filename_generator

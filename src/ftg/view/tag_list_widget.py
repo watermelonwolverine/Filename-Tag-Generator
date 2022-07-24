@@ -69,8 +69,15 @@ class TagListWidget:
         for tag in sorted(self.__tags):
             int_var = self.__checkbox_values[tag.letter_code]
 
+            max_nb_of_chars = self.__config.get_button_width()
+
+            full_name = tag.full_name
+
+            if len(full_name) > max_nb_of_chars:
+                full_name = full_name[:max_nb_of_chars-3] + "..."
+
             check_button = Checkbutton(tag_list_grid_frame,
-                                       text=tag.full_name,
+                                       text=full_name,
                                        variable=int_var,
                                        onvalue=ON_STATE_VALUE,
                                        offvalue=OFF_STATE_VALUE,

@@ -1,5 +1,4 @@
 from tkinter import messagebox
-from typing import Dict, List
 
 from tkdnd import DND_FILES
 
@@ -7,7 +6,7 @@ from ftg.__constants import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE, NO
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.utils.program_config import ProgramConfig
-from ftg.utils.tag import Tag
+from ftg.utils.tags import Tags
 from ftg.view.ftg_window import FtgWindow
 
 
@@ -15,16 +14,14 @@ class FtgWindowController:
 
     def __init__(self,
                  config: ProgramConfig,
-                 tags: List[Tag],
-                 categories: Dict[str, List[Tag]]):
+                 tags: Tags):
         view = FtgWindow(config.get_ui_config(),
-                         tags,
-                         categories)
+                         tags)
 
         self.__context = FtgWindowControllerContext(tags,
                                                     view)
 
-        self.__workers = FtgWindowControllerWorkers(config,
+        self.__workers = FtgWindowControllerWorkers(config.get_naming_config(),
                                                     self.__context)
 
         self.__configure_view(view)

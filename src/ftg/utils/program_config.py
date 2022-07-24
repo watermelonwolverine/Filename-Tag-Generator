@@ -12,7 +12,7 @@ class ProgramConfig(ABC):
     def get_ui_config(self) -> UIConfig:
         raise NotImplementedError()
 
-    def get_filename_config(self) -> NamingConfig:
+    def get_naming_config(self) -> NamingConfig:
         raise NotImplementedError()
 
 
@@ -35,7 +35,7 @@ class ProgramConfigImpl(ProgramConfig):
     def get_ui_config(self) -> UIConfig:
         return self.__ui_config
 
-    def get_filename_config(self) -> NamingConfig:
+    def get_naming_config(self) -> NamingConfig:
         return self.__naming_config
 
     @classmethod

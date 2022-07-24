@@ -1,10 +1,10 @@
 import os
 from typing import List, Dict
 
-from ftg.utils.filename_generator import FilenameGenerator
+from ftg.utils.filename_generator import NameGenerator
 
 
-def extract_tags_for_selected_files(filename_generator: FilenameGenerator,
+def extract_tags_for_selected_files(filename_generator: NameGenerator,
                                     paths: List[str]) -> Dict[str, List[str]]:
     result: Dict[str, List[str]] = {}
 
@@ -16,7 +16,7 @@ def extract_tags_for_selected_files(filename_generator: FilenameGenerator,
     return result
 
 
-def extract_extensions_for_selected_files(filename_generator: FilenameGenerator,
+def extract_extensions_for_selected_files(filename_generator: NameGenerator,
                                           paths: List[str]) -> Dict[str, str]:
     result: Dict[str, str] = {}
 
@@ -28,7 +28,7 @@ def extract_extensions_for_selected_files(filename_generator: FilenameGenerator,
     return result
 
 
-def extract_basenames_for_selected_files(filename_generator: FilenameGenerator,
+def extract_basenames_for_selected_files(filename_generator: NameGenerator,
                                          paths: List[str]) -> Dict[str, str]:
     result: Dict[str, str] = {}
 

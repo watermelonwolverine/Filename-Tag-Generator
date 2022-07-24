@@ -15,7 +15,7 @@ class ReversionResult:
         self.extension = extension
 
 
-class FilenameGenerator(ABC):
+class NameGenerator(ABC):
 
     def generate_filename(self,
                           basename: str,
@@ -28,7 +28,7 @@ class FilenameGenerator(ABC):
         raise NotImplementedError()
 
 
-class FilenameGeneratorImpl(FilenameGenerator):
+class NameGeneratorImpl(NameGenerator):
 
     def __init__(self,
                  config: NamingConfig):
@@ -63,18 +63,33 @@ class FilenameGeneratorImpl(FilenameGenerator):
 
     def __get_adjusted_base_name(self,
                                  basename: str) -> str:
-        result = basename.upper()
+
+        if not self.__config.get_adjust_basename():
+            return basename
+
+        result = basename
+
+        if self.__config.get_capitalize_basename():
+            result = result.upper()
 
         result = result.strip(" ")
 
-        result = result.replace(" ",
-                                self.__config.get_basename_spacer())
+        spacer = self.__config.get_basename_spacer()
+        double_spacer = spacer + spacer
 
-        result = result.replace(self.__config.get_tags_separator(),
-                                self.__config.get_basename_spacer())
+        if self.__config.get_replace_basename_spacer():
 
-        result = result.replace(self.__config.get_basename_tags_separator(),
-                                self.__config.get_basename_spacer())
+            result = result.replace(" ",
+                                    spacer)
+
+            result = result.replace(self.__config.get_tags_separator(),
+                                    spacer)
+
+            result = result.replace(self.__config.get_basename_tags_separator(),
+                                    spacer)
+
+            while double_spacer in result:
+                result = result.replace(double_spacer, spacer)
 
         return result
 

@@ -1,0 +1,16 @@
+{
+  "ui-config": {
+    "font-size": 14,
+    "padding-small": 5,
+    "padding-big": 10,
+    "button-width": 15
+  },
+  "naming-config": {
+    "adjust-basename": true,
+    "capitalize-basename": true,
+    "replace-basename-spacer": true,
+    "basename-spacer": "-",
+    "basename-tags-separator": ";",
+    "tag-separator": "_"
+  }
+}

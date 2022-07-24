@@ -8,7 +8,7 @@ from ftg.controller.ftg_window_controller_context import FtgWindowControllerCont
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.controller.workers.drop_event_data_processor import extract_paths
 from ftg.utils import tag_utils
-from ftg.utils.filename_generator import FilenameGenerator
+from ftg.utils.filename_generator import NameGenerator
 
 
 class FtgDropper:
@@ -16,7 +16,7 @@ class FtgDropper:
     def __init__(self,
                  context: FtgWindowControllerContext,
                  workers: FtgWindowControllerWorkers,
-                 filename_generator: FilenameGenerator):
+                 filename_generator: NameGenerator):
         self.__context = context
         self.__workers = workers
         self.__filename_generator = filename_generator
@@ -77,7 +77,7 @@ class FtgDropper:
         self.__check_for_unknown_tags()
 
     def __check_for_unknown_tags(self):
-        tag_lettercodes = [tag.letter_code for tag in self.__context.tags]
+        tag_lettercodes = [tag.letter_code for tag in self.__context.tags.tags]
 
         unrecognized_tags: Dict[str, List[str]] = {}
 
@@ -121,7 +121,7 @@ class FtgDropper:
 
     def __set_checkbutton_tristates(self,
                                     tags_for_selected_paths: Dict[str, List[str]]) -> None:
-        tag_letter_codes = [tag.letter_code for tag in self.__context.tags]
+        tag_letter_codes = [tag.letter_code for tag in self.__context.tags.tags]
 
         states = tag_utils.get_check_button_tri_states(tag_letter_codes,
                                                        tags_for_selected_paths)

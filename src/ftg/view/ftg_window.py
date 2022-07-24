@@ -1,10 +1,10 @@
 from tkinter import ttk, StringVar, BOTTOM, BOTH, Tk, Frame, X, LEFT, Entry, Button, RIGHT, TOP, IntVar
-from typing import Dict, List, Literal
+from typing import Dict, Literal
 
 from tkinterdnd2 import TkinterDnD
 
 from ftg.utils.program_config import UIConfig
-from ftg.utils.tag import Tag
+from ftg.utils.tags import Tags
 from ftg.view.categories_widget import CategoriesWidget
 from ftg.view.styles import Styles, StylesImpl
 
@@ -16,10 +16,8 @@ class FtgWindow:
 
     def __init__(self,
                  config: UIConfig,
-                 tags: List[Tag],
-                 categories: Dict[str, List[Tag]]):
+                 tags: Tags):
         self.__config = config
-        self.__categories = categories
         self.__tags = tags
 
         self.__tk = TkinterDnD.Tk()
@@ -38,7 +36,7 @@ class FtgWindow:
     def __init_checkbutton_vars(self):
         self.checkbox_values: Dict[str, IntVar] = {}
 
-        for tag in self.__tags:
+        for tag in self.__tags.tags:
             self.checkbox_values[tag.letter_code] = IntVar()
 
     def __build_ui(self,
@@ -71,7 +69,7 @@ class FtgWindow:
 
         self.categories_widget = CategoriesWidget(root_frame,
                                                   self.__config,
-                                                  self.__categories,
+                                                  self.__tags.categories,
                                                   self.checkbox_values,
                                                   self.__styles)
 

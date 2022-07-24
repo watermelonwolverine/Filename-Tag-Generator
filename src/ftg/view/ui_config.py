@@ -21,10 +21,10 @@ class UIConfig(ABC):
 
 class UIConfigImpl(UIConfig):
     # defaults
-    __font_size = 14
-    __padding_small = 5
-    __padding_big = 10
-    __button_width = 15
+    __default_font_size = 14
+    __default_padding_small = 5
+    __default_padding_big = 2 * __default_padding_small
+    __default_button_width = 15
 
     # json keys
     FONT_SIZE_KEY = "font-size"
@@ -33,27 +33,27 @@ class UIConfigImpl(UIConfig):
     BUTTON_WIDTH_KEY = "button-width"
 
     def __init__(self,
-                 font_size=__font_size,
-                 padding_small=__padding_small,
-                 padding_big=__padding_big,
-                 button_width=__button_width):
+                 font_size=__default_font_size,
+                 padding_small=__default_padding_small,
+                 padding_big=__default_padding_big,
+                 button_width=__default_button_width):
 
-        self.__font_size = font_size
-        self.__padding_small = padding_small
-        self.__padding_big = padding_big
-        self.__button_width = button_width
+        self.font_size = font_size
+        self.padding_small = padding_small
+        self.padding_big = padding_big
+        self.button_width = button_width
 
     def get_font_size(self) -> int:
-        return self.__font_size
+        return self.font_size
 
     def get_padding_small(self) -> int:
-        return self.__padding_small
+        return self.padding_small
 
     def get_padding_big(self) -> int:
-        return self.__padding_big
+        return self.padding_big
 
     def get_button_width(self) -> int:
-        return self.__button_width
+        return self.button_width
 
     @classmethod
     def parse_dict(cls,
@@ -61,19 +61,19 @@ class UIConfigImpl(UIConfig):
 
         font_size = read_int_value(json_dict,
                                    cls.FONT_SIZE_KEY,
-                                   cls.__font_size)
+                                   cls.__default_font_size)
 
         padding_small = read_int_value(json_dict,
                                        cls.PADDING_SMALL_KEY,
-                                       cls.__padding_small)
+                                       cls.__default_padding_small)
 
         padding_big = read_int_value(json_dict,
                                      cls.PADDING_BIG_KEY,
-                                     cls.__padding_big)
+                                     cls.__default_padding_big)
 
         button_width = read_int_value(json_dict,
                                       cls.BUTTON_WIDTH_KEY,
-                                      cls.__button_width)
+                                      cls.__default_button_width)
 
         return UIConfigImpl(font_size=font_size,
                             padding_small=padding_small,

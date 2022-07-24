@@ -101,7 +101,7 @@
     "big": "Big",
     "bones": "Bones",
     "boss": "Boss",
-    "circle" : "Circle",
+    "circle": "Circle",
     "corrupted": "Corrupted",
     "dragon": "Dragon",
     "entrance": "Entrance",
@@ -125,7 +125,7 @@
   },
   "Type": {
     "bmap": "Battle-Map",
-    "bmapbblock": "Battle-Map B-Block",
+    "bmapbblock": "Battle-Map Building Block",
     "charpo": "Character Portrait",
     "charto": "Character Token",
     "moto": "Monster Token",
@@ -136,12 +136,14 @@
   "Author": {
     "ch": "Crosshead",
     "u34": "uchi-deshi34",
-    "forad": "Forgotten Advent..."
+    "forad": "Forgotten Adventures"
   },
   "Module": {
     "cos": "Curse of Strahd",
     "dico": "Divine Contention",
-    "doip": "Dragons of Ice...",
-    "lmop": "Lost Mines of Ph..."
+    "doip": "Dragons of Icespire Peak",
+    "gosm": "Ghosts of Saltmarsh",
+    "lmop": "Lost Mines of Phandelver",
+    "slw": "Storm Lord's Wrath"
   }
 }

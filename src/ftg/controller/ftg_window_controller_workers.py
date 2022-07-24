@@ -3,16 +3,16 @@ from ftg.controller.workers.applier import FtgApplier
 from ftg.controller.workers.clearer import FtgClearer
 from ftg.controller.workers.reverter import FtgReverter
 from ftg.controller.workers.utils import FtgUtils
-from ftg.utils.filename_generator import FilenameGeneratorImpl
-from ftg.utils.program_config import ProgramConfig
+from ftg.utils.filename_config import NamingConfig
+from ftg.utils.filename_generator import NameGeneratorImpl
 
 
 class FtgWindowControllerWorkers:
 
     def __init__(self,
-                 config: ProgramConfig,
+                 naming_config: NamingConfig,
                  context: FtgWindowControllerContext):
-        filename_generator = FilenameGeneratorImpl(config.get_filename_config())
+        filename_generator = NameGeneratorImpl(naming_config)
 
         self.utils: FtgUtils = FtgUtils(context,
                                         filename_generator)
