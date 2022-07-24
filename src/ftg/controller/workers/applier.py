@@ -36,6 +36,13 @@ class FtgApplier:
 
         elif len(self.__context.selected_files) > 1:
 
+            if len(self.__context.selected_files) >= 10:
+                answer = messagebox.askyesno(title="Confirm Action",
+                                             message="You are about to rename a lot of files, are you sure you want to continue?")
+
+                if not answer:
+                    return
+
             extensions = ftg.utils.filename_utils.extract_extensions_for_selected_files(
                 self.__filename_generator,
                 self.__context.selected_files)
