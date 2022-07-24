@@ -1,7 +1,7 @@
 import os
 
-from cli_wrapper.main import main
+from ftg.__cli_wrapper.main import run_with
 
 
-main(os.path.join("configs", "config.json"),
-     os.path.join("configs", "map-tags.json"))
+run_with(os.path.join("configs", "config.json"),
+         os.path.join("configs", "map-tags.json"))
