@@ -4,3 +4,7 @@ class FtgException(BaseException):
 
 class FtgInternalException(FtgException):
     pass
+
+
+class JsonParseException(BaseException):
+    pass

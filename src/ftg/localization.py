@@ -29,3 +29,20 @@ You can also specify a tags file using the {tags_option} option.\n\
 Example:\n\
 {app_name}{exe} {tags_option} <path-to-tags-file>\
 "
+
+WRONG_TAGS_FILE_STRUCTURE = "Structure of tags file is wrong."
+
+PLEASE_CHECK_YOUR_FILES_TITLE = "Incorrect json files"
+
+PLEASE_CHECK_YOUR_FILES_MSG = "\
+While reading:\n\
+\n\
+{0}\n\
+\n\
+The following exception occurred:\n\
+\n\
+{1}\n\
+\n\
+Please check the correctness of this file."
+
+FILE_NOT_FOUND = "File not found: {0}"
