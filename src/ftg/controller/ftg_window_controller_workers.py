@@ -30,7 +30,7 @@ class FtgWindowControllerWorkers:
                                                  self.clearer,
                                                  filename_generator)
 
-        self.exception_handler : FtgExceptionHandler = FtgExceptionHandler(context.view.as_tk())
+        self.exception_handler: FtgExceptionHandler = FtgExceptionHandler(context.view.as_tk())
 
         # avoid circular import
         from ftg.controller.workers.dropper import FtgDropper

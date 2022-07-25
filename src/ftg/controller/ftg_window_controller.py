@@ -1,3 +1,4 @@
+import sys
 from tkinter import messagebox
 
 from tkdnd import DND_FILES
@@ -29,6 +30,10 @@ class FtgWindowController:
     def start(self):
         self.__workers.clearer.clear()
         self.__context.view.as_tk().mainloop()
+
+    def stop(self):
+        self.__context.view.as_tk().destroy()
+        sys.exit()
 
     def __configure_view(self,
                          view: FtgWindow):
@@ -91,4 +96,4 @@ class FtgWindowController:
             if result == NO:
                 return
 
-        self.__context.view.as_tk().destroy()
+        self.stop()

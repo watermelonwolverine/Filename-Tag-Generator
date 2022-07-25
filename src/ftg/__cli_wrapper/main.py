@@ -3,14 +3,16 @@ import os.path
 import sys
 import traceback
 
-import appdirs
 import click
 
 from ftg import __version__
 from ftg.__cli_wrapper.__args import config_option, tags_option, verbosity_option, verbosity_choices, version_option, \
     verbosity_info, verbosity_debug
 from ftg.__cli_wrapper.__constants import win32, linux, bug_report_message, unsupported_os_error_msg
-from ftg.__constants import app_name, default_config_file_name, default_tags_file_name
+from ftg.__cli_wrapper.__paths import local_path_to_config, user_path_to_config, system_path_to_config, \
+    local_path_to_tags, user_path_to_tags, system_path_to_tags
+from ftg.__cli_wrapper.__setup import setup
+from ftg.__constants import app_name
 from ftg.controller.ftg_window_controller import FtgWindowController
 from ftg.exceptions import FtgException, FtgInternalException
 from ftg.utils.program_config import ProgramConfigImpl
@@ -34,6 +36,7 @@ def run_with(path_to_config_file=None,
 
     ftg_window_controller = FtgWindowController(config,
                                                 tags)
+
     ftg_window_controller.start()
     sys.exit()
 
@@ -81,25 +84,17 @@ def __try_to_find_config_file(given_path_to_config: str):
         else:
             raise FtgException(F"File not found: {given_path_to_config}")
 
-    potential_path_to_config = os.path.join(
-        __get_path_to_executable(),
-        default_config_file_name)
+    potential_path_to_config = local_path_to_config()
 
     if os.path.exists(potential_path_to_config):
         return potential_path_to_config
 
-    potential_path_to_config = os.path.join(
-        appdirs.user_config_dir(),
-        app_name,
-        default_config_file_name)
+    potential_path_to_config = user_path_to_config()
 
     if os.path.exists(potential_path_to_config):
         return potential_path_to_config
 
-    potential_path_to_config = os.path.join(
-        appdirs.site_config_dir(),
-        app_name,
-        default_config_file_name)
+    potential_path_to_config = system_path_to_config()
 
     if os.path.exists(potential_path_to_config):
         return potential_path_to_config
@@ -114,25 +109,17 @@ def __try_to_find_tags_file(given_path_to_tags: str):
         else:
             raise FtgException(F"File not found: {given_path_to_tags}")
 
-    potential_path_to_tags = os.path.join(
-        __get_path_to_executable(),
-        default_tags_file_name)
+    potential_path_to_tags = local_path_to_tags()
 
     if os.path.exists(potential_path_to_tags):
         return potential_path_to_tags
 
-    potential_path_to_tags = os.path.join(
-        appdirs.user_config_dir(),
-        app_name,
-        default_tags_file_name)
+    potential_path_to_tags = user_path_to_tags()
 
     if os.path.exists(potential_path_to_tags):
         return potential_path_to_tags
 
-    potential_path_to_tags = os.path.join(
-        appdirs.site_config_dir(),
-        app_name,
-        default_tags_file_name)
+    potential_path_to_tags = system_path_to_tags()
 
     if os.path.exists(potential_path_to_tags):
         return potential_path_to_tags
@@ -163,8 +150,13 @@ def main(config: str = None,
 
         path_to_tags_file = __try_to_find_tags_file(tags)
 
+        if path_to_tags_file is None:
+            setup()
+            return
+
         run_with(path_to_config_file,
                  path_to_tags_file)
+
     except SystemExit:
         pass
     except KeyboardInterrupt:

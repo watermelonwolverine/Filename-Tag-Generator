@@ -12,8 +12,8 @@ from ftg.localization import UNEXPECTED_ERROR_TITLE, UNEXPECTED_ERROR_MSG
 class FtgExceptionHandler:
 
     def __init__(self,
-                 view: Tk):
-        self.__view = view
+                 tk: Tk):
+        self.tk = tk
         self.__handling_exception = False
 
         self.__path_to_log_dir = appdirs.user_log_dir(appname=app_name,
@@ -54,4 +54,4 @@ class FtgExceptionHandler:
             logging.critical(exception)
             pass
 
-        self.__view.destroy()
+        self.tk.destroy()

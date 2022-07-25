@@ -74,7 +74,7 @@ class TagListWidget:
             full_name = tag.full_name
 
             if len(full_name) > max_nb_of_chars:
-                full_name = full_name[:max_nb_of_chars-3] + "..."
+                full_name = full_name[:max_nb_of_chars - 3] + "..."
 
             check_button = Checkbutton(tag_list_grid_frame,
                                        text=full_name,
