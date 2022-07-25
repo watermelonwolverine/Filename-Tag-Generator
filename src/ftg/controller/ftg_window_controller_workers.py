@@ -1,6 +1,7 @@
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.applier import FtgApplier
 from ftg.controller.workers.clearer import FtgClearer
+from ftg.controller.workers.exception_handler import FtgExceptionHandler
 from ftg.controller.workers.reverter import FtgReverter
 from ftg.controller.workers.utils import FtgUtils
 from ftg.utils.filename_config import NamingConfig
@@ -28,6 +29,8 @@ class FtgWindowControllerWorkers:
         self.reverter: FtgReverter = FtgReverter(context,
                                                  self.clearer,
                                                  filename_generator)
+
+        self.exception_handler : FtgExceptionHandler = FtgExceptionHandler(context.view.as_tk())
 
         # avoid circular import
         from ftg.controller.workers.dropper import FtgDropper

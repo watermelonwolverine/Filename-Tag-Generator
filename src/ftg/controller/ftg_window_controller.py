@@ -32,6 +32,12 @@ class FtgWindowController:
 
     def __configure_view(self,
                          view: FtgWindow):
+
+        def handle_exception(*args):
+            self.__workers.exception_handler.handle_exception(*args)
+
+        view.as_tk().report_callback_exception = handle_exception
+
         view.as_tk().drop_target_register(DND_FILES)
         view.as_tk().dnd_bind('<<Drop>>', lambda event: self.__workers.dropper.drop_files(event))
 
@@ -45,7 +51,6 @@ class FtgWindowController:
         self.__add_listeners()
 
     def __add_listeners(self):
-
         # noinspection PyUnusedLocal
         def on_change_callback(*args, **kwargs):
             self.__on_change_callback()

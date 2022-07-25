@@ -10,7 +10,7 @@ if sys.platform == "win32":
     sys.path.append(path_to_project_dir)
 
 from src.ftg import __version__
-from src.ftg.__cli_wrapper.__constants import app_name, author, url, issues_url
+from ftg.__constants import app_name, author, url, issues_url
 
 setuptools.setup(
     name=app_name,

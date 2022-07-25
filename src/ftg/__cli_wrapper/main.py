@@ -9,17 +9,14 @@ import click
 from ftg import __version__
 from ftg.__cli_wrapper.__args import config_option, tags_option, verbosity_option, verbosity_choices, version_option, \
     verbosity_info, verbosity_debug
-from ftg.__cli_wrapper.__constants import win32, linux, issues_url, app_name, default_config_file_name, \
-    default_tags_file_name
+from ftg.__cli_wrapper.__constants import win32, linux, bug_report_message, unsupported_os_error_msg
+from ftg.__constants import app_name, default_config_file_name, default_tags_file_name
 from ftg.controller.ftg_window_controller import FtgWindowController
 from ftg.exceptions import FtgException, FtgInternalException
 from ftg.utils.program_config import ProgramConfigImpl
 from ftg.utils.tags import Tags
 
 supported_platforms = [win32, linux]
-
-bug_report_message = "Please file a bug report on %s" % issues_url
-unsupported_os_error_msg = "Unsupported OS: {0}"
 
 
 def run_with(path_to_config_file=None,
@@ -38,6 +35,7 @@ def run_with(path_to_config_file=None,
     ftg_window_controller = FtgWindowController(config,
                                                 tags)
     ftg_window_controller.start()
+    sys.exit()
 
 
 def __add_logging_stream_handler(level: int):
@@ -167,6 +165,10 @@ def main(config: str = None,
 
         run_with(path_to_config_file,
                  path_to_tags_file)
+    except SystemExit:
+        pass
+    except KeyboardInterrupt:
+        pass
     except FtgInternalException:
         formatted = traceback.format_exc()
         logging.error(formatted)
@@ -176,8 +178,6 @@ def main(config: str = None,
         # these are expected to happen sometimes - don't print the whole stack
         logging.error(exception)
         print(str(exception))
-    except KeyboardInterrupt:
-        pass
     except BaseException:
         formatted = traceback.format_exc()
         print(F"An unexpected error occured:\n{formatted}")
