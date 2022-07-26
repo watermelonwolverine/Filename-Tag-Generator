@@ -1,6 +1,6 @@
 from typing import Dict
 
-from ftg.utils.misconfiguration_exception import MisconfigurationException
+from ftg.exceptions import JSONParseException
 
 
 def read_int_value(dict_: Dict,
@@ -40,6 +40,7 @@ def read_value_of_type(dict_: Dict,
         value = default_value
 
     if type(value) is not expected_type:
-        raise MisconfigurationException(F"{key} has to be a {expected_type}")
+        raise JSONParseException(F"Wrong type for \"{key}\". "
+                                 F"Expected {expected_type.__name__} but got {type(value).__name__}")
 
     return value

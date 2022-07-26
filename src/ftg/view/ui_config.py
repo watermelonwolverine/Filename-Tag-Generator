@@ -1,7 +1,6 @@
 from abc import ABC
 from typing import Dict
 
-from ftg.utils.misconfiguration_exception import MisconfigurationException
 from ftg.utils.parse_utils import read_int_value
 
 
@@ -37,7 +36,6 @@ class UIConfigImpl(UIConfig):
                  padding_small=__default_padding_small,
                  padding_big=__default_padding_big,
                  button_width=__default_button_width):
-
         self.font_size = font_size
         self.padding_small = padding_small
         self.padding_big = padding_big
@@ -58,7 +56,6 @@ class UIConfigImpl(UIConfig):
     @classmethod
     def parse_dict(cls,
                    json_dict: Dict[str, int]) -> UIConfig:
-
         font_size = read_int_value(json_dict,
                                    cls.FONT_SIZE_KEY,
                                    cls.__default_font_size)
@@ -79,19 +76,3 @@ class UIConfigImpl(UIConfig):
                             padding_small=padding_small,
                             padding_big=padding_big,
                             button_width=button_width)
-
-    @classmethod
-    def read_int_value(cls,
-                       dict_: Dict,
-                       key: str,
-                       default_value: int) -> int:
-
-        if key in dict_.keys():
-            value = dict_[key]
-
-            if type(value) is not int:
-                raise MisconfigurationException(F"{key} has to be an int")
-        else:
-            value = default_value
-
-        return value

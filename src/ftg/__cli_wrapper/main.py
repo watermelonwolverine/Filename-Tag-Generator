@@ -16,7 +16,7 @@ from ftg.__cli_wrapper.__paths import local_path_to_config, user_path_to_config,
 from ftg.__cli_wrapper.__setup import setup
 from ftg.__constants import app_name
 from ftg.controller.ftg_window_controller import FtgWindowController
-from ftg.exceptions import FtgException, FtgInternalException, JsonParseException
+from ftg.exceptions import FtgException, FtgInternalException, JSONParseException
 from ftg.localization import PLEASE_CHECK_YOUR_FILES_TITLE, PLEASE_CHECK_YOUR_FILES_MSG, FILE_NOT_FOUND
 from ftg.utils.program_config import ProgramConfigImpl
 from ftg.utils.tags import Tags
@@ -48,8 +48,10 @@ def main(config: str = None,
         path_to_tags_file = __try_to_find_tags_file(tags)
 
         if path_to_tags_file is None:
-            setup()
-            return
+            tk = Tk()
+            setup(tk)
+            tk.destroy()
+            sys.exit()
 
         run_with(path_to_config_file,
                  path_to_tags_file)
@@ -147,57 +149,55 @@ def __try_to_find_tags_file(given_path_to_tags: str):
 
 def run_with(path_to_config_file,
              path_to_tags_file):
-    try:
-        if path_to_tags_file is not None and not os.path.exists(path_to_tags_file):
-            raise FileNotFoundError(FILE_NOT_FOUND.format(path_to_tags_file))
+    tags = __try_to_parse_file(path_to_tags_file,
+                               lambda: __read_tags_file(path_to_tags_file))
 
-        if path_to_tags_file is not None:
-            tags: Tags = Tags.parse_file(path_to_tags_file)
-        else:
-            raise FtgException()
-
-    except FileNotFoundError as ex:
-
-        __show_error_for_file(FILE_NOT_FOUND,
-                              str(ex))
-        return
-    except (JSONDecodeError, JsonParseException) as ex:
-
-        message = PLEASE_CHECK_YOUR_FILES_MSG.format(path_to_tags_file,
-                                                     ex)
-
-        __show_error_for_file(PLEASE_CHECK_YOUR_FILES_TITLE,
-                              message)
-        return
-
-    try:
-        if path_to_config_file is not None and not os.path.exists(path_to_config_file):
-            raise FileNotFoundError(F"File not found: {path_to_config_file}")
-
-        if path_to_config_file is not None:
-            config = ProgramConfigImpl.parse_file(path_to_config_file)
-        else:
-            config = ProgramConfigImpl()
-
-    except FileNotFoundError as ex:
-
-        __show_error_for_file(FILE_NOT_FOUND,
-                              str(ex))
-        return
-
-    except (JSONDecodeError, JsonParseException) as ex:
-
-        message = PLEASE_CHECK_YOUR_FILES_MSG.format(path_to_config_file,
-                                                     ex)
-        __show_error_for_file(PLEASE_CHECK_YOUR_FILES_TITLE,
-                              message)
-        return
+    config = __try_to_parse_file(path_to_config_file,
+                                 lambda: __read_config_file(path_to_config_file))
 
     ftg_window_controller = FtgWindowController(config,
                                                 tags)
 
     ftg_window_controller.start()
     sys.exit()
+
+
+def __try_to_parse_file(path_to_file,
+                        parse_function):
+    try:
+        return parse_function()
+
+    except FileNotFoundError as ex:
+
+        __show_error_for_file(FILE_NOT_FOUND,
+                              str(ex))
+    except (JSONDecodeError, JSONParseException) as ex:
+
+        message = PLEASE_CHECK_YOUR_FILES_MSG.format(path_to_file,
+                                                     ex)
+
+        __show_error_for_file(PLEASE_CHECK_YOUR_FILES_TITLE,
+                              message)
+
+
+def __read_tags_file(path_to_tags_file: str) -> Tags:
+    if path_to_tags_file is not None and not os.path.exists(path_to_tags_file):
+        raise FileNotFoundError(FILE_NOT_FOUND.format(path_to_tags_file))
+
+    if path_to_tags_file is not None:
+        return Tags.parse_file(path_to_tags_file)
+    else:
+        raise FtgException("Missing tags file")
+
+
+def __read_config_file(path_to_config_file: str):
+    if path_to_config_file is not None and not os.path.exists(path_to_config_file):
+        raise FileNotFoundError(F"File not found: {path_to_config_file}")
+
+    if path_to_config_file is not None:
+        return ProgramConfigImpl.parse_file(path_to_config_file)
+    else:
+        return ProgramConfigImpl()
 
 
 def __show_error_for_file(title,

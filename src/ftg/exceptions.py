@@ -6,5 +6,5 @@ class FtgInternalException(FtgException):
     pass
 
 
-class JsonParseException(BaseException):
+class JSONParseException(BaseException):
     pass

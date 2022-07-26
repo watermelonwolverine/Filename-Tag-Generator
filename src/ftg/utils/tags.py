@@ -2,7 +2,7 @@ import json
 from typing import List, Dict, Any
 
 from ftg.__constants import UTF_8
-from ftg.exceptions import JsonParseException
+from ftg.exceptions import JSONParseException
 from ftg.localization import WRONG_TAGS_FILE_STRUCTURE
 from ftg.utils.tag import Tag
 
@@ -25,12 +25,12 @@ class Tags:
             json_dict: Dict[str, Any()] = json.load(tags_file)
 
         if CATEGORIES_KEY not in json_dict.keys():
-            raise JsonParseException(F"Missing key \"{CATEGORIES_KEY}\"")
+            raise JSONParseException(F"Missing key \"{CATEGORIES_KEY}\"")
 
         categories = json_dict[CATEGORIES_KEY]
 
         if type(categories) is not dict:
-            raise JsonParseException(WRONG_TAGS_FILE_STRUCTURE)
+            raise JSONParseException(WRONG_TAGS_FILE_STRUCTURE)
 
         return cls.__parse_categories(categories)
 
@@ -44,11 +44,11 @@ class Tags:
         for category_name, tags in json_dict.items():
 
             if type(tags) is not dict:
-                raise JsonParseException(F"The tag list for category \"{category_name}\" has the wrong type. "
+                raise JSONParseException(F"The tag list for category \"{category_name}\" has the wrong type. "
                                          F"It should be a dictionary but is a {type(tags)}")
 
             if category_name in categories:
-                raise JsonParseException(F"Duplicate category \"{category_name}\"")
+                raise JSONParseException(F"Duplicate category \"{category_name}\"")
 
             cls.__parse_category(category_name,
                                  tags,
@@ -68,13 +68,13 @@ class Tags:
         for letter_code, full_name in tags.items():
 
             if type(full_name) is not str:
-                raise JsonParseException(F"Wrong type for full name of \"{letter_code}\"")
+                raise JSONParseException(F"Wrong type for full name of \"{letter_code}\"")
 
             if letter_code in tags_by_letter_code_out.keys():
 
                 tag = tags_by_letter_code_out[letter_code]
                 if tag.full_name != full_name:
-                    raise JsonParseException(F"Tags may only exists multiple times with the same display name. "
+                    raise JSONParseException(F"Tags may only exists multiple times with the same display name. "
                                              F"This is not the case for \"{letter_code}\".")
             else:
                 tag = Tag(letter_code, full_name)

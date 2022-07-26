@@ -3,6 +3,7 @@ from abc import ABC
 from typing import Dict
 
 from ftg.__constants import UTF_8
+from ftg.exceptions import JSONParseException
 from ftg.utils.filename_config import NamingConfig, NamingConfigImpl
 from ftg.view.ui_config import UIConfig, UIConfigImpl
 
@@ -57,12 +58,26 @@ class ProgramConfigImpl(ProgramConfig):
                    json_dict: Dict[str, Dict]) -> ProgramConfig:
 
         if cls.UI_CONFIG in json_dict.keys():
-            ui_config = UIConfigImpl.parse_dict(json_dict.get(cls.UI_CONFIG))
+
+            ui_config_dict = json_dict.get(cls.UI_CONFIG)
+
+            if type(ui_config_dict) is not dict:
+                raise JSONParseException(F"Wrong type for \"{cls.UI_CONFIG}\". "
+                                         F"Expected a dictionary, got {type(ui_config_dict).__name__}")
+
+            ui_config = UIConfigImpl.parse_dict(ui_config_dict)
         else:
             ui_config = cls.__default_ui_config
 
         if cls.NAMING_CONFIG in json_dict.keys():
-            naming_config = NamingConfigImpl.parse_dict(json_dict.get(cls.NAMING_CONFIG))
+
+            naming_config_dict = json_dict.get(cls.NAMING_CONFIG)
+
+            if type(naming_config_dict) is not dict:
+                raise JSONParseException(F"Wrong type for \"{cls.UI_CONFIG}\". "
+                                         F"Expected a dictionary, got {type(naming_config_dict).__name__}")
+
+            naming_config = NamingConfigImpl.parse_dict(naming_config_dict)
         else:
             naming_config = cls.__default_naming_config
 
