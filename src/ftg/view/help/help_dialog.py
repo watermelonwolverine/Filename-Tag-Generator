@@ -1,6 +1,10 @@
-import tkinter
-from tkinter import Tk, Text, BOTH, Toplevel
+import webbrowser
+from tkinter import Tk, BOTH, Toplevel
 
+import markdown
+from tkinterweb.htmlwidgets import HtmlFrame
+
+from ftg.__help_text import help_text
 from ftg.view.styles import Styles
 from ftg.view.ui_config import UIConfig
 
@@ -20,12 +24,21 @@ class FtgHelpDialog:
         self.__build_ui()
 
     def __build_ui(self):
-        text = Text(self.__root,
-                    pady=self.__config.get_padding_small(),
-                    padx=self.__config.get_padding_small(),
-                    font=self.__styles.get_normal_font())
+        text = HtmlFrame(self.__root,
+                         messages_enabled=False,
+                         vertical_scrollbar="auto",
+                         horizontal_scrollbar="auto")
 
-        text.insert(tkinter.END, "blablabla, mister freeman")
+        def open_url(url:str):
+            if url.startswith("https://"):
+                webbrowser.open(url)
+
+        text.html.link_click_func = open_url
+        text.html.form_submit_func = lambda: None
 
         text.pack(fill=BOTH,
                   expand=True)
+
+        html_help_text = markdown.markdown(help_text)
+
+        text.load_html(html_help_text)
