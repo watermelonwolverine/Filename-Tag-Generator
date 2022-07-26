@@ -8,12 +8,12 @@ from tkinter import Tk, messagebox
 import click
 
 from ftg import __version__
+from ftg.__cli_wrapper import __setup
 from ftg.__cli_wrapper.__args import config_option, tags_option, verbosity_option, verbosity_choices, version_option, \
-    verbosity_info, verbosity_debug
+    verbosity_info, verbosity_debug, setup_option
 from ftg.__cli_wrapper.__constants import win32, linux, bug_report_message, unsupported_os_error_msg
 from ftg.__cli_wrapper.__paths import local_path_to_config, user_path_to_config, system_path_to_config, \
     local_path_to_tags, user_path_to_tags, system_path_to_tags
-from ftg.__cli_wrapper.__setup import setup
 from ftg.__constants import app_name
 from ftg.controller.ftg_window_controller import FtgWindowController
 from ftg.exceptions import FtgException, FtgInternalException, JSONParseException
@@ -29,10 +29,12 @@ supported_platforms = [win32, linux]
 @click.option(tags_option, type=click.Path(exists=True))
 @click.option(verbosity_option, type=click.Choice(verbosity_choices, case_sensitive=False))
 @click.option(version_option, is_flag=True)
+@click.option(setup_option, is_flag=True)
 def main(config: str = None,
          tags: str = None,
          verbosity: str = None,
-         version: bool = False) -> None:
+         version: bool = False,
+         setup: bool = False) -> None:
     # noinspection PyBroadException
     try:
         __check_platform()
@@ -43,18 +45,14 @@ def main(config: str = None,
 
         __configure_logging(verbosity)
 
-        path_to_config_file = __try_to_find_config_file(config)
-
-        path_to_tags_file = __try_to_find_tags_file(tags)
-
-        if path_to_tags_file is None:
-            tk = Tk()
-            setup(tk)
+        if setup:
+            tk = Tk(app_name)
+            __setup.setup()
             tk.destroy()
             sys.exit()
 
-        run_with(path_to_config_file,
-                 path_to_tags_file)
+        __try_to_run_with(config,
+                          tags)
 
     except SystemExit:
         pass
@@ -101,6 +99,22 @@ def __add_logging_stream_handler(level: int):
     handler.setFormatter(formatter)
 
     root.addHandler(handler)
+
+
+def __try_to_run_with(config: str,
+                      tags: str):
+    path_to_config_file = __try_to_find_config_file(config)
+
+    path_to_tags_file = __try_to_find_tags_file(tags)
+
+    if path_to_tags_file is None:
+        tk = Tk(app_name)
+        __setup.maybe_setup()
+        tk.destroy()
+        sys.exit()
+
+    run_with(path_to_config_file,
+             path_to_tags_file)
 
 
 def __try_to_find_config_file(given_path_to_config: str):

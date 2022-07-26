@@ -4,7 +4,7 @@ from typing import Dict
 
 from ftg.__constants import UTF_8
 from ftg.exceptions import JSONParseException
-from ftg.utils.filename_config import NamingConfig, NamingConfigImpl
+from ftg.utils.naming_config import NamingConfig, NamingConfigImpl
 from ftg.view.ui_config import UIConfig, UIConfigImpl
 
 
@@ -23,8 +23,11 @@ class ProgramConfigImpl(ProgramConfig):
     __default_naming_config = NamingConfigImpl()
 
     # json keys
-    UI_CONFIG = "ui-config"
-    NAMING_CONFIG = "naming-config"
+    UI_CONFIG_KEY = "ui-config"
+    NAMING_CONFIG_KEY = "naming-config"
+
+    default_config_dict = {UI_CONFIG_KEY: UIConfigImpl.default_config_dict,
+                           NAMING_CONFIG_KEY: NamingConfigImpl.default_config_dict}
 
     def __init__(self,
                  ui_config=__default_ui_config,
@@ -57,24 +60,24 @@ class ProgramConfigImpl(ProgramConfig):
     def parse_dict(cls,
                    json_dict: Dict[str, Dict]) -> ProgramConfig:
 
-        if cls.UI_CONFIG in json_dict.keys():
+        if cls.UI_CONFIG_KEY in json_dict.keys():
 
-            ui_config_dict = json_dict.get(cls.UI_CONFIG)
+            ui_config_dict = json_dict.get(cls.UI_CONFIG_KEY)
 
             if type(ui_config_dict) is not dict:
-                raise JSONParseException(F"Wrong type for \"{cls.UI_CONFIG}\". "
+                raise JSONParseException(F"Wrong type for \"{cls.UI_CONFIG_KEY}\". "
                                          F"Expected a dictionary, got {type(ui_config_dict).__name__}")
 
             ui_config = UIConfigImpl.parse_dict(ui_config_dict)
         else:
             ui_config = cls.__default_ui_config
 
-        if cls.NAMING_CONFIG in json_dict.keys():
+        if cls.NAMING_CONFIG_KEY in json_dict.keys():
 
-            naming_config_dict = json_dict.get(cls.NAMING_CONFIG)
+            naming_config_dict = json_dict.get(cls.NAMING_CONFIG_KEY)
 
             if type(naming_config_dict) is not dict:
-                raise JSONParseException(F"Wrong type for \"{cls.UI_CONFIG}\". "
+                raise JSONParseException(F"Wrong type for \"{cls.UI_CONFIG_KEY}\". "
                                          F"Expected a dictionary, got {type(naming_config_dict).__name__}")
 
             naming_config = NamingConfigImpl.parse_dict(naming_config_dict)

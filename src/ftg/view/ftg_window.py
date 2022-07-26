@@ -3,6 +3,7 @@ from typing import Dict, Literal
 
 from tkinterdnd2 import TkinterDnD
 
+from ftg.__constants import app_name
 from ftg.utils.program_config import UIConfig
 from ftg.utils.tags import Tags
 from ftg.view.categories_widget import CategoriesWidget
@@ -41,7 +42,7 @@ class FtgWindow:
 
     def __build_ui(self,
                    tk: Tk) -> None:
-        tk.title("Filename Tag Generator")
+        tk.title(app_name)
         tk.minsize(width=500,
                    height=500)
 

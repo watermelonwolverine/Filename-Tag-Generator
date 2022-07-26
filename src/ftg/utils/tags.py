@@ -1,12 +1,22 @@
 import json
 from typing import List, Dict, Any
 
+import ftg
 from ftg.__constants import UTF_8
 from ftg.exceptions import JSONParseException
 from ftg.localization import WRONG_TAGS_FILE_STRUCTURE
 from ftg.utils.tag import Tag
 
+FTG_VERSION_KEY = "ftg-version"
 CATEGORIES_KEY = "categories"
+
+example_tags_dict = {FTG_VERSION_KEY: ftg.__version__,
+                     CATEGORIES_KEY: {
+                         "category1": {"tag1": "tag1-display-name",
+                                       "tag2": "tag2-display-name"},
+                         "category2": {"tag1": "tag1-display-name",
+                                       "tag3": "tag3-display-name"}
+                     }}
 
 
 class Tags:

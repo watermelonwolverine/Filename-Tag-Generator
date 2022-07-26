@@ -31,6 +31,11 @@ class UIConfigImpl(UIConfig):
     PADDING_BIG_KEY = "padding-big"
     BUTTON_WIDTH_KEY = "button-width"
 
+    default_config_dict = {FONT_SIZE_KEY: __default_font_size,
+                           PADDING_SMALL_KEY: __default_padding_small,
+                           PADDING_BIG_KEY: __default_padding_big,
+                           BUTTON_WIDTH_KEY: __default_button_width}
+
     def __init__(self,
                  font_size=__default_font_size,
                  padding_small=__default_padding_small,

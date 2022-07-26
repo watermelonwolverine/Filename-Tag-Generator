@@ -42,6 +42,13 @@ class NamingConfigImpl(NamingConfig):
     BASENAME_TAGS_SEPARATOR_KEY = "basename-tags-separator"
     TAG_SEPARATOR_KEY = "tag-separator"
 
+    default_config_dict = {ADJUST_BASENAME_KEY: __default_adjust_basename,
+                           CAPITALIZE_BASENAME_KEY: __default_capitalize_basename,
+                           REPLACE_BASENAME_SPACER_KEY: __default_replace_basename_spacer,
+                           BASENAME_SPACER_KEY: __default_basename_spacer,
+                           BASENAME_TAGS_SEPARATOR_KEY: __default_basename_tags_separator,
+                           TAG_SEPARATOR_KEY: __default_tag_separator}
+
     def __init__(self,
                  adjust_basename=__default_adjust_basename,
                  capitalize_basename=__default_capitalize_basename,
