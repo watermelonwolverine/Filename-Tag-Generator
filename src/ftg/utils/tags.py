@@ -7,19 +7,10 @@ from ftg.exceptions import JSONParseException
 from ftg.localization import WRONG_TAGS_FILE_STRUCTURE
 from ftg.utils.tag import Tag
 
-FTG_VERSION_KEY = "ftg-version"
-CATEGORIES_KEY = "categories"
-
-example_tags_dict = {FTG_VERSION_KEY: ftg.__version__,
-                     CATEGORIES_KEY: {
-                         "category1": {"tag1": "tag1-display-name",
-                                       "tag2": "tag2-display-name"},
-                         "category2": {"tag1": "tag1-display-name",
-                                       "tag3": "tag3-display-name"}
-                     }}
-
 
 class Tags:
+    FTG_VERSION_KEY = "ftg-version"
+    CATEGORIES_KEY = "categories"
 
     def __init__(self,
                  tags: List[Tag],
@@ -34,10 +25,10 @@ class Tags:
         with open(path_to_tags_file, "rt", encoding=UTF_8) as tags_file:
             json_dict: Dict[str, Any()] = json.load(tags_file)
 
-        if CATEGORIES_KEY not in json_dict.keys():
-            raise JSONParseException(F"Missing key \"{CATEGORIES_KEY}\"")
+        if cls.CATEGORIES_KEY not in json_dict.keys():
+            raise JSONParseException(F"Missing key \"{cls.CATEGORIES_KEY}\"")
 
-        categories = json_dict[CATEGORIES_KEY]
+        categories = json_dict[cls.CATEGORIES_KEY]
 
         if type(categories) is not dict:
             raise JSONParseException(WRONG_TAGS_FILE_STRUCTURE)
@@ -91,3 +82,12 @@ class Tags:
                 tags_by_letter_code_out[letter_code] = tag
 
             categories_out[category_name.lower()].append(tag)
+
+
+example_tags_dict = {Tags.FTG_VERSION_KEY: ftg.__version__,
+                     Tags.CATEGORIES_KEY: {
+                         "category1": {"tag1": "tag1-display-name",
+                                       "tag2": "tag2-display-name"},
+                         "category2": {"tag1": "tag1-display-name",
+                                       "tag3": "tag3-display-name"}
+                     }}

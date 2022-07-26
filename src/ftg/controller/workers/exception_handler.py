@@ -35,6 +35,9 @@ class FtgExceptionHandler:
 
     def handle_exception(self,
                          *args) -> None:
+
+        logging.exception(traceback.format_exception(*args))
+
         if self.__handling_exception:
             return
 

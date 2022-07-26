@@ -30,6 +30,18 @@ supported_platforms = [win32, linux]
 @click.option(verbosity_option, type=click.Choice(verbosity_choices, case_sensitive=False))
 @click.option(version_option, is_flag=True)
 @click.option(setup_option, is_flag=True)
+def cli_main(config: str = None,
+             tags: str = None,
+             verbosity: str = None,
+             version: bool = False,
+             setup: bool = False) -> None:
+    main(config,
+         tags,
+         verbosity,
+         version,
+         setup)
+
+
 def main(config: str = None,
          tags: str = None,
          verbosity: str = None,
@@ -226,4 +238,4 @@ def __show_error_for_file(title,
 
 
 if __name__ == "__main__":
-    main()
+    main(verbosity=verbosity_debug)

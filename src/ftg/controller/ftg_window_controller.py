@@ -9,6 +9,7 @@ from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWork
 from ftg.utils.program_config import ProgramConfig
 from ftg.utils.tags import Tags
 from ftg.view.ftg_window import FtgWindow
+from ftg.view.help.help_dialog import FtgHelpDialog
 
 
 class FtgWindowController:
@@ -16,6 +17,9 @@ class FtgWindowController:
     def __init__(self,
                  config: ProgramConfig,
                  tags: Tags):
+
+        self.__config = config
+
         view = FtgWindow(config.get_ui_config(),
                          tags)
 
@@ -52,6 +56,7 @@ class FtgWindowController:
         view.revert_button.configure(command=do_revert)
         view.apply_button.configure(command=lambda: self.__workers.applier.apply())
         view.clear_button.configure(command=lambda: self.__workers.clearer.clear())
+        view.help_button.configure(command=lambda: self.__show_help())
 
         self.__add_listeners()
 
@@ -97,3 +102,8 @@ class FtgWindowController:
                 return
 
         self.stop()
+
+    def __show_help(self):
+        FtgHelpDialog(self.__context.view.as_tk(),
+                      self.__config.get_ui_config(),
+                      self.__context.view.styles)

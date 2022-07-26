@@ -23,7 +23,7 @@ class FtgWindow:
 
         self.__tk = TkinterDnD.Tk()
 
-        self.__styles: Styles = StylesImpl(self.__config.get_font_size())
+        self.styles: Styles = StylesImpl(self.__config.get_font_size())
 
         self.__init_checkbutton_vars()
 
@@ -72,7 +72,7 @@ class FtgWindow:
                                                   self.__config,
                                                   self.__tags.categories,
                                                   self.checkbox_values,
-                                                  self.__styles)
+                                                  self.styles)
 
         self.categories_widget.as_frame().pack(side=BOTTOM,
                                                fill=BOTH,
@@ -86,20 +86,29 @@ class FtgWindow:
 
         ttk.Label(frame,
                   text="Selected File",
-                  font=self.__styles.get_normal_font(),
+                  font=self.styles.get_normal_font(),
                   width=input_label_width).pack(side=LEFT)
 
         self.selected_file_string_var: StringVar = StringVar()
 
         entry = ttk.Entry(frame,
                           textvariable=self.selected_file_string_var,
-                          font=self.__styles.get_normal_font(),
+                          font=self.styles.get_normal_font(),
                           state="readonly")
+
+        # I just don't know where else to put this
+        self.help_button = Button(frame,
+                                  text="Help")
+        self.help_button['font'] = self.styles.get_normal_font()
 
         entry.pack(side=LEFT,
                    padx=self.__config.get_padding_small(),
                    fill=X,
                    expand=True)
+
+        self.help_button.pack(side=RIGHT,
+                              padx=self.__config.get_padding_big(),
+                              fill=X)
 
         frame.pack(fill=X,
                    pady=self.__config.get_padding_small(),
@@ -114,14 +123,14 @@ class FtgWindow:
 
         ttk.Label(frame,
                   text="Basename",
-                  font=self.__styles.get_normal_font(),
+                  font=self.styles.get_normal_font(),
                   width=input_label_width).pack(side=LEFT)
 
         self.basename_string_var: StringVar = StringVar()
 
         self.basename_entry = Entry(frame,
                                     textvariable=self.basename_string_var,
-                                    font=self.__styles.get_normal_font())
+                                    font=self.styles.get_normal_font())
 
         self.basename_entry.pack(side=LEFT,
                                  padx=self.__config.get_padding_small(),
@@ -138,14 +147,14 @@ class FtgWindow:
 
         ttk.Label(frame,
                   text="Extension",
-                  font=self.__styles.get_normal_font(),
+                  font=self.styles.get_normal_font(),
                   width=input_label_width).pack(side=LEFT)
 
         self.extension_string_var: StringVar = StringVar()
 
         self.extension_entry = Entry(frame,
                                      textvariable=self.extension_string_var,
-                                     font=self.__styles.get_normal_font())
+                                     font=self.styles.get_normal_font())
 
         self.extension_entry.pack(side=LEFT,
                                   padx=self.__config.get_padding_small(),
@@ -169,14 +178,14 @@ class FtgWindow:
 
         ttk.Label(frame,
                   text="Full Name",
-                  font=self.__styles.get_normal_font(),
+                  font=self.styles.get_normal_font(),
                   width=input_label_width).pack(side=LEFT)
 
         self.filename_result_string_var: StringVar = StringVar()
 
         self.filename_entry = Entry(frame,
                                     textvariable=self.filename_result_string_var,
-                                    font=self.__styles.get_normal_font())
+                                    font=self.styles.get_normal_font())
 
         self.filename_entry.pack(fill=BOTH,
                                  expand=True,
@@ -184,7 +193,7 @@ class FtgWindow:
 
         self.revert_button = Button(frame,
                                     text="Revert")
-        self.revert_button['font'] = self.__styles.get_normal_font()
+        self.revert_button['font'] = self.styles.get_normal_font()
 
         self.revert_button.pack(side=RIGHT,
                                 padx=self.__config.get_padding_big(),
@@ -201,7 +210,7 @@ class FtgWindow:
         self.apply_button = Button(frame,
                                    text="Apply")
 
-        self.apply_button["font"] = self.__styles.get_normal_font()
+        self.apply_button["font"] = self.styles.get_normal_font()
 
         self.apply_button.pack(side=LEFT,
                                padx=self.__config.get_padding_big(),
@@ -211,7 +220,7 @@ class FtgWindow:
         self.clear_button = Button(frame,
                                    text="Clear")
 
-        self.clear_button["font"] = self.__styles.get_normal_font()
+        self.clear_button["font"] = self.styles.get_normal_font()
 
         self.clear_button.pack(side=RIGHT,
                                padx=self.__config.get_padding_big(),
