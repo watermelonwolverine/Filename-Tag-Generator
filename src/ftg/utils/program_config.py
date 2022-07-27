@@ -2,6 +2,7 @@ import json
 from abc import ABC
 from typing import Dict
 
+import ftg
 from ftg.__constants import UTF_8
 from ftg.exceptions import JSONParseException
 from ftg.utils.naming_config import NamingConfig, NamingConfigImpl
@@ -23,11 +24,14 @@ class ProgramConfigImpl(ProgramConfig):
     __default_naming_config = NamingConfigImpl()
 
     # json keys
+    FTG_VERSION_KEY = "ftg-version"
     UI_CONFIG_KEY = "ui-config"
     NAMING_CONFIG_KEY = "naming-config"
 
-    default_config_dict = {UI_CONFIG_KEY: UIConfigImpl.default_config_dict,
-                           NAMING_CONFIG_KEY: NamingConfigImpl.default_config_dict}
+    default_config_dict = {
+        FTG_VERSION_KEY: ftg.__version__,
+        UI_CONFIG_KEY: UIConfigImpl.default_config_dict,
+        NAMING_CONFIG_KEY: NamingConfigImpl.default_config_dict}
 
     def __init__(self,
                  ui_config=__default_ui_config,

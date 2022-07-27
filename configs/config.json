@@ -1,4 +1,5 @@
 {
+  "ftg-version": "0.1.0",
   "ui-config": {
     "font-size": 14,
     "padding-small": 5,

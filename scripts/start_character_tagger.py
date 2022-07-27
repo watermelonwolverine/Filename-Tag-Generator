@@ -1,6 +1,6 @@
 import os
 
-from ftg.__cli_wrapper.main import run_with
+from ftg.__cli_wrapper import main
 
-run_with(os.path.join("configs", "config.json"),
-         os.path.join("configs", "character-tags.json"))
+main.main(config=os.path.join("configs", "config.json"),
+          tags=os.path.join("configs", "character-tags.json"))
