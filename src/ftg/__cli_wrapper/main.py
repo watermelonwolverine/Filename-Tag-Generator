@@ -4,6 +4,7 @@ import sys
 import traceback
 from json import JSONDecodeError
 from tkinter import Tk, messagebox
+from typing import List, Union
 
 import click
 
@@ -12,8 +13,7 @@ from ftg.__cli_wrapper import __setup
 from ftg.__cli_wrapper.__args import config_option, tags_option, verbosity_option, verbosity_choices, version_option, \
     verbosity_info, verbosity_debug, setup_option
 from ftg.__cli_wrapper.__constants import win32, linux, bug_report_message, unsupported_os_error_msg
-from ftg.__cli_wrapper.__paths import local_path_to_config, user_path_to_config, system_path_to_config, \
-    local_path_to_tags, user_path_to_tags, system_path_to_tags
+from ftg.__cli_wrapper.__paths import path_to_tags_options, path_to_config_options
 from ftg.__constants import app_name
 from ftg.controller.ftg_window_controller import FtgWindowController
 from ftg.exceptions import FtgException, FtgInternalException, JSONParseException
@@ -113,11 +113,13 @@ def __add_logging_stream_handler(level: int):
     root.addHandler(handler)
 
 
-def __try_to_run_with(config: str,
-                      tags: str):
-    path_to_config_file = __try_to_find_config_file(config)
+def __try_to_run_with(given_path_to_config_file: str,
+                      given_path_to_tags_file: str):
+    path_to_tags_file = __take_or_look(given_path_to_tags_file,
+                                       path_to_tags_options())
 
-    path_to_tags_file = __try_to_find_tags_file(tags)
+    path_to_config_file = __take_or_look(given_path_to_config_file,
+                                         path_to_config_options())
 
     if path_to_tags_file is None:
         tk = Tk(app_name)
@@ -129,46 +131,21 @@ def __try_to_run_with(config: str,
              path_to_tags_file)
 
 
-def __try_to_find_config_file(given_path_to_config: str):
-    if given_path_to_config is not None:
-        return given_path_to_config
-
-    potential_path_to_config = local_path_to_config()
-
-    if os.path.exists(potential_path_to_config):
-        return potential_path_to_config
-
-    potential_path_to_config = user_path_to_config()
-
-    if os.path.exists(potential_path_to_config):
-        return potential_path_to_config
-
-    potential_path_to_config = system_path_to_config()
-
-    if os.path.exists(potential_path_to_config):
-        return potential_path_to_config
-
-    return None
+def __take_or_look(path: str,
+                   options: List[str]) -> Union[str, None]:
+    if path is None:
+        return __look_for(options)
+    else:
+        if os.path.exists(path):
+            return path
+        else:
+            raise FtgException(F'Error: File does not exists {path}')
 
 
-def __try_to_find_tags_file(given_path_to_tags: str):
-    if given_path_to_tags is not None:
-        raise FtgException(F"File not found: {given_path_to_tags}")
-
-    potential_path_to_tags = local_path_to_tags()
-
-    if os.path.exists(potential_path_to_tags):
-        return potential_path_to_tags
-
-    potential_path_to_tags = user_path_to_tags()
-
-    if os.path.exists(potential_path_to_tags):
-        return potential_path_to_tags
-
-    potential_path_to_tags = system_path_to_tags()
-
-    if os.path.exists(potential_path_to_tags):
-        return potential_path_to_tags
+def __look_for(options: List[str]) -> Union[str, None]:
+    for option in options:
+        if os.path.exists(option):
+            return option
 
     return None
 

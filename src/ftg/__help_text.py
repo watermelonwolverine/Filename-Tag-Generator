@@ -39,7 +39,7 @@ about_text = str(
     '\n'
     'The primary purpose of this program is to tag files by appending the tags to the name of the file.\n'
     '\n'
-    'The use case it is designed for is the organization of RPG maps and other media files a DM or GM comes in contact with.\n'
+    'The use case it is designed for is the organization of RPG maps and other media files a DM/GM comes in contact with.\n'
     '\n'
     '## Example\n'
     '\n'
@@ -49,9 +49,7 @@ about_text = str(
     '\n'
     'to the file `some_map.png` it would be renamed to\n'
     '\n'
-    '`some_map;tag1_tag2_tag3.png\n'
-    '`\n'
-    '\n')
+    '`some_map;tag1_tag2_tag3.png`')
 
 configuration = str()
 
@@ -66,8 +64,7 @@ where_to_start_text = str(
     '\n'
     F'If you want to understand the decisions that lead to this mess go to [{why_filenames_header}]({why_filenames_link})\n'
     '\n'
-    F'If you think that putting the tags into the filenames is a bad solution go to [{alternatives_header}]({alternatives_link})\n'
-    '\n'
+    F'If you think that putting the tags into the filenames is a bad solution go to [{alternatives_header}]({alternatives_link})'
 )
 
 limitations_text = str(
@@ -90,12 +87,11 @@ limitations_text = str(
     '\n'
     'Make yourself clear about these limitations before using this tool as they cannot be circumvented.\n'
     '\n'
-    'That said in most cases it´s pretty easy to stay below the limits unless you use very high number of long tags.\n'
-    '\n'
+    'That said in most cases it´s pretty easy to stay below the limits unless you use very high number of long tags.'
 )
 
 why_filenames_text = str(
-    F'# {why_filenames_header}?\n'
+    F'# {why_filenames_header}\n'
     '\n'
     'This is the conclusion of a [reddit post](TODO)\n'
     '\n'
@@ -118,12 +114,12 @@ why_filenames_text = str(
     '- Works in pretty much every cloud web interface\n'
     '    - => Access your media files via tags everywhere without having to download them first\n'
     '- Works with every type of file\n'
-    '- Tags don`t get lost on conversion\n'
-    '- Tags don`t get lost when file is moved outside the tool\n'
+    '- Tags don\'t get lost on conversion\n'
+    '- Tags don\'t get lost when file is moved\n'
     '- Tags always stay synced with file even when working on multiple machines \n'
     '  - => No need to sync databases, metafiles etc.\n'
     '\n'
-    '## Alternative Solutions\n'
+    '## Problems with Alternative Solutions\n'
     '\n'
     '### Database\n'
     '\n'
@@ -131,7 +127,7 @@ why_filenames_text = str(
     '- Would require indexing\n'
     '- Needs a thumbnail cache and a file browser with search functionality\n'
     '- How to sync the database to different PC?\n'
-    '- Can`t use tags in the cloud web interface\n'
+    '- Can\'t use tags in the cloud web interface\n'
     '- Would basically just re-implement one of the countless tagging solutions that already exist\n'
     '\n'
     '### Accompanying Metafiles\n'
@@ -139,7 +135,7 @@ why_filenames_text = str(
     '- Files always have to be moved together\n'
     '- Would require indexing\n'
     '- Needs a thumbnail cache and a file browser with search functionality\n'
-    '- Can`t use tags in the cloud web interface\n'
+    '- Can\'t use tags in the cloud web interface\n'
     '\n'
     '### Metadata of the Files\n'
     '\n'
@@ -147,27 +143,29 @@ why_filenames_text = str(
     '- Would need to treat every file type special\n'
     '- Would require indexing\n'
     '- Needs a thumbnail cache and a file browser with search functionality\n'
-    '- Can`t use tags in the cloud web interface\n'
-    '\n'
+    '- Can\'t use tags in the cloud web interface'
 )
 
 alternatives_text = str(
     F'# {alternatives_header}\n'
     '\n'
-    'Originally I was going to put a list of alternatives here, but then I found too many and none really satisfied me. That why I created this tool in the first place.\n'
+    'Originally I was going to put a list of alternatives here, but then I found many and none really satisfied me. '
+    'That\'s why I created this tool in the first place.\n'
     '\n'
     'There is an abundance of tagging tools out there. If you find one that is \n'
+    '\n'
+    '- free\n'
     '- cross-platform\n'
     '- works with cloud sync\n'
     '- works in the cloud web interface\n'
     '- can easily manage 100s of tags\n'
-    '- can easily manage dozens of tags per file  \n'
+    '- can easily manage dozens of tags per file\n'
     '\n'
-    'let me know, so I can add it.'
+    'let me know, so I can link it here.'
 )
 
 where_is_my_stuff_text = str(
-    F'# {where_is_my_stuff_header}?\n'
+    F'# {where_is_my_stuff_header}\n'
     F'\n'
     F'1. Local config dir : [{__paths.local_config_dir()}](file://{__paths.local_config_dir()})\n'
     F'2. User config dir : [{__paths.user_config_dir()}](file://{__paths.user_config_dir()})\n'
