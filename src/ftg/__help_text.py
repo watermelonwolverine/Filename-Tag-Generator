@@ -1,6 +1,12 @@
+import json
 from typing import Dict, List
 
-from ftg.__cli_wrapper import __paths
+import ftg
+from ftg.__cli_wrapper import __paths, __args
+from ftg.__constants import default_tags_file_name, default_config_file_name, author, app_name
+from ftg.utils.naming_config import NamingConfigImpl
+from ftg.utils.program_config import ProgramConfigImpl
+from ftg.utils.tags import Tags
 
 
 def __to_link__(header: str):
@@ -8,6 +14,17 @@ def __to_link__(header: str):
     result = result.strip(" ?!.")
     result.replace(" ", "-")
     return "#" + result
+
+
+def __to_code_block(code: str) -> str:
+    indent = "    "
+
+    result = ""
+
+    for line in code.splitlines():
+        result += indent + line + "\n"
+
+    return result
 
 
 about_header = "About"
@@ -30,6 +47,9 @@ where_is_my_stuff_link = __to_link__(where_is_my_stuff_header)
 
 install_header = "Install"
 install_link = __to_link__(install_header)
+
+config_header = "Config"
+config_link = __to_link__(config_header)
 
 usage_header = "Usage"
 usage_link = __to_link__(usage_header)
@@ -182,6 +202,77 @@ usage_text = str(
     F'TODO'
 )
 
+config_text = str(
+    F'# {config_header}\n'
+    F'\n'
+    F'Two files are used to configure the program\n'
+    F'\n'
+    F'- Tag files, usually named `{default_tags_file_name}`\n'
+    F'- Config files, usually named `{default_config_file_name}`\n'
+    F'\n'
+    F'Both are JSON files and need to be edited manually (as I cannot be bothered to spend countless hours on an editor)\n'
+    F'\n'
+    F'The program looks for configuration files in the following order:\n'
+    F'\n'
+    F'1. In the execution directory. I.e. where the executable is located.\n'
+    F'2. In the user config directory.\n'
+    F'    1. On Windows that\'s usually `C:\\users\\<user>\\AppData\\Local\\{author}\\{app_name}`\n'
+    F'    2. On Linux that\'s usually "/home/<user>/TODO"\n'
+    F'3. In the system config directory.\n'
+    F'    1. On Windows that\'s usually `C:\\ProgramData\\{author}\\{app_name}`\n'
+    F'    2. On Linux that\'s usually "/home/<user>/TODO"\n'
+    F'\n'
+    F'You can also specify the path to each file when starting from the command line using the `{__args.config_option}` and `{__args.tags_option}`\n'
+    F'options. '
+    F'This way you can have multiple tags and config files for different purposes.\n'
+    F'\n'
+    F'The program can run without a config file but it needs a tag file.\n'
+    F'\n'
+    F'## Tags\n'
+    F'\n'
+    F'The tags usually live in a `{default_tags_file_name}` file that follows the following structure:\n'
+    F'\n'
+    F'    {{\n'
+    F'      "{Tags.FTG_VERSION_KEY}": "{ftg.__version__}",\n\n'
+    F'      "{Tags.CATEGORIES_KEY}": {{\n'
+    F'        "category-name1": {{\n'
+    F'          "tag1": "tag1-display-name",\n'
+    F'          "tag2": "tag2-display-name"\n'
+    F'        }},\n'
+    F'        "category-name2": {{\n'
+    F'          "tag1": "tag1-display-name",\n'
+    F'          "tag3": "tag3-display-name"\n'
+    F'        }}\n'
+    F'      }}\n'
+    F'    }}\n'
+    F'\n'
+    F'You can have as many categories under `{Tags.CATEGORIES_KEY}` as you want. You can also have as many tags under each category as '
+    F'you want.\n'
+    F'\n'
+    F'Tags can be in multiple categories as long as they have the same display-name.\n'
+    F'\n'
+    F'For example: `"dungeon" : "Dungeon"` may fit into both categories `Nature` and `Civilization`.\n'
+    F'\n'
+    F'## UI and Behaviour\n'
+    F'\n'
+    F'You can configure the ui and the naming behaviour using a config file which is usually named `{default_config_file_name}`.\n'
+    F'\n'
+    F'The config file with the default values would look like this:\n'
+    F'\n'
+    F'{__to_code_block(json.dumps(ProgramConfigImpl.default_config_dict, indent=2))}\n'
+    F'\n'
+    F'I will not explain every single detail as most should be self-explanatory.\n'
+    F'\n'
+    F'The most important ones are:\n'
+    F'\n'
+    F'- `{NamingConfigImpl.ADJUST_BASENAME_KEY}` : if this is set to `false` the basename will not be adjusted in anyway\n'
+    F'- `{NamingConfigImpl.CAPITALIZE_BASENAME_KEY}` : if this is set to `true` the basename will be capitalized\n'
+    F'- `{NamingConfigImpl.REPLACE_BASENAME_SPACER_KEY}` : if this is set to `true` the TODO'
+
+)
+
+
+
 
 class Section:
     def __init__(self,
@@ -202,12 +293,6 @@ sections = [Section(about_link,
             Section(limitations_link,
                     limitations_header,
                     limitations_text),
-            Section(why_filenames_link,
-                    why_filenames_header,
-                    why_filenames_text),
-            Section(alternatives_link,
-                    alternatives_header,
-                    alternatives_text),
             Section(where_is_my_stuff_link,
                     where_is_my_stuff_header,
                     where_is_my_stuff_text),
@@ -216,20 +301,33 @@ sections = [Section(about_link,
                     install_text),
             Section(usage_link,
                     usage_header,
-                    usage_text)]
+                    usage_text),
+            Section(config_link,
+                    config_header,
+                    config_text),
+            Section(why_filenames_link,
+                    why_filenames_header,
+                    why_filenames_text),
+            Section(alternatives_link,
+                    alternatives_header,
+                    alternatives_text)]
 
 sections_by_link: Dict[str, Section] = {section.link: section for section in sections}
 
 
-def __build_readme_table_of_contents__() -> str:
+def __get_readme_sections__() -> List[Section]:
     sections_copy = sections.copy()
 
     sections_copy.remove(sections_by_link[where_is_my_stuff_link])
 
-    return __build_table_of_contents__(sections_copy)
+    return sections_copy
 
 
-def __build_table_of_contents__(sections_for_table: List[Section]) -> str:
+def __build_readme_table_of_contents__() -> Section:
+    return __build_table_of_contents__(__get_readme_sections__())
+
+
+def __build_table_of_contents__(sections_for_table: List[Section]) -> Section:
     i = 1
 
     entries = []
@@ -237,15 +335,24 @@ def __build_table_of_contents__(sections_for_table: List[Section]) -> str:
     for section in sections_for_table:
         entries.append(F'{i}. [{section.header}]({section.link})')
 
-    return "\n".join(entries)
+    text = "\n".join(entries)
 
+    header = 'Table of Contents'
+
+    text = str(
+        F"# {header}\n"
+        F'\n'
+        F'{text}')
+
+    return Section(__to_link__(header),
+                   header,
+                   text)
+
+
+readme_sections_with_toc = [__build_readme_table_of_contents__()] + __get_readme_sections__()
 
 readme_table_of_contents = __build_readme_table_of_contents__()
 
 help_table_of_contents = __build_table_of_contents__(sections)
 
-help_text = '\n\n'.join([about_text,
-                         where_to_start_text,
-                         limitations_text,
-                         why_filenames_text,
-                         alternatives_text])
+readme_text = '\n\n'.join([section.text for section in readme_sections_with_toc])

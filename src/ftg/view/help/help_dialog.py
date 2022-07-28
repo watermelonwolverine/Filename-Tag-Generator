@@ -28,7 +28,7 @@ class FtgHelpDialog:
 
         self.__build_ui()
 
-        self.__show_markdown(help_table_of_contents)
+        self.__show_markdown(help_table_of_contents.text)
 
     def __build_ui(self):
         self.html_frame = HtmlFrame(self.__root,
@@ -52,10 +52,11 @@ class FtgHelpDialog:
 
         self.html_frame.load_html(html_text)
 
-    # tkinterweb just swallows exceptions...
+    # tkinterweb just swallows exceptions, here we at least log them...
     def __wrap_with_logger(self,
                            fun: Callable):
 
+        # noinspection PyBroadException
         try:
             fun()
         except Exception:
@@ -80,7 +81,7 @@ class FtgHelpDialog:
             if filename.startswith("#"):
 
                 if filename == "#home":
-                    self.__show_markdown(help_table_of_contents)
+                    self.__show_markdown(help_table_of_contents.text)
                     return
 
                 if filename in sections_by_link.keys():
@@ -104,7 +105,7 @@ class FtgHelpDialog:
 
             try:
                 path = urllib.request.url2pathname(url)
-            except OSError as ex:
+            except OSError:
                 # urls aren't conforming
                 # get rid of file://
                 path = url[7:]
