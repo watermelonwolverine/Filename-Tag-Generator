@@ -103,13 +103,15 @@ class FtgDropper:
 
             message_queue = F"{nb + 1}/{len(unrecognized_tags)}"
 
-            message = "WARNING\n" \
-                      "\n" \
-                      F"{filename} contains unknown tags which will get lost when you apply:\n" \
-                      "\n" \
-                      F"{joined_tags}\n" \
-                      "\n" \
-                      F"({message_queue})"
+            message = str("WARNING\n"
+                          "\n"
+                          F"{filename} contains unknown tags which will get lost when you apply:\n"
+                          "\n"
+                          F"{joined_tags}\n"
+                          "\n"
+                          F"({message_queue})\n"
+                          F"\n"
+                          F"OK: Next Warning, Cancel: Skip Warnings")
 
             should_continue = messagebox.askokcancel(title="Unknown Tag",
                                                      message=message)

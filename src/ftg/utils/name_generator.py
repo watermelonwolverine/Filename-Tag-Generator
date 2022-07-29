@@ -46,10 +46,8 @@ class NameGeneratorImpl(NameGenerator):
 
         concatenated_tags = self.__config.get_tags_separator().join(sorted(tags))
 
-        joins = []
+        joins = [self.__get_adjusted_base_name(basename)]
 
-        if basename != "":
-            joins.append(self.__get_adjusted_base_name(basename))
         if concatenated_tags != "":
             joins.append(concatenated_tags)
 
@@ -123,6 +121,7 @@ class NameGeneratorImpl(NameGenerator):
 
         full_filename_splits = full_filename.split(".")
 
+        # split at the last . if more than one exist
         if len(full_filename_splits) > 1:
             filename = ".".join(full_filename_splits[0:-1])
             extension = full_filename_splits[-1]
@@ -132,6 +131,7 @@ class NameGeneratorImpl(NameGenerator):
 
         filename_splits = filename.split(self.__config.get_basename_tags_separator())
 
+        # split at the last separator if more than one exist
         if len(filename_splits) > 1:
 
             basename = self.__config.get_basename_tags_separator().join(filename_splits[0:-1])

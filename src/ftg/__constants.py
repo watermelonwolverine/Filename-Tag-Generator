@@ -25,4 +25,4 @@ crash_report_file_name = "crashreport.txt"
 default_config_file_name = "config.json"
 default_tags_file_name = "tags.json"
 
-illegal_chars = ["<", ">", ":", "\"", "\\", "/", "|", "?", "*"]
+illegal_chars = ["/", "\\"]

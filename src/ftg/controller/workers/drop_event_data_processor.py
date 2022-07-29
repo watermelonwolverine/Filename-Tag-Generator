@@ -1,3 +1,4 @@
+import os.path
 from typing import List
 
 
@@ -77,4 +78,4 @@ def extract_paths(drop_event_data: str) -> List[str]:
                     result.append(next_path)
                     remaining_data = ""
 
-    return result
+    return [os.path.normpath(path) for path in result]

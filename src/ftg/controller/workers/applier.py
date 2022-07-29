@@ -1,14 +1,21 @@
 import os
 import shutil
+import sys
 from tkinter import messagebox
-from typing import List
+from typing import List, Dict, Iterable, Union
 
-import ftg.utils.filename_utils
+from ftg.__cli_wrapper.__constants import win32
 from ftg.__constants import ON_STATE_VALUE
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.utils import FtgUtils
-from ftg.utils import tag_utils
+from ftg.exceptions import FtgException
+from ftg.utils import tag_utils, filename_utils
 from ftg.utils.name_generator import NameGenerator
+
+FILENAME_LENGTH_LIMIT = 255
+
+tmp_marker_len = 5
+tmp_markers = ["~tmp" + str(i) for i in range(0, 9)]
 
 
 class FtgApplier:
@@ -24,65 +31,186 @@ class FtgApplier:
     def apply(self) -> None:
 
         if len(self.__context.selected_files) == 1:
-
-            new_filename = self.generate_filename()
-
-            old_path = self.__context.selected_files[0]
-
-            new_path = self.__rename_file(old_path,
-                                          new_filename)
-
-            self.__context.selected_files = [new_path]
-
+            self.__apply_single()
         elif len(self.__context.selected_files) > 1:
-
-            if len(self.__context.selected_files) >= 10:
-                answer = messagebox.askyesno(title="Confirm Action",
-                                             message="You are about to rename a lot of files, are you sure you want to continue?")
-
-                if not answer:
-                    return
-
-            extensions = ftg.utils.filename_utils.extract_extensions_for_selected_files(
-                self.__filename_generator,
-                self.__context.selected_files)
-            basenames = ftg.utils.filename_utils.extract_basenames_for_selected_files(
-                self.__filename_generator,
-                self.__context.selected_files)
-
-            new_selected_files = [path for path in self.__context.selected_files]
-
-            for old_path in self.__context.selected_files:
-                old_tags = self.__context.tags_for_selected_files[old_path]
-                override_tag_states = {tag: int_var.get() for tag, int_var in
-                                       self.__context.view.checkbox_values.items()}
-                override_tags = tag_utils.override_tags(
-                    old_tags,
-                    override_tag_states)
-
-                new_filename = self.__filename_generator.generate_filename(basenames[old_path],
-                                                                           override_tags,
-                                                                           extensions[old_path])
-
-                new_path = self.__rename_file(old_path,
-                                              new_filename)
-
-                new_selected_files.remove(old_path)
-                new_selected_files.append(new_path)
-
-            self.__context.selected_files = new_selected_files
-            self.__context.tags_for_selected_files = ftg.utils.filename_utils.extract_tags_for_selected_files(
-                self.__filename_generator,
-                new_selected_files)
-
+            self.__apply_batch()
         else:
-            messagebox.showerror(title="Unexpected Error",
-                                 message="An unexpected error occurred.")
-            return
+            raise FtgException("Illegal Program State")
 
         self.__context.changes_are_pending = False
 
-    def generate_filename(self) -> str:
+    def __apply_single(self) -> None:
+
+        old_path = None
+        new_path = None
+
+        try:
+
+            new_filename = self.generate_full_name()
+
+            old_path = self.__context.selected_files[0]
+
+            folder, _ = os.path.split(old_path)
+
+            new_path = os.path.join(folder, new_filename)
+
+            self.__rename_file(old_path,
+                               new_path)
+
+            self.__context.selected_files = [new_path]
+
+        except (FtgException, OSError) as ex:
+            msg = self.__error_msg_for_exception(old_path,
+                                                 new_path,
+                                                 ex)
+            messagebox.showerror(title="Error",
+                                 message=msg)
+
+    def __apply_batch(self) -> None:
+
+        if len(self.__context.selected_files) >= 10:
+            answer = messagebox.askyesno(title="Confirm Action",
+                                         message="You are about to rename a lot of files, are you sure you want to continue?")
+            if not answer:
+                return
+
+        updated_paths: Dict[str, str] = {}
+
+        for old_path in self.__context.selected_files:
+            updated_paths[old_path] = self.__new_path_for(old_path)
+
+        if self.__contains_duplicate_paths(updated_paths.values()):
+            answer = messagebox.askyesno(title="Filename Collision",
+                                         message="Cannot rename all files as it would lead to colliding filenames. Do you want to continue?\n"
+                                                 "If you click yes some file will not be renamed.")
+            if not answer:
+                return
+
+        if self.__contains_too_long_filenames(updated_paths.values()):
+            answer = messagebox.askyesno(title="Filenames Too Long",
+                                         message="Cannot rename all files as some filenames would be too long. Do you want to continue?\n"
+                                                 "If you click yes some file will not be renamed.")
+            if not answer:
+                return
+
+        self.__do_batch_rename(updated_paths)
+
+    def __do_batch_rename(self,
+                          updated_paths: Dict[str, str]) -> None:
+
+        new_selected_files = self.__context.selected_files.copy()
+
+        skip_warnings = False
+
+        for old_path, new_path in updated_paths.items():
+
+            try:
+                self.__rename_file(old_path,
+                                   new_path)
+                new_selected_files.remove(old_path)
+                new_selected_files.append(new_path)
+
+            except (FtgException, OSError) as ex:
+                if skip_warnings:
+                    continue
+
+                answer = self.__handle_batch_renaming_exception(old_path,
+                                                                new_path,
+                                                                ex)
+                if answer is None:
+                    break
+                if not answer:
+                    skip_warnings = True
+
+        self.__context.selected_files = new_selected_files
+        self.__context.tags_for_selected_files = filename_utils.extract_tags_for_selected_files(
+            self.__filename_generator,
+            new_selected_files)
+
+    def __handle_batch_renaming_exception(self,
+                                          old_path: str,
+                                          new_path: str,
+                                          ex) -> Union[bool, None]:
+
+        question = str('\n'
+                       '\n'
+                       'Yes: Continue batch process\n'
+                       'No: Skip all warnings\n'
+                       'Cancel: Stop batch process\n')
+
+        msg = self.__error_msg_for_exception(old_path,
+                                             new_path,
+                                             ex) + question
+
+        return messagebox.askyesnocancel(title="Error",
+                                         message=msg)
+
+    @classmethod
+    def __error_msg_for_exception(cls,
+                                  old_path,
+                                  new_path,
+                                  ex):
+        if issubclass(type(ex), FtgException):
+
+            return str(F'Cannot rename {old_path} to {new_path}.\n'
+                       F'\n'
+                       F'Reason: {ex}')
+
+        elif issubclass(type(ex), OSError):
+
+            return str(F'Cannot rename {old_path} to {new_path}.\n'
+                       F'\n'
+                       F'OSError: {ex}\n'
+                       F'\n'
+                       F'This usually means:\n'
+                       F'- You are using illegal characters\n'
+                       F'- You don\'t have the permission\n'
+                       F'- The file was deleted\n'
+                       F'- The file was moved')
+
+        raise Exception("BIG OOF")
+
+    @classmethod
+    def __contains_duplicate_paths(cls,
+                                   paths: Iterable[str]) -> bool:
+
+        if sys.platform == win32:
+            paths = [path.lower() for path in paths]
+
+        return len(paths) != len(set(paths))
+
+    @classmethod
+    def __contains_too_long_filenames(cls,
+                                      paths: Iterable[str]) -> bool:
+
+        for path in paths:
+            _, filename = os.path.split(path)
+            if len(filename) > FILENAME_LENGTH_LIMIT:
+                return True
+
+        return False
+
+    def __new_path_for(self,
+                       old_path: str):
+
+        old_dir, old_filename = os.path.split(old_path)
+
+        old_tags = self.__context.tags_for_selected_files[old_path]
+        override_tag_states = {tag: int_var.get() for tag, int_var in
+                               self.__context.view.checkbox_values.items()}
+        override_tags = tag_utils.override_tags(
+            old_tags,
+            override_tag_states)
+
+        reversion_result = self.__filename_generator.revert(old_filename)
+
+        new_filename = self.__filename_generator.generate_filename(reversion_result.basename,
+                                                                   override_tags,
+                                                                   reversion_result.extension)
+
+        return os.path.join(old_dir, new_filename)
+
+    def generate_full_name(self) -> str:
         return self.__filename_generator.generate_filename(
             self.__context.view.basename_string_var.get(),
             self.__get_checked_tags(),
@@ -99,29 +227,50 @@ class FtgApplier:
 
     def __rename_file(self,
                       old_path: str,
-                      new_filename: str) -> str:
-        folder, old_filename = os.path.split(old_path)
+                      new_path: str) -> None:
+
+        _, old_filename = os.path.split(old_path)
+        _, new_filename = os.path.split(new_path)
 
         if len(new_filename) > 255:
-            messagebox.showerror(title="Filename too long",
-                                 message=F"Unable to rename {old_filename} to {new_filename}. Filename is too long.")
-            return old_path
-
-        new_path = os.path.join(folder,
-                                new_filename)
-
-        old_path = os.path.normpath(old_path)
-        new_path = os.path.normpath(new_path)
+            raise FtgException("Filename is too long.")
 
         if old_path == new_path:
-            return old_path
+            return
 
         if os.path.exists(new_path):
-            messagebox.showerror(title="Error Renaming File",
-                                 message=F"Cannot rename {old_filename} to {new_filename}. Path already exists")
-            return old_path
+            # Windows ignores capitalization
+            if sys.platform == win32 \
+                    and old_path.lower() == new_path.lower():
+                # capitalization changed but everything else stayed the same
+                # Windows won't let us rename file
+                tmp_path = self.__get_tmp_path(old_path)
+
+                if tmp_path is None:
+                    raise FtgException("Cannot create temp file.")
+
+                shutil.move(old_path, tmp_path)
+                shutil.move(tmp_path, new_path)
+                return
+            else:
+                raise FtgException("Path already exists")
 
         shutil.move(old_path,
                     new_path)
 
-        return new_path
+    @classmethod
+    def __get_tmp_path(cls,
+                       old_path: str) -> Union[str, None]:
+
+        folder, filename = os.path.split(old_path)
+
+        for tmp_marker in tmp_markers:
+            if len(filename) + tmp_marker_len > FILENAME_LENGTH_LIMIT:
+                tmp_path = old_path[:-tmp_marker_len] + tmp_marker
+            else:
+                tmp_path = old_path + tmp_marker
+
+            if not os.path.exists(tmp_path):
+                return tmp_path
+
+        return None
