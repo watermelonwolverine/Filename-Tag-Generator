@@ -1,7 +1,7 @@
 from ftg.__constants import ON_STATE_VALUE
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.clearer import FtgClearer
-from ftg.utils.filename_generator import NameGenerator
+from ftg.utils.name_generator import NameGenerator
 
 
 class FtgReverter:

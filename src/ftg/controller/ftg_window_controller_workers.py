@@ -5,7 +5,7 @@ from ftg.controller.workers.exception_handler import FtgExceptionHandler
 from ftg.controller.workers.reverter import FtgReverter
 from ftg.controller.workers.utils import FtgUtils
 from ftg.utils.naming_config import NamingConfig
-from ftg.utils.filename_generator import NameGeneratorImpl
+from ftg.utils.name_generator import NameGeneratorImpl
 
 
 class FtgWindowControllerWorkers:

@@ -8,7 +8,7 @@ from ftg.controller.ftg_window_controller_context import FtgWindowControllerCont
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.controller.workers.drop_event_data_processor import extract_paths
 from ftg.utils import tag_utils
-from ftg.utils.filename_generator import NameGenerator
+from ftg.utils.name_generator import NameGenerator
 
 
 class FtgDropper:

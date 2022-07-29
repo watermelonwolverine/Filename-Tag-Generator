@@ -1,6 +1,8 @@
 from abc import ABC
 from typing import List
 
+from ftg.__constants import illegal_chars
+from ftg.exceptions import FtgException
 from ftg.utils.program_config import NamingConfig
 
 
@@ -38,6 +40,9 @@ class NameGeneratorImpl(NameGenerator):
                           basename: str,
                           tags: List[str],
                           extension: str) -> str:
+        self.__check(basename,
+                     tags,
+                     extension)
 
         concatenated_tags = self.__config.get_tags_separator().join(sorted(tags))
 
@@ -60,6 +65,26 @@ class NameGeneratorImpl(NameGenerator):
         result = ".".join(joins)
 
         return result
+
+    def __check(self,
+                basename: str,
+                tags: List[str],
+                extension: str):
+
+        for illegal_char in illegal_chars:
+            if illegal_char in extension:
+                raise FtgException(F'"{illegal_char}" is not allowed as part of the extension.')
+            if illegal_char in basename:
+                raise FtgException(F'"{illegal_char}" is not allowed as part of the basename.')
+
+        illegal_chars_for_tags = illegal_chars.copy()
+        illegal_chars_for_tags.append(self.__config.get_tags_separator())
+        illegal_chars_for_tags.append(self.__config.get_basename_tags_separator())
+
+        for illegal_char in illegal_chars_for_tags:
+            for tag in tags:
+                if illegal_char in tag:
+                    raise FtgException(F'"{illegal_char}" is not allowed as part of any tag.')
 
     def __get_adjusted_base_name(self,
                                  basename: str) -> str:

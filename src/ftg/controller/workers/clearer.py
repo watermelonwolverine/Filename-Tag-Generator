@@ -3,7 +3,7 @@ from tkinter import DISABLED
 from ftg.__constants import NORMAL, OFF_STATE_VALUE, NO_FILE_SELECTED
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.utils import FtgUtils
-from ftg.utils.filename_generator import NameGenerator
+from ftg.utils.name_generator import NameGenerator
 
 
 class FtgClearer:

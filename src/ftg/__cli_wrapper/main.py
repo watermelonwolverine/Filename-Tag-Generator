@@ -174,7 +174,7 @@ def __try_to_parse_file(path_to_file,
 
         __show_error_for_file(FILE_NOT_FOUND,
                               str(ex))
-    except (JSONDecodeError, JSONParseException) as ex:
+    except (JSONDecodeError, JSONParseException, FtgException) as ex:
 
         message = PLEASE_CHECK_YOUR_FILES_MSG.format(path_to_file,
                                                      ex)

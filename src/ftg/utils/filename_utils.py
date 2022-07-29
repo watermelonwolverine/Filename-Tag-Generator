@@ -1,7 +1,7 @@
 import os
 from typing import List, Dict
 
-from ftg.utils.filename_generator import NameGenerator
+from ftg.utils.name_generator import NameGenerator
 
 
 def extract_tags_for_selected_files(filename_generator: NameGenerator,

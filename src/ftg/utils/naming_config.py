@@ -1,6 +1,8 @@
 from abc import ABC
 from typing import Dict
 
+from ftg.__constants import illegal_chars
+from ftg.exceptions import FtgException
 from ftg.utils.parse_utils import read_bool_value, read_str_value
 
 
@@ -63,6 +65,8 @@ class NamingConfigImpl(NamingConfig):
         self.__basename_tags_separator = basename_tags_separator
         self.__tag_separator = tag_separator
 
+        self.__check_self()
+
     def get_adjust_basename(self) -> bool:
         return self.__adjust_basename
 
@@ -80,6 +84,14 @@ class NamingConfigImpl(NamingConfig):
 
     def get_tags_separator(self) -> str:
         return self.__tag_separator
+
+    def __check_self(self):
+
+        for illegal_char in illegal_chars:
+            if illegal_char in self.__basename_spacer \
+                    or illegal_char in self.__tag_separator \
+                    or illegal_char in self.__basename_tags_separator:
+                raise FtgException(F'"{illegal_char}" is not allowed')
 
     @classmethod
     def parse_dict(cls,

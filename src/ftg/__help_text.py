@@ -3,7 +3,8 @@ from typing import Dict, List
 
 import ftg
 from ftg.__cli_wrapper import __paths, __args
-from ftg.__constants import default_tags_file_name, default_config_file_name, author, app_name
+from ftg.__constants import default_tags_file_name, default_config_file_name, author, app_name, illegal_chars
+from ftg.utils.name_generator import NameGeneratorImpl
 from ftg.utils.naming_config import NamingConfigImpl
 from ftg.utils.program_config import ProgramConfigImpl
 from ftg.utils.tags import Tags
@@ -202,6 +203,23 @@ usage_text = str(
     F'TODO'
 )
 
+__example_config = {
+    ProgramConfigImpl.NAMING_CONFIG_KEY: {
+        NamingConfigImpl.TAG_SEPARATOR_KEY: " ",
+        NamingConfigImpl.BASENAME_TAGS_SEPARATOR_KEY: "-",
+        NamingConfigImpl.ADJUST_BASENAME_KEY: False
+    }
+}
+
+name_generator_default = NameGeneratorImpl(NamingConfigImpl())
+
+name_generator_example = NameGeneratorImpl(
+    NamingConfigImpl.parse_dict(__example_config[ProgramConfigImpl.NAMING_CONFIG_KEY]))
+
+example_tags = ["tag1", "tag2", "tag3"]
+
+example_basename = "This is some_base-name"
+
 config_text = str(
     F'# {config_header}\n'
     F'\n'
@@ -249,13 +267,13 @@ config_text = str(
     F'You can have as many categories under `{Tags.CATEGORIES_KEY}` as you want. You can also have as many tags under each category as '
     F'you want.\n'
     F'\n'
-    F'Tags can be in multiple categories as long as they have the same display-name.\n'
+    F'One tag can be in multiple categories as long as it has the the same display-name everywhere.\n'
     F'\n'
     F'For example: `"dungeon" : "Dungeon"` may fit into both categories `Nature` and `Civilization`.\n'
     F'\n'
     F'## UI and Behaviour\n'
     F'\n'
-    F'You can configure the ui and the naming behaviour using a config file which is usually named `{default_config_file_name}`.\n'
+    F'You can configure the UI and the naming behaviour using a config file which is usually named `{default_config_file_name}`.\n'
     F'\n'
     F'The config file with the default values would look like this:\n'
     F'\n'
@@ -265,13 +283,33 @@ config_text = str(
     F'\n'
     F'The most important ones are:\n'
     F'\n'
-    F'- `{NamingConfigImpl.ADJUST_BASENAME_KEY}` : if this is set to `false` the basename will not be adjusted in anyway\n'
-    F'- `{NamingConfigImpl.CAPITALIZE_BASENAME_KEY}` : if this is set to `true` the basename will be capitalized\n'
-    F'- `{NamingConfigImpl.REPLACE_BASENAME_SPACER_KEY}` : if this is set to `true` the TODO'
-
+    F'- `{NamingConfigImpl.BASENAME_TAGS_SEPARATOR_KEY}` : the string that will be used to separate the basename from the tags. Make sure this is unique and doesn\'t appear in any tag or in the basename.\n'
+    F'- `{NamingConfigImpl.TAG_SEPARATOR_KEY}` : the string that will be used to separate the tags. Make sure this is unique and doesn\'t appear in any tag or in the basename.\n'
+    F'- `{NamingConfigImpl.ADJUST_BASENAME_KEY}` : if this is set to `true` the program will adjust the basename\n'
+    F'- `{NamingConfigImpl.CAPITALIZE_BASENAME_KEY}` : if this is set to `true` the basename will be capitalized when adjusted.\n'
+    F'- `{NamingConfigImpl.REPLACE_BASENAME_SPACER_KEY}` : if this is set to `true` all spacers (whitespaces, {NamingConfigImpl.TAG_SEPARATOR_KEY} and {NamingConfigImpl.BASENAME_TAGS_SEPARATOR_KEY})  in the basename will be replaced by the given text\n'
+    F'\n'
+    F'## Example'
+    F'\n'
+    F'For the basename `{example_basename}` and the tags ´{", ".join(example_tags)}´ the default config would generate:\n'
+    F'\n'
+    F'`{name_generator_default.generate_filename(example_basename, example_tags, "png")}`\n'
+    F'\n'
+    F'With:\n'
+    F'\n'
+    F'{__to_code_block(json.dumps(__example_config, indent=2))}\n'
+    F'\n'
+    F'It would generate:\n'
+    F'\n'
+    F'`{name_generator_example.generate_filename(example_basename, example_tags, "png")}`\n'
+    F'\n'
+    F'As you can probably guess the last one is impossible to revert back into basename and tags. How is the program '
+    F'supposed to know where the basename ends and the list of tags begins? Therefore you should be careful how separators and spacers you choose.\n'
+    F'\n'
+    F'Some filesystems forbid the usage of certain symbols. In other cases characters should be avoided for simplicity\'s sake. You must avoid:\n'
+    F'\n'
+    F'`{", ".join(illegal_chars)}`\n'
 )
-
-
 
 
 class Section:
