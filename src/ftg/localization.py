@@ -32,3 +32,12 @@ NO_FILE_SELECTED = "No file selected"
 
 PENDING_CHANGES_TITLE = "Pending Changes"
 PENDING_CHANGES_MESSAGE = "You have unsaved changes. Do you want to discard them?"
+
+SELECTED_FILE = "Selected File"
+APPLY = "Apply"
+CLEAR = "Clear"
+FULL_NAME = "Full Name"
+EXTENSION = "Extension"
+BASENAME = "Basename"
+HELP = "Help"
+REVERT = "Revert"

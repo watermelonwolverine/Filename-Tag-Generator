@@ -1,9 +1,9 @@
 from ftg.__constants import url, app_name, author
 from ftg.__help import configuration
-from ftg.__help.utils import __to_link__, Section
+from ftg.__help.utils import to_link, Section
 
 header = "Install"
-link = __to_link__(header)
+link = to_link(header)
 
 text = str(
     F'# {header}\n'

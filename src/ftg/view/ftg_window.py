@@ -4,6 +4,7 @@ from typing import Dict, Literal
 from tkinterdnd2 import TkinterDnD
 
 from ftg.__constants import app_name
+from ftg.localization import SELECTED_FILE, APPLY, CLEAR, FULL_NAME, EXTENSION, BASENAME, HELP, REVERT
 from ftg.utils.program_config import UIConfig
 from ftg.utils.tags import Tags
 from ftg.view.categories_widget import CategoriesWidget
@@ -85,7 +86,7 @@ class FtgWindow:
         frame = ttk.Frame(parent_frame)
 
         ttk.Label(frame,
-                  text="Selected File",
+                  text=SELECTED_FILE,
                   font=self.styles.get_normal_font(),
                   width=input_label_width).pack(side=LEFT)
 
@@ -98,7 +99,7 @@ class FtgWindow:
 
         # I just don't know where else to put this
         self.help_button = Button(frame,
-                                  text="Help")
+                                  text=HELP)
         self.help_button['font'] = self.styles.get_normal_font()
 
         entry.pack(side=LEFT,
@@ -122,7 +123,7 @@ class FtgWindow:
                    side=TOP)
 
         ttk.Label(frame,
-                  text="Basename",
+                  text=BASENAME,
                   font=self.styles.get_normal_font(),
                   width=input_label_width).pack(side=LEFT)
 
@@ -146,7 +147,7 @@ class FtgWindow:
                    side=TOP)
 
         ttk.Label(frame,
-                  text="Extension",
+                  text=EXTENSION,
                   font=self.styles.get_normal_font(),
                   width=input_label_width).pack(side=LEFT)
 
@@ -177,7 +178,7 @@ class FtgWindow:
                    expand=False)
 
         ttk.Label(frame,
-                  text="Full Name",
+                  text=FULL_NAME,
                   font=self.styles.get_normal_font(),
                   width=input_label_width).pack(side=LEFT)
 
@@ -192,7 +193,7 @@ class FtgWindow:
                                  side=LEFT)
 
         self.revert_button = Button(frame,
-                                    text="Revert")
+                                    text=REVERT)
         self.revert_button['font'] = self.styles.get_normal_font()
 
         self.revert_button.pack(side=RIGHT,
@@ -208,7 +209,7 @@ class FtgWindow:
                    side=side)
 
         self.apply_button = Button(frame,
-                                   text="Apply")
+                                   text=APPLY)
 
         self.apply_button["font"] = self.styles.get_normal_font()
 
@@ -218,7 +219,7 @@ class FtgWindow:
                                fill=BOTH)
 
         self.clear_button = Button(frame,
-                                   text="Clear")
+                                   text=CLEAR)
 
         self.clear_button["font"] = self.styles.get_normal_font()
 

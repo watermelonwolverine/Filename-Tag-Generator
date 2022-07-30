@@ -2,7 +2,7 @@ from typing import Dict, List
 
 from ftg.__help import install, why_filenames, configuration, about, where_to_start, limitations, alternatives, \
     where_is_my_stuff, usage
-from ftg.__help.utils import __to_link__, Section
+from ftg.__help.utils import to_link, Section
 
 sections = [about.section,
             where_to_start.section,
@@ -46,7 +46,7 @@ def __build_table_of_contents__(sections_for_table: List[Section]) -> Section:
         F'\n'
         F'{text}')
 
-    return Section(__to_link__(header),
+    return Section(to_link(header),
                    header,
                    text)
 

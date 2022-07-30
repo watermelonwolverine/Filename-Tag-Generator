@@ -1,10 +1,10 @@
 from ftg.__cli_wrapper import __paths
 from ftg.__cli_wrapper.__args import setup_option
 from ftg.__help import install, configuration
-from ftg.__help.utils import __to_link__, Section
+from ftg.__help.utils import to_link, Section
 
 header = 'Where is my Stuff?'
-link = __to_link__(header)
+link = to_link(header)
 
 text = str(
     F'# {header}\n'

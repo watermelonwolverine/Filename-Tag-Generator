@@ -1,10 +1,10 @@
 from ftg.__help import install, why_filenames, limitations, alternatives, usage
 from ftg.__help.utils import Section
 
-from ftg.__help.utils import __to_link__
+from ftg.__help.utils import to_link
 
 header = "Where to Start"
-link = __to_link__(header)
+link = to_link(header)
 
 text = str(
     F'# {header}\n'

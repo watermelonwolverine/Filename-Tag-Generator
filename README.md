@@ -1,12 +1,12 @@
 # Table of Contents
 
 1. [About](#about)
-1. [Where to Start](#where to start)
+1. [Where to Start](#where-to-start)
 1. [Limitations](#limitations)
 1. [Install](#install)
 1. [Usage](#usage)
 1. [Configuration](#configuration)
-1. [Why Filenames?](#why filenames)
+1. [Why Filenames?](#why-filenames)
 1. [Alternatives](#alternatives)
 
 # About
@@ -33,7 +33,7 @@ Then go to [Install](#install)
 
 Then go to [Usage](#usage)
 
-If you want to understand the decisions that lead to this mess go to [Why Filenames?](#why filenames)
+If you want to understand the decisions that lead to this mess go to [Why Filenames?](#why-filenames)
 
 If you think that putting the tags into the filenames is a bad solution go to [Alternatives](#alternatives)
 
@@ -102,8 +102,53 @@ You must also install tkinter for your python version using `apt install pythonX
 
 # Usage
 
-The 
+The program can be used for two purposes:
 
+1. Directly rename files via drag and drop
+2. Generate map names
+
+## Renaming Files
+
+### Single
+
+To rename a file drag and drop it from your file browser into the application window.
+The program will then revert the filename back into basename, tags and extensions.
+For this process to go smoothly make sure the filename doesn't contain special characters in its basename or tags.
+See [Configuration](#configuration) for more information.
+Any tags in the filename that are not in you tags file will get lost in this translation.
+Once you dropped the file into the application you can change the basename and extension and select the tags you want to add.
+
+As soon as you click the `Apply` button the file will be renamed in accordance to what you selected.
+
+### Multiple
+
+You can drag and drop multiple files into the application window.
+In this case the program behaves very similar to single file drop with a few changes.
+
+- The tag buttons will be changed to checkboxes with one of three states `On` and `Off` and `Mixed`.
+- The `Selected File` field will be disabled. You will have to remember which files you dragged into the application.
+- `Basename` and `Extension` input fields will be disabled. You will have to adjust the basename and extension beforehand.
+
+Checkboxes states:
+
+- The `On` state indicates, that all files have this tag.
+- The `Off` state indicates, that no file has this tags.
+- The `Mixed` state indicates, that some, but not all, file have this tag.
+
+When you click on a checkbox with state `Mixed` it will change to `On`. After that you can only switch between `On` and `Off`.
+  => Don't touch a `Mixed` checkbox unless want to add or remove this tag to/from all files
+
+As soon as you click the `Apply` button the files will be renamed in accordance to what you selected.
+If you disabled a checkbox that was previously `Mixed` or `On` the tag will be removed from all files.
+If you enabled a checkbox that was previously `Mixed` or `Off` the tag will be added to all files.
+
+## Generating Map Names
+
+This one is useful for organizing maps via names in your VTT.
+
+Simply enter a basename and click on the tags you want to select and copy the result from the `Full Name` field.
+
+If you want to add or remove tags to a name paste it in `Full Name` and click the `Revert` button.
 
 # Configuration
 

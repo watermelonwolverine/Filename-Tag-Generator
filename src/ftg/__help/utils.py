@@ -1,11 +1,11 @@
-def __to_link__(header: str):
+def to_link(header: str):
     result = header.lower()
     result = result.strip(" ?!.")
-    result.replace(" ", "-")
+    result = result.replace(" ", "-")
     return "#" + result
 
 
-def __to_code_block(code: str) -> str:
+def to_code_block(code: str) -> str:
     indent = "    "
 
     result = ""

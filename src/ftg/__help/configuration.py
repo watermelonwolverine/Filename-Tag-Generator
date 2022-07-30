@@ -3,14 +3,14 @@ import json
 import ftg
 from ftg.__cli_wrapper import __args
 from ftg.__constants import default_tags_file_name, default_config_file_name, author, app_name, illegal_chars
-from ftg.__help.utils import __to_link__, __to_code_block, Section
+from ftg.__help.utils import to_link, to_code_block, Section
 from ftg.utils.name_generator import NameGeneratorImpl
 from ftg.utils.naming_config import NamingConfigImpl
 from ftg.utils.program_config import ProgramConfigImpl
 from ftg.utils.tags import Tags
 
 header = "Configuration"
-link = __to_link__(header)
+link = to_link(header)
 
 __example_config = {
     ProgramConfigImpl.NAMING_CONFIG_KEY: {
@@ -100,7 +100,7 @@ text = str(
     F'\n'
     F'The config file with the default values would look like this:\n'
     F'\n'
-    F'{__to_code_block(json.dumps(ProgramConfigImpl.default_config_dict, indent=2))}\n'
+    F'{to_code_block(json.dumps(ProgramConfigImpl.default_config_dict, indent=2))}\n'
     F'\n'
     F'I will not explain every single detail as most should be self-explanatory.\n'
     F'\n'
@@ -120,7 +120,7 @@ text = str(
     F'\n'
     F'With:\n'
     F'\n'
-    F'{__to_code_block(json.dumps(__example_config, indent=2))}\n'
+    F'{to_code_block(json.dumps(__example_config, indent=2))}\n'
     F'\n'
     F'It would generate:\n'
     F'\n'

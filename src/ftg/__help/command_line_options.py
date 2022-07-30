@@ -1,5 +1,5 @@
-from ftg.__help.utils import __to_link__
+from ftg.__help.utils import to_link
 
 header = "Command Line Options"
-link = __to_link__(header)
+link = to_link(header)
 text = ""
