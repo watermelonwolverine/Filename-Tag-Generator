@@ -3,9 +3,10 @@ from tkinter import messagebox
 
 from tkdnd import DND_FILES
 
-from ftg.__constants import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE, NO
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
+from ftg.exceptions import FtgException
+from ftg.localization import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE
 from ftg.utils.program_config import ProgramConfig
 from ftg.utils.tags import Tags
 from ftg.view.ftg_window import FtgWindow
@@ -83,8 +84,12 @@ class FtgWindowController:
                                              on_close_callback)
 
     def __generate(self) -> None:
-        self.__context.view.filename_result_string_var.set(
-            self.__workers.applier.generate_filename())
+
+        try:
+            name = self.__workers.applier.generate_full_name()
+        except FtgException as ex:
+            name = F'Error: {ex}'
+        self.__context.view.filename_result_string_var.set(name)
 
     def __on_change_callback(self):
         if len(self.__context.selected_files) > 0:
@@ -95,10 +100,10 @@ class FtgWindowController:
 
     def __on_close_callback(self):
         if self.__context.changes_are_pending:
-            result = messagebox.askquestion(title=PENDING_CHANGES_TITLE,
-                                            message=PENDING_CHANGES_MESSAGE)
+            result = messagebox.askyesno(title=PENDING_CHANGES_TITLE,
+                                         message=PENDING_CHANGES_MESSAGE)
 
-            if result == NO:
+            if not result:
                 return
 
         self.stop()

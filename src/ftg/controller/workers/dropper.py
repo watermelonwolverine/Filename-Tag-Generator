@@ -3,10 +3,11 @@ from tkinter import messagebox, DISABLED, NORMAL
 from typing import List, Dict
 
 import ftg.utils.filename_utils
-from ftg.__constants import READONLY, MULTIPLE_FILES_SELECTED, NO, PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE
+from ftg.__constants import READONLY
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.controller.workers.drop_event_data_processor import extract_paths
+from ftg.localization import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE, MULTIPLE_FILES_SELECTED
 from ftg.utils import tag_utils
 from ftg.utils.name_generator import NameGenerator
 
@@ -33,10 +34,10 @@ class FtgDropper:
                 return
 
         if self.__context.changes_are_pending:
-            result = messagebox.askquestion(title=PENDING_CHANGES_TITLE,
-                                            message=PENDING_CHANGES_MESSAGE)
+            result = messagebox.askyesno(title=PENDING_CHANGES_TITLE,
+                                         message=PENDING_CHANGES_MESSAGE)
 
-            if result == NO:
+            if not result:
                 return
 
         self.__workers.clearer.clear()
