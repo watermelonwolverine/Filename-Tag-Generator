@@ -1,12 +1,13 @@
 import sys
-from tkinter import messagebox
+from tkinter import messagebox, DISABLED, NORMAL
 
 from tkdnd import DND_FILES
 
+from ftg.__constants import illegal_chars
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.exceptions import FtgException
-from ftg.localization import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE
+from ftg.localization import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE, ERROR_TITLE
 from ftg.utils.program_config import ProgramConfig
 from ftg.utils.tags import Tags
 from ftg.view.ftg_window import FtgWindow
@@ -30,15 +31,49 @@ class FtgWindowController:
         self.__workers = FtgWindowControllerWorkers(config.get_naming_config(),
                                                     self.__context)
 
+        try:
+            self.__check_configuration(tags,
+                                       config)
+        except FtgException as ex:
+            messagebox.showerror(title=ERROR_TITLE,
+                                 message=F"Error: {ex}")
+            self.stop()
+
         self.__configure_view(view)
 
     def start(self):
+
         self.__workers.clearer.clear()
         self.__context.view.as_tk().mainloop()
 
     def stop(self):
         self.__context.view.as_tk().destroy()
         sys.exit()
+
+    def __check_configuration(self,
+                              tags: Tags,
+                              config: ProgramConfig):
+
+        naming_config = config.get_naming_config()
+
+        basename_tags_sep = naming_config.get_basename_tags_separator()
+        tags_sep = naming_config.get_tags_separator()
+
+        for tag in tags.tags:
+
+            illegal_text = None
+
+            if basename_tags_sep in tag.letter_code:
+                illegal_text = basename_tags_sep
+            elif tags_sep in tag.letter_code:
+                illegal_text = tags_sep
+            else:
+                for illegal_char in illegal_chars:
+                    if illegal_char in tag.letter_code:
+                        illegal_text = illegal_char
+
+            if illegal_text is not None:
+                raise FtgException(F'Tag "{tag.letter_code}" contains illegal text: {illegal_text}')
 
     def __configure_view(self,
                          view: FtgWindow):
@@ -85,10 +120,29 @@ class FtgWindowController:
 
     def __generate(self) -> None:
 
+        single_file_selected = len(self.__context.selected_files) == 1
+        no_file_selected = len(self.__context.selected_files) == 0
+
         try:
+
+            # might have illegal characters in basename/tags
+            self.__workers.applier.check()
+
+            # might have to re-enable rever button
+            if no_file_selected:
+                self.__context.view.revert_button.config(state=NORMAL)
+            if single_file_selected:
+                self.__context.view.apply_button.config(state=NORMAL)
+
             name = self.__workers.applier.generate_full_name()
+
         except FtgException as ex:
             name = F'Error: {ex}'
+            if no_file_selected:
+                self.__context.view.revert_button.config(state=DISABLED)
+            if single_file_selected:
+                self.__context.view.apply_button.config(state=DISABLED)
+
         self.__context.view.filename_result_string_var.set(name)
 
     def __on_change_callback(self):

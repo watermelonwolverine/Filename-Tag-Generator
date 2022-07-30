@@ -25,6 +25,11 @@ class NameGenerator(ABC):
                           extension: str) -> str:
         raise NotImplementedError()
 
+    def check(self, basename: str,
+              tags: List[str],
+              extension: str) -> None:
+        raise NotImplementedError()
+
     def revert(self,
                filename: str) -> ReversionResult:
         raise NotImplementedError()
@@ -40,9 +45,6 @@ class NameGeneratorImpl(NameGenerator):
                           basename: str,
                           tags: List[str],
                           extension: str) -> str:
-        self.__check(basename,
-                     tags,
-                     extension)
 
         concatenated_tags = self.__config.get_tags_separator().join(sorted(tags))
 
@@ -64,10 +66,10 @@ class NameGeneratorImpl(NameGenerator):
 
         return result
 
-    def __check(self,
-                basename: str,
-                tags: List[str],
-                extension: str):
+    def check(self,
+              basename: str,
+              tags: List[str],
+              extension: str) -> None:
 
         for illegal_char in illegal_chars:
             if illegal_char in extension:

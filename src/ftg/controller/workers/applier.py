@@ -9,6 +9,7 @@ from ftg.__constants import ON_STATE_VALUE
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.utils import FtgUtils
 from ftg.exceptions import FtgException
+from ftg.localization import ERROR_TITLE
 from ftg.utils import tag_utils, filename_utils
 from ftg.utils.name_generator import NameGenerator
 
@@ -22,10 +23,10 @@ class FtgApplier:
 
     def __init__(self,
                  context: FtgWindowControllerContext,
-                 filename_generator: NameGenerator,
+                 name_generator: NameGenerator,
                  utils: FtgUtils):
         self.__context = context
-        self.__filename_generator = filename_generator
+        self.__name_generator = name_generator
         self.__utils = utils
 
     def apply(self) -> None:
@@ -45,6 +46,8 @@ class FtgApplier:
         new_path = None
 
         try:
+
+            self.check()
 
             new_filename = self.generate_full_name()
 
@@ -77,7 +80,12 @@ class FtgApplier:
         updated_paths: Dict[str, str] = {}
 
         for old_path in self.__context.selected_files:
-            updated_paths[old_path] = self.__new_path_for(old_path)
+            try:
+                updated_paths[old_path] = self.__new_path_for(old_path)
+            except FtgException as ex:
+                messagebox.showerror(title=ERROR_TITLE,
+                                     message=F"Error while generating filenames: {ex}")
+            return
 
         if self.__contains_duplicate_paths(updated_paths.values()):
             answer = messagebox.askyesno(title="Filename Collision",
@@ -124,7 +132,7 @@ class FtgApplier:
 
         self.__context.selected_files = new_selected_files
         self.__context.tags_for_selected_files = filename_utils.extract_tags_for_selected_files(
-            self.__filename_generator,
+            self.__name_generator,
             new_selected_files)
 
     def __handle_batch_renaming_exception(self,
@@ -202,16 +210,26 @@ class FtgApplier:
             old_tags,
             override_tag_states)
 
-        reversion_result = self.__filename_generator.revert(old_filename)
+        reversion_result = self.__name_generator.revert(old_filename)
 
-        new_filename = self.__filename_generator.generate_filename(reversion_result.basename,
-                                                                   override_tags,
-                                                                   reversion_result.extension)
+        self.__name_generator.check(reversion_result.basename,
+                                    override_tags,
+                                    reversion_result.extension)
+
+        new_filename = self.__name_generator.generate_filename(reversion_result.basename,
+                                                               override_tags,
+                                                               reversion_result.extension)
 
         return os.path.join(old_dir, new_filename)
 
+    def check(self):
+        self.__name_generator.check(self.__context.view.basename_string_var.get(),
+                                    self.__get_checked_tags(),
+                                    self.__context.view.extension_string_var.get())
+
     def generate_full_name(self) -> str:
-        return self.__filename_generator.generate_filename(
+
+        return self.__name_generator.generate_filename(
             self.__context.view.basename_string_var.get(),
             self.__get_checked_tags(),
             self.__context.view.extension_string_var.get())
