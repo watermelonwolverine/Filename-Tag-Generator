@@ -39,7 +39,7 @@ text = str(
     '- What happens when files are moved outside the tool?\n'
     '- Would require indexing\n'
     '- Needs a thumbnail cache and a file browser with search functionality\n'
-    '- How to sync the database to different PC?\n'
+    '- How to sync the database to different PCs?\n'
     '- Can\'t use tags in the cloud web interface\n'
     '- Would basically just re-implement one of the countless tagging solutions that already exist\n'
     '\n'

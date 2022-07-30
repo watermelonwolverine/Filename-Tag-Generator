@@ -14,7 +14,7 @@ text = str(
     '- free\n'
     '- cross-platform\n'
     '- works with cloud sync\n'
-    '- works in the cloud web interface\n'
+    '- works in the  web interface of any cloud\n'
     '- can easily manage 100s of tags\n'
     '- can easily manage dozens of tags per file\n'
     '\n'

@@ -9,7 +9,7 @@ link = __to_link__(header)
 text = str(
     F'# {header}\n'
     '\n'
-    F'If you are a new user who is planning to use this program read about its [limitations]({limitations.link}) first.\n'
+    F'If you are a new user who is planning to use this program you should read about its [limitations]({limitations.link}) first.\n'
     '\n'
     F'Then go to [{install.header}]({install.link})\n'
     '\n'

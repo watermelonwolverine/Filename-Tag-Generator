@@ -15,7 +15,7 @@ link = __to_link__(header)
 __example_config = {
     ProgramConfigImpl.NAMING_CONFIG_KEY: {
         NamingConfigImpl.TAG_SEPARATOR_KEY: " ",
-        NamingConfigImpl.BASENAME_TAGS_SEPARATOR_KEY: "-",
+        NamingConfigImpl.BASENAME_TAGS_SEPARATOR_KEY: " ",
         NamingConfigImpl.ADJUST_BASENAME_KEY: False
     }
 }
@@ -28,6 +28,8 @@ __name_generator_example = NameGeneratorImpl(
 __example_tags = ["tag1", "tag2", "tag3"]
 
 __example_basename = "This is some_base-name"
+
+__characters_to_avoid = ["*", "<", ">", "|", "?", ":", '"']
 
 text = str(
     F'# {header}\n'
@@ -112,7 +114,7 @@ text = str(
     F'\n'
     F'## Example'
     F'\n'
-    F'For the basename `{__example_basename}` and the tags ´{", ".join(__example_tags)}´ the default config would generate:\n'
+    F'For the basename `{__example_basename}` and the tags `{", ".join(__example_tags)}` the default config would generate:\n'
     F'\n'
     F'`{__name_generator_default.generate_filename(__example_basename, __example_tags, "png")}`\n'
     F'\n'
@@ -125,11 +127,15 @@ text = str(
     F'`{__name_generator_example.generate_filename(__example_basename, __example_tags, "png")}`\n'
     F'\n'
     F'As you can probably guess the last one is impossible to revert back into basename and tags. How is the program '
-    F'supposed to know where the basename ends and the list of tags begins? Therefore you should be careful how separators and spacers you choose.\n'
+    F'supposed to know where the basename ends and the list of tags begins? Therefore you should be careful which separators and spacers you choose.\n'
     F'\n'
     F'Some filesystems forbid the usage of certain symbols. In other cases characters should be avoided for simplicity\'s sake. You must avoid:\n'
     F'\n'
     F'`{", ".join(illegal_chars)}`\n'
+    F'\n'
+    F'and you should avoid:\n'
+    F'\n'
+    F'`{", ".join(__characters_to_avoid)}`'
 )
 
 section = Section(link,
