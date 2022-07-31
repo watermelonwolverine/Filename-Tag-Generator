@@ -120,13 +120,14 @@ If you want to add or remove tags to a name paste it in `Full Name` and click th
 
 For those who want a bit more control over the program I added some command line options.
 
-    Filename-Tag-Generator [--tags path-to-tags-file] [--config path-to-config-file] [--verbosity {info|debug}] [--setup] [--version]
+    Filename-Tag-Generator [--tags <path-to-tags-file>] [--config <path-to-config-file>] [--verbosity {info|debug}] [--setup] [--version]
     
       --tags               specify a tags file
       --config             specify a config file
       --verbosity          set the verbosity of the console logger
       --setup              run interactive setup
       --version            print version and exit
+      --help               print help and exit
 
 
 ## Example
@@ -176,19 +177,19 @@ You can install the program in two ways. You can either download one of the preb
 
 ### Using Python
 
-This section assumes that you have Python version >= 3.8 installed on your system and that you have some basic python and command line knowledge.
+This section assumes that you have Python version >= 3.8 installed on your system and that you have some basic Python and command line knowledge.
 Also, you must have installed Tkinter when you were installing Python.
 If you have multiple versions on your system make sure you are using the right one using `python.exe --version`
 
 1. Install via pip
-    1. Either from python a wheel file from [releases](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) with `python.exe -m pip install <link-to-whl-file-under-releases>`
+    1. Either from Python a wheel file from [releases](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) with `python.exe -m pip install <link-to-whl-file-under-releases>`
     2. Or install directly from the repo with `python.exe -m pip install git+https://github.com/watermelonwolverine/Filename-Tag-Generator`
-2. Find out where Python puts your console scripts. It should be somewhere under the `USER_BASE` folder which you can find out using `python.exe -m site`.
+2. Find out where Python installs scripts. It should be in the `Scripts` folder under Python's `USER_BASE` folder which you can find out using `python.exe -m site`.
 3. Either run the program for a first time setup or go directly to [configuration](#configuration) to read about configuration files.
 
 ## Ubuntu
 
-You can install the program in two ways. You can either download one of the prebuilt exe files from [releases](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) or you can install it using Python.
+You can install the program in two ways. You can either download one of the prebuilt binaries files from [releases](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) or you can install it using Python.
 
 ### Using Prebuilt Binary
 
@@ -198,12 +199,12 @@ You can install the program in two ways. You can either download one of the preb
 
 ### Using Python
 
-This section assumes that you have Python version >= 3.8 installed on your system and that you have some basic python and command line knowledge.
-You must also install tkinter for your python version. Under Ubuntu that can usually be done with `apt install pythonX-tk` with `X` being the Python version you use.
+This section assumes that you have Python version >= 3.8 installed on your system and that you have some basic Python and command line knowledge.
+You must also install tkinter for your Python version. Under Ubuntu that can usually be done with `apt install pythonX-tk` with `X` being the Python version you use.
 
 1. Install via pip
-    1. Either from a python wheel file from [releases](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) with `pythonX -m pip install <link-to-whl-file-under-releases>`
-    2. Or install directly from the repo with `python -m pip install git+https://github.com/watermelonwolverine/Filename-Tag-Generator`
+    1. Either from a Python wheel file from [releases](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) with `pythonX -m pip install <link-to-whl-file-under-releases>`
+    2. Or install directly from the repo with `pythonX -m pip install git+https://github.com/watermelonwolverine/Filename-Tag-Generator`
 2. You should now be able to run the program from command line with `Filename-Tag-Generator`.
 3. Either run the  program for a first time setup or go directly to [configuration](#configuration) to read about configuration files.
 
@@ -257,6 +258,7 @@ One tag can be in multiple categories as long as it has the same display-name ev
 
 For example: `"dungeon" : "Dungeon"` may fit into both categories `Nature` and `Civilization`.
 
+If you need more examples or starting point look at the [source repository](https://github.com/watermelonwolverine/Filename-Tag-Generator/tree/main/configs)
 ## UI and Behaviour
 
 You can configure the UI and the naming behaviour using a config file which is usually named `config.json`.

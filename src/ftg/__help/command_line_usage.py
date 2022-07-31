@@ -18,10 +18,10 @@ def __make_markdown(text_: str) -> str:
     return result
 
 
-usage = str(
+syntax = str(
     F'{app_name} '
-    F'[{__args.tags_option} path-to-tags-file] '
-    F'[{__args.config_option} path-to-config-file] '
+    F'[{__args.tags_option} <path-to-tags-file>] '
+    F'[{__args.config_option} <path-to-config-file>] '
     F'[{__args.verbosity_option} {{{"|".join(__args.verbosity_choices)}}}] '
     F'[{__args.setup_option}] '
     F'[{__args.version_option}]\n'
@@ -31,6 +31,7 @@ usage = str(
     F'{__with_spaces(__args.verbosity_option)} set the verbosity of the console logger\n'
     F'{__with_spaces(__args.setup_option)} run interactive setup\n'
     F'{__with_spaces(__args.version_option)} print version and exit\n'
+    F'{__with_spaces(__args.help_option)} print help and exit'
 )
 
 text = str(
@@ -38,7 +39,7 @@ text = str(
     F'\n'
     F'For those who want a bit more control over the program I added some command line options.\n'
     F'\n'
-    F'{to_code_block(usage)}\n'
+    F'{to_code_block(syntax)}\n'
     F'\n'
     F'## Example\n'
     F'\n'

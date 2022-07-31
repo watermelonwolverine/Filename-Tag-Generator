@@ -2,7 +2,7 @@ import json
 
 import ftg
 from ftg.__cli_wrapper import __args
-from ftg.__constants import default_tags_file_name, default_config_file_name, author, app_name, illegal_chars
+from ftg.__constants import default_tags_file_name, default_config_file_name, author, app_name, illegal_chars, url
 from ftg.__help import command_line_usage
 from ftg.__help.utils import to_link, to_code_block, Section
 from ftg.utils.name_generator import NameGeneratorImpl
@@ -82,6 +82,8 @@ text = str(
     F'One tag can be in multiple categories as long as it has the same display-name everywhere.\n'
     F'\n'
     F'For example: `"dungeon" : "Dungeon"` may fit into both categories `Nature` and `Civilization`.\n'
+    F'\n'
+    F'If you need more examples or starting point look at the [source repository]({url}/tree/main/configs)'
     F'\n'
     F'## UI and Behaviour\n'
     F'\n'
