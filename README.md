@@ -3,8 +3,10 @@
 1. [About](#about)
 1. [Where to Start](#where-to-start)
 1. [Limitations](#limitations)
-1. [Install](#install)
 1. [Usage](#usage)
+1. [Command Line Options](#command-line-options)
+1. [Searching](#searching)
+1. [Install](#install)
 1. [Configuration](#configuration)
 1. [Why Filenames?](#why-filenames)
 1. [Alternatives](#alternatives)
@@ -58,6 +60,89 @@ Make yourself clear about these limitations before using this tool as they canno
 
 That said in most cases it´s pretty easy to stay below the limits unless you use very high number of long tags.
 
+# Usage
+
+The program can be used for two purposes:
+
+1. Directly rename files via drag and drop
+2. Generate names
+
+## Renaming Files
+
+### Single
+
+![](media/dnd_single.gif)
+To rename a file drag and drop it from your file browser into the application window.
+The program will then revert the filename back into basename, tags and extensions.
+For this process to go smoothly make sure the filename doesn't contain special characters in its basename or tags.
+See [Configuration](#configuration) for more information.
+Any tags in the filename that are not in you tags file will get lost in this translation.
+Once you dropped the file into the application you can change the basename and extension and select the tags you want to add.
+
+As soon as you click the `Apply` button the file will be renamed in accordance to what you selected.
+
+### Multiple
+
+You can drag and drop multiple files into the application window.
+In this case the program behaves very similar to single file drop with a few changes.
+
+- The tag buttons will be changed to checkboxes with one of three states `On` and `Off` and `Mixed`.
+- The `Selected File` field will be disabled. You will have to remember which files you dragged into the application.
+- `Basename` and `Extension` input fields will be disabled. You will have to adjust the basename and extension beforehand.
+
+Checkboxes states:
+
+- The `On` state indicates, that all files have this tag.
+- The `Off` state indicates, that no file has this tags.
+- The `Mixed` state indicates, that some, but not all, file have this tag.
+
+When you click on a checkbox with state `Mixed` it will change to `On`. After that you can only switch between `On` and `Off`.
+  => Don't touch a `Mixed` checkbox unless want to add or remove this tag to/from all files
+
+As soon as you click the `Apply` button the files will be renamed in accordance to what you selected.
+If you disabled a checkbox that was previously `Mixed` or `On` the tag will be removed from all files.
+If you enabled a checkbox that was previously `Mixed` or `Off` the tag will be added to all files.
+
+## Generating Map Names
+
+This one is useful for organizing maps via names in your VTT.
+
+Simply enter a basename and click on the tags you want to select and copy the result from the `Full Name` field.
+
+If you want to add or remove tags to a name paste it in `Full Name` and click the `Revert` button.
+
+# Command Line Options
+
+For those who want a bit more control over the program I added some command line options.
+
+    Filename-Tag-Generator [--tags path-to-tags-file] [--config path-to-config-file] [--verbosity {info|debug}] [--setup] [--version]
+    
+      --tags               specify a tags file
+      --config             specify a config file
+      --verbosity          set the verbosity of the console logger
+      --setup              run interactive setup
+      --version            print version and exit
+
+
+# Searching
+
+This program does not have any search functionality. Instead you use whatever file browser your system has which usually has all the features you need. Windows, Ubuntu, GDrive, Dropbox, etc. all provide thumbnail views and indexed search.
+
+## Examples
+
+On Windows the [syntax](https://docs.microsoft.com/en-us/windows/win32/lwef/-search-2x-wds-aqsreference) is very easy. The query
+
+`"tag1" ("tag2" OR "tag3") NOT kind:folder`
+
+would give you all files with the tag `tag1` that also have `tag2` or `tag3`
+
+The Google Drive search syntax is a bit weird, and I couldn't find any good references. With a bit of trial and error I found that:
+
+`"tag1"("tag2"|"tag3")-type:folder`
+
+wold be equal to the above. It's important to not use whitespaces. `|` operates as (logical) or.
+
+
 # Install
 
 ## Windows
@@ -99,56 +184,6 @@ You must also install tkinter for your python version using `apt install pythonX
 2. Find out where Python puts your console scripts. Usually that is in the `usr/local/bin`.
 3. Either run the  program for a first time setup or go directly to [configuration](#configuration) to read about configuration files.
 
-
-# Usage
-
-The program can be used for two purposes:
-
-1. Directly rename files via drag and drop
-2. Generate map names
-
-## Renaming Files
-
-### Single
-
-To rename a file drag and drop it from your file browser into the application window.
-The program will then revert the filename back into basename, tags and extensions.
-For this process to go smoothly make sure the filename doesn't contain special characters in its basename or tags.
-See [Configuration](#configuration) for more information.
-Any tags in the filename that are not in you tags file will get lost in this translation.
-Once you dropped the file into the application you can change the basename and extension and select the tags you want to add.
-
-As soon as you click the `Apply` button the file will be renamed in accordance to what you selected.
-
-### Multiple
-
-You can drag and drop multiple files into the application window.
-In this case the program behaves very similar to single file drop with a few changes.
-
-- The tag buttons will be changed to checkboxes with one of three states `On` and `Off` and `Mixed`.
-- The `Selected File` field will be disabled. You will have to remember which files you dragged into the application.
-- `Basename` and `Extension` input fields will be disabled. You will have to adjust the basename and extension beforehand.
-
-Checkboxes states:
-
-- The `On` state indicates, that all files have this tag.
-- The `Off` state indicates, that no file has this tags.
-- The `Mixed` state indicates, that some, but not all, file have this tag.
-
-When you click on a checkbox with state `Mixed` it will change to `On`. After that you can only switch between `On` and `Off`.
-  => Don't touch a `Mixed` checkbox unless want to add or remove this tag to/from all files
-
-As soon as you click the `Apply` button the files will be renamed in accordance to what you selected.
-If you disabled a checkbox that was previously `Mixed` or `On` the tag will be removed from all files.
-If you enabled a checkbox that was previously `Mixed` or `Off` the tag will be added to all files.
-
-## Generating Map Names
-
-This one is useful for organizing maps via names in your VTT.
-
-Simply enter a basename and click on the tags you want to select and copy the result from the `Full Name` field.
-
-If you want to add or remove tags to a name paste it in `Full Name` and click the `Revert` button.
 
 # Configuration
 

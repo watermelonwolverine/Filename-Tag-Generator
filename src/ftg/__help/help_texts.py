@@ -1,15 +1,17 @@
 from typing import Dict, List
 
 from ftg.__help import install, why_filenames, configuration, about, where_to_start, limitations, alternatives, \
-    where_is_my_stuff, usage
+    where_is_my_stuff, usage, searching, command_line_usage
 from ftg.__help.utils import to_link, Section
 
 sections = [about.section,
             where_to_start.section,
             limitations.section,
             where_is_my_stuff.section,
-            install.section,
             usage.section,
+            command_line_usage.section,
+            searching.section,
+            install.section,
             configuration.section,
             why_filenames.section,
             alternatives.section]

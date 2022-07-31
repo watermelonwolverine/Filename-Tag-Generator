@@ -9,7 +9,7 @@ from typing import Callable
 import markdown
 from tkinterweb.htmlwidgets import HtmlFrame
 
-from ftg.__help.help_text import help_table_of_contents, sections, sections_by_link
+from ftg.__help.help_texts import help_table_of_contents, sections, sections_by_link
 from ftg.view.styles import Styles
 from ftg.view.ui_config import UIConfig
 
