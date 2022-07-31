@@ -36,9 +36,7 @@ class FtgApplier:
         elif len(self.__context.selected_files) > 1:
             self.__apply_batch()
         else:
-            raise FtgException("Illegal Program State")
-
-        self.__context.changes_are_pending = False
+            raise Exception("Illegal Program State")
 
     def __apply_single(self) -> None:
 
@@ -61,6 +59,8 @@ class FtgApplier:
                                new_path)
 
             self.__context.selected_files = [new_path]
+
+            self.__context.changes_are_pending = False
 
         except (FtgException, OSError) as ex:
             msg = self.__error_msg_for_exception(old_path,
@@ -85,7 +85,7 @@ class FtgApplier:
             except FtgException as ex:
                 messagebox.showerror(title=ERROR_TITLE,
                                      message=F"Error while generating filenames: {ex}")
-            return
+                return
 
         if self.__contains_duplicate_paths(updated_paths.values()):
             answer = messagebox.askyesno(title="Filename Collision",
@@ -102,6 +102,7 @@ class FtgApplier:
                 return
 
         self.__do_batch_rename(updated_paths)
+        self.__context.changes_are_pending = False
 
     def __do_batch_rename(self,
                           updated_paths: Dict[str, str]) -> None:

@@ -3,6 +3,7 @@ from typing import Dict, Literal
 
 from tkinterdnd2 import TkinterDnD
 
+import ftg
 from ftg.__constants import app_name
 from ftg.localization import SELECTED_FILE, APPLY, CLEAR, FULL_NAME, EXTENSION, BASENAME, HELP, REVERT
 from ftg.utils.program_config import UIConfig
@@ -43,7 +44,7 @@ class FtgWindow:
 
     def __build_ui(self,
                    tk: Tk) -> None:
-        tk.title(app_name)
+        tk.title(app_name + " v." + ftg.__version__)
         tk.minsize(width=500,
                    height=500)
 
