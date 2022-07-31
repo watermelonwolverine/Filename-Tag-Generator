@@ -72,6 +72,7 @@ The program can be used for two purposes:
 ### Single
 
 ![](media/dnd_single.gif)
+
 To rename a file drag and drop it from your file browser into the application window.
 The program will then revert the filename back into basename, tags and extensions.
 For this process to go smoothly make sure the filename doesn't contain special characters in its basename or tags.
@@ -82,6 +83,8 @@ Once you dropped the file into the application you can change the basename and e
 As soon as you click the `Apply` button the file will be renamed in accordance to what you selected.
 
 ### Multiple
+
+![](media/dnd_multiple_add_tag.gif)
 
 You can drag and drop multiple files into the application window.
 In this case the program behaves very similar to single file drop with a few changes.

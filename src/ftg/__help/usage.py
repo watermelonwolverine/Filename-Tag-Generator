@@ -5,7 +5,11 @@ from ftg.localization import SELECTED_FILE, BASENAME, EXTENSION, APPLY, FULL_NAM
 header = "Usage"
 link = to_link(header)
 
-text = str(
+__dnd_single_placeholder = "DND_SINGLE_PLACEHOLDER"
+__dnd_multiple_add_placeholder = "DND_SINGLE_MULTIPLE_ADD_PLACEHOLDER"
+__dnd_multiple_remove_placeholder = "DND_SINGLE_MULTIPLE_REMOVE_PLACEHOLDER"
+
+__text = str(
     F'# {header}\n'
     F'\n'
     F'The program can be used for two purposes:\n'
@@ -17,8 +21,7 @@ text = str(
     F'\n'
     F'### Single\n'
     F'\n'
-    F'![](media/dnd_single.gif)'    
-    F'\n'
+    F'{__dnd_single_placeholder}'
     F'To rename a file drag and drop it from your file browser into the application window.\n'
     F'The program will then revert the filename back into basename, tags and extensions.\n'
     F'For this process to go smoothly make sure the filename doesn\'t contain special characters in its basename or tags.\n'
@@ -30,6 +33,7 @@ text = str(
     F'\n'
     F'### Multiple\n'
     F'\n'
+    F'{__dnd_multiple_add_placeholder}'
     F'You can drag and drop multiple files into the application window.\n'
     F'In this case the program behaves very similar to single file drop with a few changes.\n'
     F'\n'
@@ -59,6 +63,21 @@ text = str(
     F'If you want to add or remove tags to a name paste it in `{FULL_NAME}` and click the `{REVERT}` button.'
 )
 
-section = Section(link,
-                  header,
-                  text)
+
+def __surround(text_: str) -> str:
+    return "![](" + text_ + ")\n\n"
+
+
+# tkinter html viewer does not support animated gifs...
+# also how to ship them with the binary? => just leave them out
+def get_section(for_readme: bool) -> Section:
+    result = __text.replace(__dnd_single_placeholder,
+                            __surround("media/dnd_single.gif") if for_readme else "")
+    result = result.replace(__dnd_multiple_add_placeholder,
+                            __surround("media/dnd_multiple_add_tag.gif") if for_readme else "")
+    result = result.replace(__dnd_multiple_remove_placeholder,
+                            __surround("media/dnd_multiple_remove_tag.gif") if for_readme else "")
+
+    return Section(link,
+                   header,
+                   result)

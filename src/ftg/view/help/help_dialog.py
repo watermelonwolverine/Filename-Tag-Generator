@@ -9,7 +9,7 @@ from typing import Callable
 import markdown
 from tkinterweb.htmlwidgets import HtmlFrame
 
-from ftg.__help.help_texts import help_table_of_contents, sections, sections_by_link
+from ftg.__help.help_texts import help_table_of_contents, help_sections_by_link, help_sections
 from ftg.view.styles import Styles
 from ftg.view.ui_config import UIConfig
 
@@ -84,21 +84,21 @@ class FtgHelpDialog:
                     self.__show_markdown(help_table_of_contents.text)
                     return
 
-                if filename in sections_by_link.keys():
+                if filename in help_sections_by_link.keys():
 
-                    section = sections_by_link[filename]
+                    section = help_sections_by_link[filename]
 
                     section_markdown_text = section.text
 
                     navigation_links = "[Home](#home)"
 
-                    index = sections.index(section)
+                    index = help_sections.index(section)
 
                     if index > 0:
-                        navigation_links += F'  [Previous]({sections[index - 1].link})'
+                        navigation_links += F'  [Previous]({help_sections[index - 1].link})'
 
-                    if index < len(sections) - 1:
-                        navigation_links += F'  [Next]({sections[index + 1].link})'
+                    if index < len(help_sections) - 1:
+                        navigation_links += F'  [Next]({help_sections[index + 1].link})'
 
                     self.__show_markdown(navigation_links + "\n\n" + section_markdown_text)
                 return
