@@ -19,7 +19,7 @@ text = str(
     '  32,767 characters. [link](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry#:~:text=path%20length%20of-,32%2C767%20characters,-.%20This%20type%20of)\n'
     '\n'
     'If you intend to use this tool you should check what the systems you are planning to use\n'
-    'are supporting. Maybe even run some tests. If you plan to use this program on Windows you will have to enable Long Paths almost certainly.\n'
+    'are supporting. Maybe even run some tests. If you plan to use this program on Windows you will have to enable Long Paths, almost certainly.\n'
     '\n'
     'Make yourself clear about these limitations before using this tool as they cannot be circumvented.\n'
     '\n'

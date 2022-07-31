@@ -7,7 +7,8 @@ link = to_link(header)
 
 __dnd_single_placeholder = "DND_SINGLE_PLACEHOLDER"
 __dnd_multiple_add_placeholder = "DND_SINGLE_MULTIPLE_ADD_PLACEHOLDER"
-__dnd_multiple_remove_placeholder = "DND_SINGLE_MULTIPLE_REMOVE_PLACEHOLDER"
+__generate_placeholder = "GENERATE_PLACEHOLDER"
+__revert_placeholder = "REVERT_PLACEHOLDER"
 
 __text = str(
     F'# {header}\n'
@@ -41,7 +42,7 @@ __text = str(
     F'- The `{SELECTED_FILE}` field will be disabled. You will have to remember which files you dragged into the application.\n'
     F'- `{BASENAME}` and `{EXTENSION}` input fields will be disabled. You will have to adjust the basename and extension beforehand.\n'
     F'\n'
-    F'Checkboxes states:\n'
+    F'Checkbox states:\n'
     F'\n'
     F'- The `On` state indicates, that all files have this tag.\n'
     F'- The `Off` state indicates, that no file has this tags.\n'
@@ -56,10 +57,12 @@ __text = str(
     F'\n'
     F'## Generating Map Names\n'
     F'\n'
+    F'{__generate_placeholder}'
     F'This one is useful for organizing maps via names in your VTT.\n'
     F'\n'
     F'Simply enter a basename and click on the tags you want to select and copy the result from the `{FULL_NAME}` field.\n'
     F'\n'
+    F'{__revert_placeholder}'
     F'If you want to add or remove tags to a name paste it in `{FULL_NAME}` and click the `{REVERT}` button.'
 )
 
@@ -75,8 +78,10 @@ def get_section(for_readme: bool) -> Section:
                             __surround("media/dnd_single.gif") if for_readme else "")
     result = result.replace(__dnd_multiple_add_placeholder,
                             __surround("media/dnd_multiple_add_tag.gif") if for_readme else "")
-    result = result.replace(__dnd_multiple_remove_placeholder,
-                            __surround("media/dnd_multiple_remove_tag.gif") if for_readme else "")
+    result = result.replace(__generate_placeholder,
+                            __surround("media/generate.gif") if for_readme else "")
+    result = result.replace(__revert_placeholder,
+                            __surround("media/revert.gif") if for_readme else "")
 
     return Section(link,
                    header,

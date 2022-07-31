@@ -6,7 +6,7 @@ link = to_link(header)
 text = str(
     F'# {header}\n'
     '\n'
-    'This is the conclusion of a [reddit post](TODO)\n'
+    'This is the conclusion of a [reddit post](https://www.reddit.com/r/battlemaps/comments/vuk9uw/working_on_a_tagging_tool_for_map_hoarders_need/)\n'
     '\n'
     '# Summary\n'
     '\n'

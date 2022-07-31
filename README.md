@@ -54,7 +54,7 @@ on those.
   32,767 characters. [link](https://docs.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry#:~:text=path%20length%20of-,32%2C767%20characters,-.%20This%20type%20of)
 
 If you intend to use this tool you should check what the systems you are planning to use
-are supporting. Maybe even run some tests. If you plan to use this program on Windows you will have to enable Long Paths almost certainly.
+are supporting. Maybe even run some tests. If you plan to use this program on Windows you will have to enable Long Paths, almost certainly.
 
 Make yourself clear about these limitations before using this tool as they cannot be circumvented.
 
@@ -93,7 +93,7 @@ In this case the program behaves very similar to single file drop with a few cha
 - The `Selected File` field will be disabled. You will have to remember which files you dragged into the application.
 - `Basename` and `Extension` input fields will be disabled. You will have to adjust the basename and extension beforehand.
 
-Checkboxes states:
+Checkbox states:
 
 - The `On` state indicates, that all files have this tag.
 - The `Off` state indicates, that no file has this tags.
@@ -108,9 +108,13 @@ If you enabled a checkbox that was previously `Mixed` or `Off` the tag will be a
 
 ## Generating Map Names
 
+![](media/generate.gif)
+
 This one is useful for organizing maps via names in your VTT.
 
 Simply enter a basename and click on the tags you want to select and copy the result from the `Full Name` field.
+
+![](media/revert.gif)
 
 If you want to add or remove tags to a name paste it in `Full Name` and click the `Revert` button.
 
@@ -129,7 +133,7 @@ For those who want a bit more control over the program I added some command line
 
 # Searching
 
-This program does not have any search functionality. Instead you use whatever file browser your system has which usually has all the features you need. Windows, Ubuntu, GDrive, Dropbox, etc. all provide thumbnail views and indexed search.
+This program does not have any search functionality. Instead, you use whatever file browser your system has which usually has all the features you need. Windows, Ubuntu, GDrive, Dropbox, etc. all provide thumbnail views and indexed search.
 
 ## Examples
 
@@ -161,7 +165,7 @@ You can install the program in two ways. You can either download one of the preb
 ### Using Python
 
 This section assumes that you have Python version >= 3.10 installed on your system and that you have some basic programming and command line knowledge.
-Also you must have installed Tkinter when you where installing Python.
+Also, you must have installed Tkinter when you were installing Python.
 If you have multiple versions on your system make sure you are using the right one using `python.exe --version`
 
 1. Run `python.exe pip install https://github.com/watermelonwolverine/Filename-Tag-Generator`
@@ -214,7 +218,7 @@ Example:
 
 You could have two tags files. One for maps and one for character artwork named `map-tags.json` and `character-tags.json` respectively.
 
-The program wouldn't find those because they don't have the default name but you can start the program by pointing them directly to the tags with
+The program wouldn't find those because they don't have the default name, but you can start the program by pointing them directly to the tags with
 
 `Filename-Tag-Generator --tags maps-tags.json`
 
@@ -222,7 +226,7 @@ or
 
 `Filename-Tag-Generator --tags character-tags.json`
 
-The program can run without a config file but it needs a tag file.
+The program can run without a config file, but it needs a tag file.
 
 ## Tags
 
@@ -245,7 +249,7 @@ The tags usually live in a `tags.json` file that follows the following structure
 
 You can have as many categories under `categories` as you want. You can also have as many tags under each category as you want.
 
-One tag can be in multiple categories as long as it has the the same display-name everywhere.
+One tag can be in multiple categories as long as it has the same display-name everywhere.
 
 For example: `"dungeon" : "Dungeon"` may fit into both categories `Nature` and `Civilization`.
 
@@ -304,7 +308,7 @@ It would generate:
 
 `This is some_base-name tag1 tag2 tag3.png`
 
-As you can probably guess the last one is impossible to revert back into basename and tags. How is the program supposed to know where the basename ends and the list of tags begins? Therefore you should be careful which separators and spacers you choose.
+As you can probably guess the last one is impossible to revert into basename and tags. How is the program supposed to know where the basename ends and the list of tags begins? Therefore, you should be careful which separators and spacers you choose.
 
 Some filesystems forbid the usage of certain symbols. In other cases characters should be avoided for simplicity's sake. You must avoid:
 
@@ -316,7 +320,7 @@ and you should avoid:
 
 # Why Filenames?
 
-This is the conclusion of a [reddit post](TODO)
+This is the conclusion of a [reddit post](https://www.reddit.com/r/battlemaps/comments/vuk9uw/working_on_a_tagging_tool_for_map_hoarders_need/)
 
 # Summary
 

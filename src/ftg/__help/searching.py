@@ -5,7 +5,7 @@ link = to_link(header)
 text = str(
     F'# {header}\n'
     F'\n'
-    F'This program does not have any search functionality. Instead you use whatever file browser your system has which '
+    F'This program does not have any search functionality. Instead, you use whatever file browser your system has which '
     F'usually has all the features you need. Windows, Ubuntu, GDrive, Dropbox, etc. all provide thumbnail views and indexed search.\n'
     F'\n'
     F'## Examples\n'

@@ -22,7 +22,7 @@ text = str(
     F'### Using Python\n'
     F'\n'
     F'This section assumes that you have Python version >= 3.10 installed on your system and that you have some basic programming and command line knowledge.\n'
-    F'Also you must have installed Tkinter when you where installing Python.\n'
+    F'Also, you must have installed Tkinter when you were installing Python.\n'
     F'If you have multiple versions on your system make sure you are using the right one using `python.exe --version`\n'
     F'\n'
     F'1. Run `python.exe pip install {url}`\n'
