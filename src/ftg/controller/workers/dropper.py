@@ -96,11 +96,11 @@ class FtgDropper:
 
         nb = 0
 
-        for abs_path_to_file, tags in unrecognized_tags.items():
+        for abs_path_to_file, unknown_tags_for_file in unrecognized_tags.items():
 
             _, filename = os.path.split(abs_path_to_file)
 
-            joined_tags = ", ".join(tags)
+            joined_tags = ", ".join(unknown_tags_for_file)
 
             message_queue = F"{nb + 1}/{len(unrecognized_tags)}"
 
@@ -114,7 +114,7 @@ class FtgDropper:
                           F"\n"
                           F"OK: Next Warning, Cancel: Skip Warnings")
 
-            should_continue = messagebox.askokcancel(title="Unknown Tag",
+            should_continue = messagebox.askokcancel(title="Unknown Tags",
                                                      message=message)
 
             if not should_continue:
