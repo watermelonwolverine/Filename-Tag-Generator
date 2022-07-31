@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 import sys
 from tkinter import messagebox
 
@@ -8,6 +9,8 @@ from ftg.__cli_wrapper.__constants import win32
 from ftg.__cli_wrapper.__paths import user_path_to_tags, system_path_to_tags, \
     local_path_to_tags, local_path_to_config, system_path_to_config, user_path_to_config
 from ftg.__constants import UTF_8, app_name, url
+from ftg.exceptions import FtgException
+from ftg.utils.cross_platform import open_folder
 from ftg.utils.program_config import ProgramConfigImpl
 from ftg.utils.tags import example_tags_dict
 
@@ -101,6 +104,7 @@ def create_file(name,
             path_to_file = user_path
 
     if path_to_file is None:
+
         answer = messagebox.askyesno("Setup",
                                      F"Do you want create a {name} file in the system config directory?\n"
                                      "\n" +
@@ -114,26 +118,39 @@ def create_file(name,
         messagebox.showerror("Setup Aborted",
                              "No option selected. Setup aborted")
 
+    try:
+        __try_to_create_file(path_to_file,
+                             default_content)
+    except PermissionError as ex:
+        messagebox.showerror(title="Insufficient Permissions",
+                             message=str(ex) + "\n\n")
+        return
+    except (OSError, FtgException) as ex:
+        messagebox.showerror(title="Error",
+                             message=str(ex))
+        return
+
+
+def __try_to_create_file(path_to_file: str,
+                         default_content: str) -> None:
     directory, filename = os.path.split(path_to_file)
 
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     if os.path.exists(path_to_file):
-        messagebox.showerror(title="Error",
-                             message="File already exists:\n"
-                                     "\n"
-                                     F"{path_to_file}")
-        return
+        raise FtgException("File already exists:\n"
+                           "\n"
+                           F"{path_to_file}")
 
     with open(path_to_file, "wt", encoding=UTF_8) as fh:
         fh.write(default_content)
 
     answer = messagebox.askyesno(title="New File Created",
-                                 message=F"A new {name} file was created in at\n"
+                                 message=F"A new {filename} file was created in at\n"
                                          F"\n"
                                          F" {path_to_file}\n"
                                          F"\n"
                                          F"Do you want open the folder?")
     if answer:
-        os.startfile(directory)
+        open_folder(directory)

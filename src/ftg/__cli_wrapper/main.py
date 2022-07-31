@@ -14,7 +14,7 @@ from ftg.__cli_wrapper.__args import config_option, tags_option, verbosity_optio
     verbosity_info, verbosity_debug, setup_option
 from ftg.__cli_wrapper.__constants import win32, linux, bug_report_message, unsupported_os_error_msg
 from ftg.__cli_wrapper.__paths import path_to_tags_options, path_to_config_options
-from ftg.__constants import app_name
+from ftg.__constants import app_name, window_title
 from ftg.controller.ftg_window_controller import FtgWindowController
 from ftg.exceptions import FtgException, FtgInternalException, JSONParseException
 from ftg.localization import PLEASE_CHECK_YOUR_FILES_TITLE, PLEASE_CHECK_YOUR_FILES_MSG, FILE_NOT_FOUND
@@ -58,7 +58,8 @@ def main(config: str = None,
         __configure_logging(verbosity)
 
         if setup:
-            tk = Tk(app_name)
+            tk = Tk()
+            tk.title(window_title)
             __setup.setup()
             tk.destroy()
             sys.exit()
@@ -122,7 +123,8 @@ def __try_to_run_with(given_path_to_config_file: str,
                                          path_to_config_options())
 
     if path_to_tags_file is None:
-        tk = Tk(app_name)
+        tk = Tk()
+        tk.title(app_name)
         __setup.maybe_setup()
         tk.destroy()
         sys.exit()
@@ -206,7 +208,7 @@ def __read_config_file(path_to_config_file: str):
 def __show_error_for_file(title,
                           message):
     tk = Tk()
-
+    tk.title(window_title)
     messagebox.showerror(title=title,
                          message=message)
 

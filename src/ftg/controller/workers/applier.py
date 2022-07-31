@@ -144,7 +144,7 @@ class FtgApplier:
         question = str('\n'
                        '\n'
                        'Yes: Continue batch process\n'
-                       'No: Skip all warnings\n'
+                       'No: Continue and skip all warnings\n'
                        'Cancel: Stop batch process\n')
 
         msg = self.__error_msg_for_exception(old_path,
@@ -247,6 +247,10 @@ class FtgApplier:
     def __rename_file(self,
                       old_path: str,
                       new_path: str) -> None:
+
+        # does not fail on ubuntu if file was moved but should
+        if not os.path.exists(old_path):
+            raise FileNotFoundError(F"File not found: {old_path}")
 
         _, old_filename = os.path.split(old_path)
         _, new_filename = os.path.split(new_path)

@@ -1,7 +1,6 @@
 import logging
 import os.path
 import traceback
-import urllib.request
 import webbrowser
 from tkinter import Tk, BOTH, Toplevel
 from typing import Callable
@@ -10,6 +9,7 @@ import markdown
 from tkinterweb.htmlwidgets import HtmlFrame
 
 from ftg.__help.help_texts import help_table_of_contents, help_sections_by_link, help_sections
+from ftg.utils.cross_platform import open_folder
 from ftg.view.styles import Styles
 from ftg.view.ui_config import UIConfig
 
@@ -103,16 +103,12 @@ class FtgHelpDialog:
                     self.__show_markdown(navigation_links + "\n\n" + section_markdown_text)
                 return
 
-            try:
-                path = urllib.request.url2pathname(url)
-            except OSError:
-                # urls aren't conforming
-                # get rid of file://
-                path = url[7:]
+            # get rid of file://
+            path = url[7:]
 
             if os.path.exists(path):
                 if os.path.isdir(path):
-                    os.startfile(path)
+                    open_folder(path)
                 elif os.path.isfile(path):
-                    os.startfile(os.path.dirname(path))
+                    open_folder(os.path.dirname(path))
                 return
