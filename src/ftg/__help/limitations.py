@@ -23,7 +23,7 @@ text = str(
     '\n'
     'Make yourself clear about these limitations before using this program as they cannot be circumvented.\n'
     '\n'
-    'That said in most cases it´s pretty easy to stay below the limits unless you use very high number of long tags.'
+    'That said in most cases it´s pretty easy to stay below the limits unless you use a very high number of long tags.'
 )
 
 section = Section(link,

@@ -19,11 +19,11 @@ It's designed use case is the organization of RPG maps and other media files a D
 
 ## Example
 
-To add the tags 
+You have a file named `some_map.png`
 
-`tag1`, `tag2` and `tag3`
+You want to add the tags `tag1`, `tag2` and `tag3` to this file.
 
-to the file `some_map.png` it would be renamed to
+You drag and drop the file into the program, select the tags and the program automatically renames the file to
 
 `SOME-MAP;tag1_tag2_tag3.png`
 
@@ -56,7 +56,7 @@ are supporting. Maybe even run some tests. If you plan to use this program on Wi
 
 Make yourself clear about these limitations before using this program as they cannot be circumvented.
 
-That said in most cases it´s pretty easy to stay below the limits unless you use very high number of long tags.
+That said in most cases it´s pretty easy to stay below the limits unless you use a very high number of long tags.
 
 # Usage
 
@@ -75,7 +75,7 @@ To rename a file drag and drop it from your file browser into the application wi
 The program will then revert the filename back into basename, tags and extensions.
 For this process to go smoothly make sure the filename doesn't contain special characters in its basename or tags.
 See [Configuration](#configuration) for more information.
-Any tags in the filename that are not in your tags file will get lost in this translation.
+Any tags in the filename that are not in your tags file (see [Configuration](#configuration) will get lost in this translation.
 Once you dropped the file into the application you can change the basename and extension and select the tags you want to add.
 
 As soon as you click the `Apply` button the file will be renamed in accordance to what you selected.
@@ -216,7 +216,9 @@ Two files are used to configure the program
 - Tags files, named `tags.json`
 - Config files, named `config.json`
 
-Both are JSON files and need to be edited manually (as I cannot be bothered to spend countless hours on an editor)
+Both are JSON files and need to be edited manually (as I cannot be bothered to spend countless hours on an editor).
+
+The program will ask you if you want to generate a tags file and a config file when you first execute it.
 
 The program looks for configuration files in the following order:
 
@@ -251,6 +253,8 @@ The tags usually live in a `tags.json` file that follows the following structure
         }
       }
     }
+
+Tags have the structure `"tag" : "display-name"`. `tag` will used for the filename whereas `display-name will be displayed in the UI.`
 
 You can have as many categories under `categories` as you want. You can also have as many tags under each category as you want.
 

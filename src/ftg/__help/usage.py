@@ -27,7 +27,7 @@ __text = str(
     F'The program will then revert the filename back into basename, tags and extensions.\n'
     F'For this process to go smoothly make sure the filename doesn\'t contain special characters in its basename or tags.\n'
     F'See [{configuration.header}]({configuration.link}) for more information.\n'
-    F'Any tags in the filename that are not in your tags file will get lost in this translation.\n'
+    F'Any tags in the filename that are not in your tags file (see [{configuration.header}]({configuration.link}) will get lost in this translation.\n'
     F'Once you dropped the file into the application you can change the basename and extension and select the tags you want to add.\n'
     F'\n'
     F'As soon as you click the `{APPLY}` button the file will be renamed in accordance to what you selected.\n'

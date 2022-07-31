@@ -19,11 +19,11 @@ text = str(
     '\n'
     '## Example\n'
     '\n'
-    'To add the tags \n'
+    'You have a file named `some_map.png`\n'
     '\n'
-    '`tag1`, `tag2` and `tag3`\n'
+    'You want to add the tags `tag1`, `tag2` and `tag3` to this file.\n'
     '\n'
-    'to the file `some_map.png` it would be renamed to\n'
+    'You drag and drop the file into the program, select the tags and the program automatically renames the file to\n'
     '\n'
     F'`{__example_filename}`')
 
