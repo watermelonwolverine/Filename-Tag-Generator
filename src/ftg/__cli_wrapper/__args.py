@@ -3,6 +3,7 @@ verbosity_option = "--verbosity"
 config_option = "--config"
 tags_option = "--tags"
 setup_option = "--setup"
+help_option = "--help"
 
 verbosity_debug = "debug"
 verbosity_info = "info"

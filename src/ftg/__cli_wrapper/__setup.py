@@ -1,13 +1,11 @@
 import json
 import os
-import subprocess
 import sys
 from tkinter import messagebox
 
 from ftg.__cli_wrapper.__args import tags_option
 from ftg.__cli_wrapper.__constants import win32
-from ftg.__cli_wrapper.__paths import user_path_to_tags, system_path_to_tags, \
-    local_path_to_tags, local_path_to_config, system_path_to_config, user_path_to_config
+from ftg.__cli_wrapper.__paths import user_path_to_tags, system_path_to_tags, system_path_to_config, user_path_to_config
 from ftg.__constants import UTF_8, app_name, url
 from ftg.exceptions import FtgException
 from ftg.utils.cross_platform import open_folder
@@ -57,7 +55,6 @@ def create_tags_file():
                           indent=4)
 
     create_file("tags",
-                local_path_to_tags(),
                 user_path_to_tags(),
                 system_path_to_tags(),
                 contents)
@@ -68,30 +65,16 @@ def create_config_file():
                           indent=4)
 
     create_file("config",
-                local_path_to_config(),
                 user_path_to_config(),
                 system_path_to_config(),
                 contents)
 
 
 def create_file(name,
-                local_path,
                 user_path,
                 system_path,
                 default_content):
     path_to_file = None
-
-    answer = messagebox.askyesno("Setup",
-                                 F"Do you want create a local {name} file?\n"
-                                 "\n"
-                                 "It will be in the same location as the executable.\n"
-                                 "\n"
-                                 F"{local_path}\n"
-                                 "\n"
-                                 "Option 1/3")
-
-    if answer:
-        path_to_file = local_path
 
     if path_to_file is None:
         answer = messagebox.askyesno("Setup",
