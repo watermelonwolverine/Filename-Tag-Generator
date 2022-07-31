@@ -2,7 +2,7 @@ import os
 import subprocess
 import sys
 
-from ftg.__cli_wrapper.__constants import win32
+from ftg.__cli_wrapper.__constants import win32, linux
 
 
 def open_folder(path_to_folder: str):
@@ -11,6 +11,8 @@ def open_folder(path_to_folder: str):
 
     if sys.platform == win32:
         os.startfile(path_to_folder)
-    else:
+    elif sys.platform == linux:
         print(path_to_folder)
         subprocess.call(["xdg-open", path_to_folder])
+    else:
+        raise NotImplementedError()

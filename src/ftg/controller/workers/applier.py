@@ -4,7 +4,7 @@ import sys
 from tkinter import messagebox
 from typing import List, Dict, Iterable, Union
 
-from ftg.__cli_wrapper.__constants import win32
+from ftg.__cli_wrapper.__constants import win32, linux
 from ftg.__constants import ON_STATE_VALUE
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.workers.utils import FtgUtils
@@ -185,6 +185,10 @@ class FtgApplier:
 
         if sys.platform == win32:
             paths = [path.lower() for path in paths]
+        elif sys.platform == linux:
+            pass
+        else:
+            raise NotImplementedError()
 
         return len(paths) != len(set(paths))
 
@@ -263,20 +267,24 @@ class FtgApplier:
 
         if os.path.exists(new_path):
             # Windows ignores capitalization
-            if sys.platform == win32 \
-                    and old_path.lower() == new_path.lower():
-                # capitalization changed but everything else stayed the same
-                # Windows won't let us rename file
-                tmp_path = self.__get_tmp_path(old_path)
+            if sys.platform == win32:
+                if old_path.lower() == new_path.lower():
+                    # capitalization changed but everything else stayed the same
+                    # Windows won't let us rename file
+                    tmp_path = self.__get_tmp_path(old_path)
 
-                if tmp_path is None:
-                    raise FtgException("Cannot create temp file.")
+                    if tmp_path is None:
+                        raise FtgException("Cannot create temp file.")
 
-                shutil.move(old_path, tmp_path)
-                shutil.move(tmp_path, new_path)
-                return
-            else:
+                    shutil.move(old_path, tmp_path)
+                    shutil.move(tmp_path, new_path)
+                    return
+                else:
+                    raise FtgException("Path already exists")
+            elif sys.platform == linux:
                 raise FtgException("Path already exists")
+            else:
+                raise NotImplementedError()
 
         shutil.move(old_path,
                     new_path)
