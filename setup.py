@@ -10,7 +10,7 @@ if sys.platform == "win32":
     sys.path.append(path_to_project_dir)
 
 from src.ftg import __version__
-from ftg.__constants import app_name, author, url, issues_url
+from src.ftg.__constants import app_name, author, url, issues_url
 
 setuptools.setup(
     name=app_name,
@@ -32,7 +32,7 @@ setuptools.setup(
     python_requires=">=3.8",
     py_modules=[os.path.splitext(os.path.basename(path))[0] for path in glob('src/*.py')],
     entry_points={
-        'console_scripts': [f'{app_name} = ftg.__cli_wrapper.main:main'],
+        'console_scripts': [f'{app_name} = ftg.__cli_wrapper.main:cli_main'],
     },
-    requires=["appdirs", "click", "tkinterdnd2"]
+    install_requires=["appdirs", "click", "tkinterdnd2", "tkinterweb", "markdown"]
 )
