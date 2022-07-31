@@ -13,9 +13,9 @@
 
 # About
 
-The primary purpose of this program is to tags files by appending the tags to the name of the file.
+The primary purpose of this program is to tag files by appending the tags to the name of the file.
 
-The use case it is designed for is the organization of RPG maps and other media files a DM/GM comes in contact with.
+It's designed use case is the organization of RPG maps and other media files a DM/GM comes in contact with.
 
 ## Example
 
@@ -39,7 +39,7 @@ If you think that putting the tags into the filenames is a bad solution go to [A
 
 # Limitations
 
-Putting the tags into the filenames is limited by the maximum path length and maximum filename length.
+Putting the tags into the filenames is limited by the maximum path length and the maximum filename length of the system(s) you're using.
 Windows, Linux, GoogleDrive, OneDrive, Dropbox, etc. all have different restraints
 on those.
 
@@ -54,16 +54,16 @@ on those.
 If you intend to use this tool you should check what the systems you are planning to use
 are supporting. Maybe even run some tests. If you plan to use this program on Windows you will have to enable Long Paths, almost certainly.
 
-Make yourself clear about these limitations before using this tool as they cannot be circumvented.
+Make yourself clear about these limitations before using this program as they cannot be circumvented.
 
 That said in most cases it´s pretty easy to stay below the limits unless you use very high number of long tags.
 
 # Usage
 
-The program can be used for two purposes:
+The program can be used in two different ways:
 
 1. Directly rename files via drag and drop
-2. Generate names
+2. Generate names to use them elsewhere (like a VTT)
 
 ## Renaming Files
 
@@ -89,7 +89,7 @@ In this case the program behaves very similar to single file drop with a few cha
 
 - The tag buttons will be changed to checkboxes with one of three states `On` and `Off` and `Mixed`.
 - The `Selected File` field will be disabled. You will have to remember which files you dragged into the application.
-- `Basename` and `Extension` input fields will be disabled. You will have to adjust the basename and extension beforehand.
+- The `Basename` and `Extension` fields will also be disabled. You will have to adjust the basename and extension beforehand.
 
 Checkbox states:
 
@@ -106,9 +106,9 @@ If you enabled a checkbox that was previously `Mixed` or `Off` the tag will be a
 
 ## Generating Map Names
 
-![](media/generate.gif)
+This one is useful for organizing files inside another program like a VTT.
 
-This one is useful for organizing maps via names in your VTT.
+![](media/generate.gif)
 
 Simply enter a basename and click on the tags you want to select and copy the result from the `Full Name` field.
 
@@ -176,12 +176,14 @@ You can install the program in two ways. You can either download one of the preb
 
 ### Using Python
 
-This section assumes that you have Python version >= 3.10 installed on your system and that you have some basic programming and command line knowledge.
+This section assumes that you have Python version >= 3.8 installed on your system and that you have some basic python and command line knowledge.
 Also, you must have installed Tkinter when you were installing Python.
 If you have multiple versions on your system make sure you are using the right one using `python.exe --version`
 
-1. Run `python.exe -m pip install <link-to-whl-file-under-releases>`
-2. Find out where Python puts your console scripts. Usually that is in the `Scripts` directory of your Python installation.
+1. Install via pip
+    1. Either from python a wheel file from [releases](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) with `python.exe -m pip install <link-to-whl-file-under-releases>`
+    2. Or install directly from the repo with `python.exe -m pip install git+https://github.com/watermelonwolverine/Filename-Tag-Generator`
+2. Find out where Python puts your console scripts. It should be somewhere under the `USER_BASE` folder which you can find out using `python.exe -m site`.
 3. Either run the program for a first time setup or go directly to [configuration](#configuration) to read about configuration files.
 
 ## Ubuntu
@@ -196,11 +198,13 @@ You can install the program in two ways. You can either download one of the preb
 
 ### Using Python
 
-This section assumes that you have Python version >= 3.10 installed on your system and that you have some basic programming and command line knowledge.
+This section assumes that you have Python version >= 3.8 installed on your system and that you have some basic python and command line knowledge.
 You must also install tkinter for your python version. Under Ubuntu that can usually be done with `apt install pythonX-tk` with `X` being the Python version you use.
 
-1. Run `pythonX -m pip install <link-to-whl-file-under-releases>`
-2. Find out where Python puts your console scripts. Usually that is in the `usr/local/bin`.
+1. Install via pip
+    1. Either from a python wheel file from [releases](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) with `pythonX -m pip install <link-to-whl-file-under-releases>`
+    2. Or install directly from the repo with `python -m pip install git+https://github.com/watermelonwolverine/Filename-Tag-Generator`
+2. You should now be able to run the program from command line with `Filename-Tag-Generator`.
 3. Either run the  program for a first time setup or go directly to [configuration](#configuration) to read about configuration files.
 
 
@@ -218,10 +222,10 @@ The program looks for configuration files in the following order:
 1. In the execution directory. I.e. where the executable is located.
 2. In the user config directory.
     1. On Windows that's usually `C:\users\<user>\AppData\Local\watermelonwolverine\Filename-Tag-Generator`
-    2. On Linux that's usually `/home/<user>/TODO`
+    2. On Ubuntu that's usually `/home/<user>/.config/Filename-Tag-Generator`
 3. In the system config directory.
     1. On Windows that's usually `C:\ProgramData\watermelonwolverine\Filename-Tag-Generator`
-    2. On Linux that's usually `/home/<user>/TODO`
+    2. On Ubuntu that's usually `/etc/xdg/xdg-ubuntu/Filename-Tag-Generator`
 
 You can also specify the path to each file when starting from the command line using the `--config` and `--tags`
 options. This way you can have multiple tags and config files for different purposes. See [Command Line Options](#command-line-options)

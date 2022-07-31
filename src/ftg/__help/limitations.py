@@ -6,7 +6,7 @@ link = to_link(header)
 text = str(
     F'# {header}\n'
     '\n'
-    'Putting the tags into the filenames is limited by the maximum path length and maximum filename length.\n'
+    'Putting the tags into the filenames is limited by the maximum path length and the maximum filename length of the system(s) you\'re using.\n'
     'Windows, Linux, GoogleDrive, OneDrive, Dropbox, etc. all have different restraints\n'
     'on those.\n'
     '\n'
@@ -21,7 +21,7 @@ text = str(
     'If you intend to use this tool you should check what the systems you are planning to use\n'
     'are supporting. Maybe even run some tests. If you plan to use this program on Windows you will have to enable Long Paths, almost certainly.\n'
     '\n'
-    'Make yourself clear about these limitations before using this tool as they cannot be circumvented.\n'
+    'Make yourself clear about these limitations before using this program as they cannot be circumvented.\n'
     '\n'
     'That said in most cases it´s pretty easy to stay below the limits unless you use very high number of long tags.'
 )

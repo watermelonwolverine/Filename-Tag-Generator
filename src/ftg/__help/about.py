@@ -13,9 +13,9 @@ __example_filename = __nameGenerator.generate_filename("some_map",
 text = str(
     F'# {header}\n'
     '\n'
-    'The primary purpose of this program is to tags files by appending the tags to the name of the file.\n'
+    'The primary purpose of this program is to tag files by appending the tags to the name of the file.\n'
     '\n'
-    'The use case it is designed for is the organization of RPG maps and other media files a DM/GM comes in contact with.\n'
+    'It\'s designed use case is the organization of RPG maps and other media files a DM/GM comes in contact with.\n'
     '\n'
     '## Example\n'
     '\n'
