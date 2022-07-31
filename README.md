@@ -13,7 +13,7 @@
 
 # About
 
-The primary purpose of this program is to tag files by appending the tags to the name of the file.
+The primary purpose of this program is to tags files by appending the tags to the name of the file.
 
 The use case it is designed for is the organization of RPG maps and other media files a DM/GM comes in contact with.
 
@@ -25,15 +25,13 @@ To add the tags
 
 to the file `some_map.png` it would be renamed to
 
-`some_map;tag1_tag2_tag3.png`
+`SOME-MAP;tag1_tag2_tag3.png`
 
 # Where to Start
 
+If you just want to see how to the program works go to [Usage](#usage)
+
 If you are a new user who is planning to use this program you should read about its [limitations](#limitations) first.
-
-Then go to [Install](#install)
-
-Then go to [Usage](#usage)
 
 If you want to understand the decisions that lead to this mess go to [Why Filenames?](#why-filenames)
 
@@ -77,7 +75,7 @@ To rename a file drag and drop it from your file browser into the application wi
 The program will then revert the filename back into basename, tags and extensions.
 For this process to go smoothly make sure the filename doesn't contain special characters in its basename or tags.
 See [Configuration](#configuration) for more information.
-Any tags in the filename that are not in you tags file will get lost in this translation.
+Any tags in the filename that are not in your tags file will get lost in this translation.
 Once you dropped the file into the application you can change the basename and extension and select the tags you want to add.
 
 As soon as you click the `Apply` button the file will be renamed in accordance to what you selected.
@@ -131,6 +129,20 @@ For those who want a bit more control over the program I added some command line
       --version            print version and exit
 
 
+## Example
+
+You may want to have different tags files. For example one for maps and one for characters which are named `map-tags.json` and `character-tags.json` respectively.
+
+The program wouldn't find those because they don't have the default name, but you can start the program by pointing them directly to the tags with
+
+`Filename-Tag-Generator --tags maps-tags.json`
+
+or
+
+`Filename-Tag-Generator --tags character-tags.json`
+
+
+
 # Searching
 
 This program does not have any search functionality. Instead, you use whatever file browser your system has which usually has all the features you need. Windows, Ubuntu, GDrive, Dropbox, etc. all provide thumbnail views and indexed search.
@@ -143,11 +155,11 @@ On Windows the [syntax](https://docs.microsoft.com/en-us/windows/win32/lwef/-sea
 
 would give you all files with the tag `tag1` that also have `tag2` or `tag3`
 
-The Google Drive search syntax is a bit weird, and I couldn't find any good references. With a bit of trial and error I found that:
+The Google Drive search syntax is different, and I couldn't find any good references. With a bit of trial and error I found that:
 
 `"tag1"("tag2"|"tag3")-type:folder`
 
-wold be equal to the above. It's important to not use whitespaces. `|` operates as (logical) or.
+would be equal to the above. It's important to not use whitespaces. `|` operates as (logical) or. `-` excludes stuff.
 
 
 # Install
@@ -168,7 +180,7 @@ This section assumes that you have Python version >= 3.10 installed on your syst
 Also, you must have installed Tkinter when you were installing Python.
 If you have multiple versions on your system make sure you are using the right one using `python.exe --version`
 
-1. Run `python.exe pip install https://github.com/watermelonwolverine/Filename-Tag-Generator`
+1. Run `python.exe -m pip install <link-to-whl-file-under-releases>`
 2. Find out where Python puts your console scripts. Usually that is in the `Scripts` directory of your Python installation.
 3. Either run the program for a first time setup or go directly to [configuration](#configuration) to read about configuration files.
 
@@ -185,9 +197,9 @@ You can install the program in two ways. You can either download one of the preb
 ### Using Python
 
 This section assumes that you have Python version >= 3.10 installed on your system and that you have some basic programming and command line knowledge.
-You must also install tkinter for your python version using `apt install pythonX-tk` with `X` being the Python version you use.
+You must also install tkinter for your python version. Under Ubuntu that can usually be done with `apt install pythonX-tk` with `X` being the Python version you use.
 
-1. Run `pythonX pip install https://github.com/watermelonwolverine/Filename-Tag-Generator`
+1. Run `pythonX -m pip install <link-to-whl-file-under-releases>`
 2. Find out where Python puts your console scripts. Usually that is in the `usr/local/bin`.
 3. Either run the  program for a first time setup or go directly to [configuration](#configuration) to read about configuration files.
 
@@ -196,7 +208,7 @@ You must also install tkinter for your python version using `apt install pythonX
 
 Two files are used to configure the program
 
-- Tag files, named `tags.json`
+- Tags files, named `tags.json`
 - Config files, named `config.json`
 
 Both are JSON files and need to be edited manually (as I cannot be bothered to spend countless hours on an editor)
@@ -206,27 +218,15 @@ The program looks for configuration files in the following order:
 1. In the execution directory. I.e. where the executable is located.
 2. In the user config directory.
     1. On Windows that's usually `C:\users\<user>\AppData\Local\watermelonwolverine\Filename-Tag-Generator`
-    2. On Linux that's usually "/home/<user>/TODO"
+    2. On Linux that's usually `/home/<user>/TODO`
 3. In the system config directory.
     1. On Windows that's usually `C:\ProgramData\watermelonwolverine\Filename-Tag-Generator`
-    2. On Linux that's usually "/home/<user>/TODO"
+    2. On Linux that's usually `/home/<user>/TODO`
 
 You can also specify the path to each file when starting from the command line using the `--config` and `--tags`
-options. This way you can have multiple tags and config files for different purposes.
+options. This way you can have multiple tags and config files for different purposes. See [Command Line Options](#command-line-options)
 
-Example:
-
-You could have two tags files. One for maps and one for character artwork named `map-tags.json` and `character-tags.json` respectively.
-
-The program wouldn't find those because they don't have the default name, but you can start the program by pointing them directly to the tags with
-
-`Filename-Tag-Generator --tags maps-tags.json`
-
-or
-
-`Filename-Tag-Generator --tags character-tags.json`
-
-The program can run without a config file, but it needs a tag file.
+The program can run without a config file, but it needs a tags file.
 
 ## Tags
 
@@ -318,40 +318,45 @@ and you should avoid:
 
 `*, <, >, |, ?, :, "`
 
+You should also avoid having the same text as `basename-spacer` and `tag-separator`.
+
 # Why Filenames?
 
 This is the conclusion of a [reddit post](https://www.reddit.com/r/battlemaps/comments/vuk9uw/working_on_a_tagging_tool_for_map_hoarders_need/)
 
-# Summary
+## Summary
 
 - Filenames are a good enough solution in the majority of cases.
-- Every good enough solution is better than a perfect solution that is never finished. (It has already taken me too long to implement this)
+- Every good enough solution is better than a perfect solution that is never finished. (It has already taken me too long to release this)
 - Every alternative to filenames I found so far either had other limitations or would require 100s of hours of work
-  to produce a satisfying program.
 - I don't get paid so can't spend 100s of hours implementing niche tools that only a handful of people will use.
 
 ## Why Filenames are Good
 
-- Very verbose, can see tags with every file browser
-- Re-using what already exists
+- Very verbose, users can see tags with every file browser
+- Re-using what already exists instead of re-implementing
     - File browser
     - Thumbnail cache
     - Search and indexing functionality
     - Image viewers
 - Works in pretty much every cloud web interface
-    - => Access your media files via tags everywhere without having to download them first
+    - Users can access their media files via tags everywhere
 - Works with every type of file
 - Tags don't get lost on conversion
 - Tags don't get lost when file is moved
 - Tags always stay synced with file even when working on multiple machines 
   - => No need to sync databases, metafiles etc.
 
+## Why Filenames are Bad
+
+- There is a limit to how long a path or a filename can be on most systems. See [Limitations](#limitations)
+- They can get nasty to edit and typos are a real issue, hence this program.
+
 ## Problems with Alternative Solutions
 
 ### Database
 
 - What happens when files are moved outside the tool?
-- Would require indexing
 - Needs a thumbnail cache and a file browser with search functionality
 - How to sync the database to different PCs?
 - Can't use tags in the cloud web interface
@@ -382,7 +387,7 @@ There is an abundance of tagging tools out there. If you find one that is
 - cross-platform
 - works with cloud sync
 - works in the  web interface of any cloud
-- can easily manage 100s of tags
-- can easily manage dozens of tags per file
+- can manage 100s of tags
+- can manage dozens of tags per file
 
 let me know, so I can link it here.

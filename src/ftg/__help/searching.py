@@ -16,11 +16,11 @@ text = str(
     F'\n'
     F'would give you all files with the tag `tag1` that also have `tag2` or `tag3`\n'
     F'\n'
-    F'The Google Drive search syntax is a bit weird, and I couldn\'t find any good references. With a bit of trial and error I found that:\n'
+    F'The Google Drive search syntax is different, and I couldn\'t find any good references. With a bit of trial and error I found that:\n'
     F'\n'
     F'`"tag1"("tag2"|"tag3")-type:folder`\n'
     F'\n'
-    F'wold be equal to the above. It\'s important to not use whitespaces. `|` operates as (logical) or.\n'
+    F'would be equal to the above. It\'s important to not use whitespaces. `|` operates as (logical) or. `-` excludes stuff.\n'
 )
 
 section = Section(link,

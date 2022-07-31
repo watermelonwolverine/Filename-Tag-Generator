@@ -25,7 +25,7 @@ text = str(
     F'Also, you must have installed Tkinter when you were installing Python.\n'
     F'If you have multiple versions on your system make sure you are using the right one using `python.exe --version`\n'
     F'\n'
-    F'1. Run `python.exe pip install {url}`\n'
+    F'1. Run `python.exe -m pip install <link-to-whl-file-under-releases>`\n'
     F'2. Find out where Python puts your console scripts. Usually that is in the `Scripts` directory of your Python installation.\n'
     F'3. Either run the program for a first time setup or go directly to [configuration]({configuration.link}) to read about configuration files.\n'
     F'\n'
@@ -43,9 +43,9 @@ text = str(
     F'### Using Python\n'
     F'\n'
     F'This section assumes that you have Python version >= 3.10 installed on your system and that you have some basic programming and command line knowledge.\n'
-    F'You must also install tkinter for your python version using `apt install pythonX-tk` with `X` being the Python version you use.\n'
+    F'You must also install tkinter for your python version. Under Ubuntu that can usually be done with `apt install pythonX-tk` with `X` being the Python version you use.\n'
     F'\n'
-    F'1. Run `pythonX pip install {url}`\n'
+    F'1. Run `pythonX -m pip install <link-to-whl-file-under-releases>`\n'
     F'2. Find out where Python puts your console scripts. Usually that is in the `usr/local/bin`.\n'
     F'3. Either run the  program for a first time setup or go directly to [configuration]({configuration.link}) to read about configuration files.\n')
 

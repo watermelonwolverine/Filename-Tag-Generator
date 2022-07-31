@@ -3,6 +3,7 @@ import json
 import ftg
 from ftg.__cli_wrapper import __args
 from ftg.__constants import default_tags_file_name, default_config_file_name, author, app_name, illegal_chars
+from ftg.__help import command_line_usage
 from ftg.__help.utils import to_link, to_code_block, Section
 from ftg.utils.name_generator import NameGeneratorImpl
 from ftg.utils.naming_config import NamingConfigImpl
@@ -20,7 +21,7 @@ __example_config = {
     }
 }
 
-__name_generator_default = NameGeneratorImpl(NamingConfigImpl())
+__name_generator_default = NameGeneratorImpl()
 
 __name_generator_example = NameGeneratorImpl(
     NamingConfigImpl.parse_dict(__example_config[ProgramConfigImpl.NAMING_CONFIG_KEY]))
@@ -36,7 +37,7 @@ text = str(
     F'\n'
     F'Two files are used to configure the program\n'
     F'\n'
-    F'- Tag files, named `{default_tags_file_name}`\n'
+    F'- Tags files, named `{default_tags_file_name}`\n'
     F'- Config files, named `{default_config_file_name}`\n'
     F'\n'
     F'Both are JSON files and need to be edited manually (as I cannot be bothered to spend countless hours on an editor)\n'
@@ -46,28 +47,16 @@ text = str(
     F'1. In the execution directory. I.e. where the executable is located.\n'
     F'2. In the user config directory.\n'
     F'    1. On Windows that\'s usually `C:\\users\\<user>\\AppData\\Local\\{author}\\{app_name}`\n'
-    F'    2. On Linux that\'s usually "/home/<user>/TODO"\n'
+    F'    2. On Linux that\'s usually `/home/<user>/TODO`\n'
     F'3. In the system config directory.\n'
     F'    1. On Windows that\'s usually `C:\\ProgramData\\{author}\\{app_name}`\n'
-    F'    2. On Linux that\'s usually "/home/<user>/TODO"\n'
+    F'    2. On Linux that\'s usually `/home/<user>/TODO`\n'
     F'\n'
     F'You can also specify the path to each file when starting from the command line using the `{__args.config_option}` and `{__args.tags_option}`\n'
     F'options. '
-    F'This way you can have multiple tags and config files for different purposes.\n'
+    F'This way you can have multiple tags and config files for different purposes. See [{command_line_usage.header}]({command_line_usage.link})\n'
     F'\n'
-    F'Example:\n'
-    F'\n'
-    F'You could have two tags files. One for maps and one for character artwork named `map-tags.json` and `character-tags.json` respectively.\n'
-    F'\n'
-    F'The program wouldn\'t find those because they don\'t have the default name, but you can start the program by pointing them directly to the tags with\n'
-    F'\n'
-    F'`{app_name} {__args.tags_option} maps-tags.json`\n'
-    F'\n'
-    F'or\n'
-    F'\n'
-    F'`{app_name} {__args.tags_option} character-tags.json`\n'
-    F'\n'
-    F'The program can run without a config file, but it needs a tag file.\n'
+    F'The program can run without a config file, but it needs a tags file.\n'
     F'\n'
     F'## Tags\n'
     F'\n'
@@ -135,7 +124,9 @@ text = str(
     F'\n'
     F'and you should avoid:\n'
     F'\n'
-    F'`{", ".join(__characters_to_avoid)}`'
+    F'`{", ".join(__characters_to_avoid)}`\n'
+    F'\n'
+    F'You should also avoid having the same text as `{NamingConfigImpl.BASENAME_SPACER_KEY}` and `{NamingConfigImpl.TAG_SEPARATOR_KEY}`.'
 )
 
 section = Section(link,

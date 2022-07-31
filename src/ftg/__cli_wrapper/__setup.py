@@ -24,7 +24,7 @@ def maybe_setup():
               "Example:\n"
               F"{app_name}{exe} {tags_option} <path-to-tags-file>\n"
               F"\n"
-              F"On the projects website you can find tag files to start with:\n"
+              F"On the projects website you can find tags files to start with:\n"
               F"\n"
               F"{url}")
 
