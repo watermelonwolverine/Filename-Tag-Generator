@@ -226,4 +226,4 @@ def __show_error_for_file(title,
 
 
 if __name__ == "__main__":
-    main(verbosity=verbosity_debug)
+    cli_main()
