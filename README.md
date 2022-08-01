@@ -13,9 +13,9 @@
 
 # About
 
-The primary purpose of this program is to tag files by appending the tags to the name of the file.
+The primary purpose of this program is to tag files by putting the tags in the filename.
 
-It's designed use case is the organization of RPG maps and other media files a DM/GM comes in contact with.
+It's designed use case is the organization of maps and other media files a DM/GM comes in contact with.
 
 ## Example
 
@@ -23,7 +23,7 @@ You have a file named `some_map.png`
 
 You want to add the tags `tag1`, `tag2` and `tag3` to this file.
 
-You drag and drop the file into the program, select the tags and the program automatically renames the file to
+You drag and drop the file into the program, select the tags and click apply. The program then automatically renames the file to
 
 `SOME-MAP;tag1_tag2_tag3.png`
 
@@ -75,7 +75,7 @@ To rename a file drag and drop it from your file browser into the application wi
 The program will then revert the filename back into basename, tags and extensions.
 For this process to go smoothly make sure the filename doesn't contain special characters in its basename or tags.
 See [Configuration](#configuration) for more information.
-Any tags in the filename that are not in your tags file (see [Configuration](#configuration) will get lost in this translation.
+Any tags in the filename that are not in your tags file (see [Configuration](#configuration)) will get lost in this translation.
 Once you dropped the file into the application you can change the basename and extension and select the tags you want to add.
 
 As soon as you click the `Apply` button the file will be renamed in accordance to what you selected.
@@ -85,7 +85,7 @@ As soon as you click the `Apply` button the file will be renamed in accordance t
 ![](media/dnd_multiple_add_tag.gif)
 
 You can drag and drop multiple files into the application window.
-In this case the program behaves very similar to single file drop with a few changes.
+In this case the program behaves very similar to single file drag and drop with a few changes.
 
 - The tag buttons will be changed to checkboxes with one of three states `On` and `Off` and `Mixed`.
 - The `Selected File` field will be disabled. You will have to remember which files you dragged into the application.
@@ -108,13 +108,13 @@ If you enabled a checkbox that was previously `Mixed` or `Off` the tag will be a
 
 This one is useful for organizing files inside another program like a VTT.
 
+Simply enter a basename and click on the tags you want to select and copy the result from the `Full Name` field.
 ![](media/generate.gif)
 
-Simply enter a basename and click on the tags you want to select and copy the result from the `Full Name` field.
 
-![](media/revert.gif)
+If you want to add or remove tags to a name paste it in `Full Name` and click the `Revert` button.![](media/revert.gif)
 
-If you want to add or remove tags to a name paste it in `Full Name` and click the `Revert` button.
+
 
 # Command Line Options
 
@@ -154,7 +154,7 @@ On Windows the [syntax](https://docs.microsoft.com/en-us/windows/win32/lwef/-sea
 
 `"tag1" ("tag2" OR "tag3") NOT kind:folder`
 
-would give you all files with the tag `tag1` that also have `tag2` or `tag3`
+would give you all files with the tag `tag1` that also have `tag2` or `tag3`. `NOT` and `-` exclude stuff, in this case folders.
 
 The Google Drive search syntax is different, and I couldn't find any good references. With a bit of trial and error I found that:
 
@@ -255,7 +255,7 @@ The tags usually live in a `tags.json` file that follows the following structure
       }
     }
 
-Tags have the structure `"tag" : "display-name"`. `tag` will used for the filename whereas `display-name will be displayed in the UI.`
+Tags have the structure `"tag" : "display-name"`. `tag` will be used for the filename whereas `display-name will be displayed in the UI.`
 
 You can have as many categories under `categories` as you want. You can also have as many tags under each category as you want.
 
@@ -289,15 +289,14 @@ The config file with the default values would look like this:
     }
 
 
-I will not explain every single detail as most should be self-explanatory.
-
 The most important ones are:
 
-- `basename-tags-separator` : the string that will be used to separate the basename from the tags. Make sure this is unique and doesn't appear in any tag or in the basename.
-- `tag-separator` : the string that will be used to separate the tags. Make sure this is unique and doesn't appear in any tag or in the basename.
+- `basename-tags-separator` : the text that will be used to separate the basename from the list of tags. Make sure that this is unique and doesn't appear in any tag or in the basename.
+- `tag-separator` : the text that will be used to separate the tags. Make sure this is unique and doesn't appear in any tag.
 - `adjust-basename` : if this is set to `true` the program will adjust the basename
 - `capitalize-basename` : if this is set to `true` the basename will be capitalized when adjusted.
-- `replace-basename-spacer` : if this is set to `true` all spacers (whitespaces, tag-separator and basename-tags-separator)  in the basename will be replaced by the given text
+- `replace-basename-spacer` : if this is set to `true` all whitespaces, `tag-separator` and `basename-tags-separator`  in the basename will be replaced by `basename-spacer`
+- `basename-spacer` : the text that will replace any spacers in the basename. See `replace-basename-spacer`.
 
 ## Example
 For the basename `This is some_base-name` and the tags `tag1, tag2, tag3` the default config would generate:
@@ -319,7 +318,7 @@ It would generate:
 
 `This is some_base-name tag1 tag2 tag3.png`
 
-As you can probably guess the last one is impossible to revert into basename and tags. How is the program supposed to know where the basename ends and the list of tags begins? Therefore, you should be careful which separators and spacers you choose.
+As you can probably guess this is impossible to revert into basename and tags. How is the program supposed to know where the basename ends and the list of tags begins? Therefore, you should be careful which separators and spacers you choose.
 
 Some filesystems forbid the usage of certain symbols. In other cases characters should be avoided for simplicity's sake. You must avoid:
 

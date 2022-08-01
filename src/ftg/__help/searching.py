@@ -14,7 +14,7 @@ text = str(
     F'\n'
     F'`"tag1" ("tag2" OR "tag3") NOT kind:folder`\n'
     F'\n'
-    F'would give you all files with the tag `tag1` that also have `tag2` or `tag3`\n'
+    F'would give you all files with the tag `tag1` that also have `tag2` or `tag3`. `NOT` and `-` exclude stuff, in this case folders.\n'
     F'\n'
     F'The Google Drive search syntax is different, and I couldn\'t find any good references. With a bit of trial and error I found that:\n'
     F'\n'

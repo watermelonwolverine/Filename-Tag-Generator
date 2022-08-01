@@ -27,7 +27,7 @@ __text = str(
     F'The program will then revert the filename back into basename, tags and extensions.\n'
     F'For this process to go smoothly make sure the filename doesn\'t contain special characters in its basename or tags.\n'
     F'See [{configuration.header}]({configuration.link}) for more information.\n'
-    F'Any tags in the filename that are not in your tags file (see [{configuration.header}]({configuration.link}) will get lost in this translation.\n'
+    F'Any tags in the filename that are not in your tags file (see [{configuration.header}]({configuration.link})) will get lost in this translation.\n'
     F'Once you dropped the file into the application you can change the basename and extension and select the tags you want to add.\n'
     F'\n'
     F'As soon as you click the `{APPLY}` button the file will be renamed in accordance to what you selected.\n'
@@ -36,7 +36,7 @@ __text = str(
     F'\n'
     F'{__dnd_multiple_add_placeholder}'
     F'You can drag and drop multiple files into the application window.\n'
-    F'In this case the program behaves very similar to single file drop with a few changes.\n'
+    F'In this case the program behaves very similar to single file drag and drop with a few changes.\n'
     F'\n'
     F'- The tag buttons will be changed to checkboxes with one of three states `On` and `Off` and `Mixed`.\n'
     F'- The `{SELECTED_FILE}` field will be disabled. You will have to remember which files you dragged into the application.\n'
@@ -59,11 +59,11 @@ __text = str(
     F'\n'
     F'This one is useful for organizing files inside another program like a VTT.\n'
     F'\n'
-    F'{__generate_placeholder}'
     F'Simply enter a basename and click on the tags you want to select and copy the result from the `{FULL_NAME}` field.\n'
+    F'{__generate_placeholder}'
     F'\n'
-    F'{__revert_placeholder}'
     F'If you want to add or remove tags to a name paste it in `{FULL_NAME}` and click the `{REVERT}` button.'
+    F'{__revert_placeholder}'
 )
 
 
