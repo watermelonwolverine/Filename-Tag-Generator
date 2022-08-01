@@ -4,6 +4,7 @@ from typing import Dict
 from ftg.__constants import illegal_chars
 from ftg.exceptions import FtgException
 from ftg.utils.parse_utils import read_bool_value, read_str_value
+from ftg.utils.tags import Tags
 
 
 class NamingConfig(ABC):
@@ -24,6 +25,10 @@ class NamingConfig(ABC):
         raise NotImplementedError()
 
     def get_tags_separator(self) -> str:
+        raise NotImplementedError()
+
+    def check_tags(self,
+                   tags: Tags) -> None:
         raise NotImplementedError()
 
 
@@ -65,7 +70,7 @@ class NamingConfigImpl(NamingConfig):
         self.__basename_tags_separator = basename_tags_separator
         self.__tag_separator = tag_separator
 
-        self.__check_self()
+        self.check_self()
 
     def get_adjust_basename(self) -> bool:
         return self.__adjust_basename
@@ -85,13 +90,33 @@ class NamingConfigImpl(NamingConfig):
     def get_tags_separator(self) -> str:
         return self.__tag_separator
 
-    def __check_self(self):
+    def check_self(self):
 
         for illegal_char in illegal_chars:
             if illegal_char in self.__basename_spacer \
                     or illegal_char in self.__tag_separator \
                     or illegal_char in self.__basename_tags_separator:
                 raise FtgException(F'"{illegal_char}" is not allowed')
+
+        if self.__tag_separator == "":
+            raise FtgException(F'An empty value for "{self.TAG_SEPARATOR_KEY}" is not allowed')
+        if self.__basename_tags_separator == "":
+            raise FtgException(F'An empty value for "{self.BASENAME_TAGS_SEPARATOR_KEY}" is not allowed')
+
+    def check_tags(self, tags: Tags) -> None:
+
+        for tag in tags.tags:
+
+            if self.get_basename_tags_separator() in tag.letter_code:
+                raise FtgException(
+                    F'Tag "{tag.letter_code}" contains text reserved for "{NamingConfigImpl.BASENAME_TAGS_SEPARATOR_KEY}": {basename_tags_sep}')
+            elif self.get_tags_separator() in tag.letter_code:
+                raise FtgException(
+                    F'Tag "{tag.letter_code}" contains text reserved for "{NamingConfigImpl.TAG_SEPARATOR_KEY}": {tags_sep}')
+            else:
+                for illegal_char in illegal_chars:
+                    if illegal_char in tag.letter_code:
+                        raise FtgException(F'Tag "{tag.letter_code}" contains illegal text: {illegal_char}')
 
     @classmethod
     def parse_dict(cls,

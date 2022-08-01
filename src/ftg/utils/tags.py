@@ -3,7 +3,7 @@ from typing import List, Dict, Any
 
 import ftg
 from ftg.__constants import UTF_8
-from ftg.exceptions import JSONParseException
+from ftg.exceptions import JSONParseException, FtgException
 from ftg.localization import WRONG_TAGS_FILE_STRUCTURE
 from ftg.utils.tag import Tag
 
@@ -17,6 +17,13 @@ class Tags:
                  categories: Dict[str, List[Tag]]):
         self.tags = tags
         self.categories = categories
+        self.check_self()
+
+    def check_self(self) -> None:
+
+        for tag in self.tags:
+            if tag.letter_code == "":
+                raise FtgException("Empty tag keys are not allowed.")
 
     @classmethod
     def parse_file(cls,

@@ -14,6 +14,9 @@ class ProgramConfig(ABC):
     def get_ui_config(self) -> UIConfig:
         raise NotImplementedError()
 
+    def check_self(self) -> None:
+        NotImplementedError()
+
     def get_naming_config(self) -> NamingConfig:
         raise NotImplementedError()
 
@@ -39,6 +42,10 @@ class ProgramConfigImpl(ProgramConfig):
 
         self.__ui_config = ui_config
         self.__naming_config = naming_config
+
+    def check_self(self) -> None:
+        self.__ui_config.check_self()
+        self.__naming_config.check_self()
 
     def get_ui_config(self) -> UIConfig:
         return self.__ui_config
@@ -88,5 +95,9 @@ class ProgramConfigImpl(ProgramConfig):
         else:
             naming_config = cls.__default_naming_config
 
-        return ProgramConfigImpl(ui_config=ui_config,
-                                 naming_config=naming_config)
+        result = ProgramConfigImpl(ui_config=ui_config,
+                                   naming_config=naming_config)
+
+        result.check_self()
+
+        return result

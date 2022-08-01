@@ -3,7 +3,6 @@ from tkinter import messagebox, DISABLED, NORMAL
 
 from tkdnd import DND_FILES
 
-from ftg.__constants import illegal_chars
 from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.exceptions import FtgException
@@ -31,13 +30,8 @@ class FtgWindowController:
         self.__workers = FtgWindowControllerWorkers(config.get_naming_config(),
                                                     self.__context)
 
-        try:
-            self.__check_configuration(tags,
-                                       config)
-        except FtgException as ex:
-            messagebox.showerror(title=ERROR_TITLE,
-                                 message=F"Error: {ex}")
-            self.stop()
+        self.__check_configuration(tags,
+                                   config)
 
         self.__configure_view(view)
 
@@ -53,27 +47,17 @@ class FtgWindowController:
     def __check_configuration(self,
                               tags: Tags,
                               config: ProgramConfig):
+        try:
 
-        naming_config = config.get_naming_config()
+            config.check_self()
+            tags.check_self()
+            
+            config.get_naming_config().check_tags(tags)
 
-        basename_tags_sep = naming_config.get_basename_tags_separator()
-        tags_sep = naming_config.get_tags_separator()
-
-        for tag in tags.tags:
-
-            illegal_text = None
-
-            if basename_tags_sep in tag.letter_code:
-                illegal_text = basename_tags_sep
-            elif tags_sep in tag.letter_code:
-                illegal_text = tags_sep
-            else:
-                for illegal_char in illegal_chars:
-                    if illegal_char in tag.letter_code:
-                        illegal_text = illegal_char
-
-            if illegal_text is not None:
-                raise FtgException(F'Tag "{tag.letter_code}" contains illegal text: {illegal_text}')
+        except FtgException as ex:
+            messagebox.showerror(title=ERROR_TITLE,
+                                 message=F"Error: {ex}")
+            self.stop()
 
     def __configure_view(self,
                          view: FtgWindow):

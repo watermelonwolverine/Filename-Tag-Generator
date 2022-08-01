@@ -45,6 +45,10 @@ class UIConfigImpl(UIConfig):
         self.padding_small = padding_small
         self.padding_big = padding_big
         self.button_width = button_width
+        self.check_self()
+
+    def check_self(self):
+        pass
 
     def get_font_size(self) -> int:
         return self.font_size
