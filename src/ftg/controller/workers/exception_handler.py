@@ -22,17 +22,6 @@ class FtgExceptionHandler:
         self.__path_to_log_file = os.path.join(self.__path_to_log_dir,
                                                crash_report_file_name)
 
-    def __create_crash_file(self,
-                            *args) -> None:
-
-        crash_report_txt = traceback.format_exception(*args)
-
-        if not os.path.exists(self.__path_to_log_dir):
-            os.makedirs(self.__path_to_log_dir)
-
-        with open(self.__path_to_log_file, "wt", encoding=UTF_8) as fh:
-            fh.write("".join(crash_report_txt))
-
     def handle_exception(self,
                          *args) -> None:
 
@@ -43,18 +32,32 @@ class FtgExceptionHandler:
 
         # noinspection PyBroadException
         try:
-            self.__handling_exception = True
-
-            self.__create_crash_file(*args)
-
-            msg = UNEXPECTED_ERROR_MSG.format(self.__path_to_log_file,
-                                              issues_url)
-
-            messagebox.showerror(title=UNEXPECTED_ERROR_TITLE,
-                                 message=msg)
-
+            self.__try_handle_exception(*args)
         except BaseException as exception:
             logging.critical(exception)
             pass
 
         self.tk.destroy()
+
+    def __try_handle_exception(self,
+                               *args):
+        self.__handling_exception = True
+
+        self.__create_crash_file(*args)
+
+        msg = UNEXPECTED_ERROR_MSG.format(self.__path_to_log_file,
+                                          issues_url)
+
+        messagebox.showerror(title=UNEXPECTED_ERROR_TITLE,
+                             message=msg)
+
+    def __create_crash_file(self,
+                            *args) -> None:
+
+        crash_report_txt = traceback.format_exception(*args)
+
+        if not os.path.exists(self.__path_to_log_dir):
+            os.makedirs(self.__path_to_log_dir)
+
+        with open(self.__path_to_log_file, "wt", encoding=UTF_8) as fh:
+            fh.write("".join(crash_report_txt))

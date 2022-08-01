@@ -220,13 +220,14 @@ Both are JSON files and need to be edited manually (as I cannot be bothered to s
 
 The program will ask you if you want to generate a tags file and a config file when you first execute it.
 
+You can also run the setup again at any time by running the program with the `--setup` from command line.
+
 The program looks for configuration files in the following order:
 
-1. In the execution directory. I.e. where the executable is located.
-2. In the user config directory.
+1. In the user config directory.
     1. On Windows that's usually `C:\users\<user>\AppData\Local\watermelonwolverine\Filename-Tag-Generator`
     2. On Ubuntu that's usually `/home/<user>/.config/Filename-Tag-Generator`
-3. In the system config directory.
+1. In the system config directory.
     1. On Windows that's usually `C:\ProgramData\watermelonwolverine\Filename-Tag-Generator`
     2. On Ubuntu that's usually `/etc/xdg/xdg-ubuntu/Filename-Tag-Generator`
 
