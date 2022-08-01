@@ -27,18 +27,8 @@ class FtgDropper:
 
         paths = extract_paths(event.data)
 
-        for path in paths:
-            if not os.path.isfile(path):
-                messagebox.showerror(title="Error",
-                                     message="Only files are supported")
-                return
-
-        if self.__context.changes_are_pending:
-            result = messagebox.askyesno(title=PENDING_CHANGES_TITLE,
-                                         message=PENDING_CHANGES_MESSAGE)
-
-            if not result:
-                return
+        if not self.__should_continue(paths):
+            return
 
         self.__workers.clearer.clear()
 
@@ -49,33 +39,54 @@ class FtgDropper:
             paths)
 
         if len(paths) > 1:
-            self.__context.view.basename_entry.configure(state=READONLY)
-            self.__context.view.extension_entry.configure(state=READONLY)
-            self.__context.view.selected_file_string_var.set(MULTIPLE_FILES_SELECTED)
-            self.__workers.utils.enable_checkbutton_indicators(True)
-
-            self.__set_checkbutton_tristates(self.__context.tags_for_selected_files)
-            self.__context.view.apply_button.configure(state=NORMAL)
+            self.__drop_multiple_files()
 
         elif len(paths) == 1:
-            self.__context.view.apply_button.configure(state=NORMAL)
-            self.__context.view.selected_file_string_var.set(paths[0])
-
-            _, filename = os.path.split(paths[0])
-
-            self.__workers.reverter.revert(filename)
-            self.__context.view.filename_result_string_var.set(filename)
+            self.__drop_single_file(paths[0])
 
         else:
-            messagebox.showerror(title="Unexpected Error",
-                                 message="An unexpected error occurred.")
-            return
+            raise Exception()
 
         self.__context.view.filename_entry.configure(state=READONLY)
         self.__context.view.revert_button.configure(state=DISABLED)
         self.__context.changes_are_pending = False  # have to do this after setting all the checkboxes and stuff
 
         self.__check_for_unknown_tags()
+
+    def __drop_single_file(self,
+                           path_to_file) -> None:
+        self.__context.view.apply_button.configure(state=NORMAL)
+        self.__context.view.selected_file_string_var.set(path_to_file)
+
+        _, filename = os.path.split(path_to_file)
+
+        self.__workers.reverter.revert(filename)
+
+    def __drop_multiple_files(self) -> None:
+        self.__context.view.basename_entry.configure(state=READONLY)
+        self.__context.view.extension_entry.configure(state=READONLY)
+        self.__context.view.selected_file_string_var.set(MULTIPLE_FILES_SELECTED)
+        self.__workers.utils.enable_checkbutton_indicators(True)
+
+        self.__set_checkbutton_tristates(self.__context.tags_for_selected_files)
+        self.__context.view.apply_button.configure(state=NORMAL)
+
+    def __should_continue(self,
+                          paths) -> bool:
+        for path in paths:
+            if not os.path.isfile(path):
+                messagebox.showerror(title="Error",
+                                     message="Only files are supported")
+                return False
+
+        if self.__context.changes_are_pending:
+            result = messagebox.askyesno(title=PENDING_CHANGES_TITLE,
+                                         message=PENDING_CHANGES_MESSAGE)
+
+            if not result:
+                return False
+
+        return True
 
     def __check_for_unknown_tags(self):
         tag_lettercodes = [tag.letter_code for tag in self.__context.tags.tags]
