@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from ftg.__help import install, why_filenames, configuration, about, where_to_start, limitations, alternatives, \
-    where_is_my_stuff, usage, searching, command_line_usage
+    where_is_my_stuff, usage, searching, command_line_usage, known_issues
 from ftg.__help.utils import to_link, Section
 
 __sections = [about.section,
@@ -13,7 +13,8 @@ __sections = [about.section,
               install.section,
               configuration.section,
               why_filenames.section,
-              alternatives.section]
+              alternatives.section,
+              known_issues.section]
 
 __usage_index = __sections.index(command_line_usage.section)
 

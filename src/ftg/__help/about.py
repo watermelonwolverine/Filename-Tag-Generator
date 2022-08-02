@@ -15,7 +15,7 @@ text = str(
     '\n'
     'The primary purpose of this program is to tag files by putting the tags in the filename.\n'
     '\n'
-    'It\'s designed use case is the organization of maps and other media files a DM/GM comes in contact with.\n'
+    'Its designed use case is the organization of maps and other media files a DM/GM comes in contact with.\n'
     '\n'
     '## Example\n'
     '\n'

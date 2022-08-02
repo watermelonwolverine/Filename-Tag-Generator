@@ -1,5 +1,6 @@
 import logging
 import os.path
+import shutil
 import sys
 import traceback
 from json import JSONDecodeError

@@ -51,8 +51,6 @@ class FtgDropper:
         self.__context.view.revert_button.configure(state=DISABLED)
         self.__context.changes_are_pending = False  # have to do this after setting all the checkboxes and stuff
 
-        self.__check_for_unknown_tags()
-
     def __drop_single_file(self,
                            path_to_file) -> None:
         self.__context.view.apply_button.configure(state=NORMAL)
@@ -70,6 +68,8 @@ class FtgDropper:
 
         self.__set_checkbutton_tristates(self.__context.tags_for_selected_files)
         self.__context.view.apply_button.configure(state=NORMAL)
+
+        self.__check_for_unknown_tags()
 
     def __should_continue(self,
                           paths) -> bool:

@@ -10,12 +10,13 @@
 1. [Configuration](#configuration)
 1. [Why Filenames?](#why-filenames)
 1. [Alternatives](#alternatives)
+1. [Known Issues](#known-issues)
 
 # About
 
 The primary purpose of this program is to tag files by putting the tags in the filename.
 
-It's designed use case is the organization of maps and other media files a DM/GM comes in contact with.
+Its designed use case is the organization of maps and other media files a DM/GM comes in contact with.
 
 ## Example
 
@@ -401,3 +402,7 @@ There is an abundance of tagging tools out there. If you find one that is
 - can manage dozens of tags per file
 
 let me know, so I can link it here.
+
+# Known Issues
+
+Filesystems are quirky, and therefore so is this program.On Windows Python can't handle `&` in paths for some reason. Even weirder this problem only occurs with the prebuilt binaries, not when installed with pip. I assume this to be an issue with PyInstaller.

@@ -1,6 +1,8 @@
+import logging
 import os
 import shutil
 import sys
+import traceback
 from tkinter import messagebox
 from typing import List, Dict, Iterable, Union
 
@@ -63,6 +65,9 @@ class FtgApplier:
             self.__context.changes_are_pending = False
 
         except (FtgException, OSError) as ex:
+
+            logging.warning("Cannot rename file.", exc_info=True)
+
             msg = self.__error_msg_for_exception(old_path,
                                                  new_path,
                                                  ex)
@@ -77,41 +82,41 @@ class FtgApplier:
             if not answer:
                 return
 
-        updated_paths: Dict[str, str] = {}
+        new_path_by_old_path: Dict[str, str] = {}
 
         for old_path in self.__context.selected_files:
             try:
-                updated_paths[old_path] = self.__new_path_for(old_path)
+                new_path_by_old_path[old_path] = self.__new_path_for(old_path)
             except FtgException as ex:
                 messagebox.showerror(title=ERROR_TITLE,
                                      message=F"Error while generating filenames: {ex}")
                 return
 
-        if self.__contains_duplicate_paths(updated_paths.values()):
+        if self.__contains_duplicate_paths(new_path_by_old_path.values()):
             answer = messagebox.askyesno(title="Filename Collision",
                                          message="Cannot rename all files as it would lead to colliding filenames. Do you want to continue?\n"
                                                  "If you click yes some file will not be renamed.")
             if not answer:
                 return
 
-        if self.__contains_too_long_filenames(updated_paths.values()):
+        if self.__contains_too_long_filenames(new_path_by_old_path.values()):
             answer = messagebox.askyesno(title="Filenames Too Long",
                                          message="Cannot rename all files as some filenames would be too long. Do you want to continue?\n"
                                                  "If you click yes some file will not be renamed.")
             if not answer:
                 return
 
-        self.__do_batch_rename(updated_paths)
+        self.__do_batch_rename(new_path_by_old_path)
         self.__context.changes_are_pending = False
 
     def __do_batch_rename(self,
-                          updated_paths: Dict[str, str]) -> None:
+                          new_path_by_old_path: Dict[str, str]) -> None:
 
         new_selected_files = self.__context.selected_files.copy()
 
         skip_warnings = False
 
-        for old_path, new_path in updated_paths.items():
+        for old_path, new_path in new_path_by_old_path.items():
 
             try:
                 self.__rename_file(old_path,
@@ -120,6 +125,9 @@ class FtgApplier:
                 new_selected_files.append(new_path)
 
             except (FtgException, OSError) as ex:
+
+                logging.warning("Cannot rename file.", exc_info=True)
+
                 if skip_warnings:
                     continue
 
@@ -175,7 +183,8 @@ class FtgApplier:
                        F'- You are using illegal characters\n'
                        F'- You don\'t have the permission\n'
                        F'- The file was deleted\n'
-                       F'- The file was moved')
+                       F'- The file was moved in the meantime\n'
+                       F'- A parent folder contains a symbol Python can\'t handle, like "&"')
 
         raise Exception("BIG OOF")
 
@@ -265,29 +274,37 @@ class FtgApplier:
         if old_path == new_path:
             return
 
-        if os.path.exists(new_path):
-            # Windows ignores capitalization
-            if sys.platform == win32:
-                if old_path.lower() == new_path.lower():
-                    # capitalization changed but everything else stayed the same
-                    # Windows won't let us rename file
-                    tmp_path = self.__get_tmp_path(old_path)
+        if not os.path.exists(new_path):
+            logging.info("Moving %s to %s", old_path, new_path)
+            shutil.move(old_path,
+                        new_path)
+            return
 
-                    if tmp_path is None:
-                        raise FtgException("Cannot create temp file.")
+        self.__handle_path_exists(old_path,
+                                  new_path)
 
-                    shutil.move(old_path, tmp_path)
-                    shutil.move(tmp_path, new_path)
-                    return
-                else:
-                    raise FtgException("Path already exists")
-            elif sys.platform == linux:
-                raise FtgException("Path already exists")
+    def __handle_path_exists(self,
+                             old_path,
+                             new_path):
+        # Windows ignores capitalization
+        if sys.platform == win32:
+            if old_path.lower() == new_path.lower():
+                # capitalization changed but everything else stayed the same
+                # Windows won't let us rename file
+                tmp_path = self.__get_tmp_path(old_path)
+
+                if tmp_path is None:
+                    raise FtgException("Cannot create temp file.")
+
+                shutil.move(old_path, tmp_path)
+                shutil.move(tmp_path, new_path)
+                return
             else:
-                raise NotImplementedError()
-
-        shutil.move(old_path,
-                    new_path)
+                raise FtgException("Path already exists")
+        elif sys.platform == linux:
+            raise FtgException("Path already exists")
+        else:
+            raise NotImplementedError()
 
     @classmethod
     def __get_tmp_path(cls,
