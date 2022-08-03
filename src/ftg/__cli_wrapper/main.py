@@ -9,29 +9,27 @@ from typing import List, Union
 import click
 
 from ftg import __version__
-from ftg.__cli_wrapper import __setup
-from ftg.__cli_wrapper.__args import config_option, tags_option, verbosity_option, verbosity_choices, version_option, \
-    verbosity_info, verbosity_debug, setup_option, help_option
+from ftg.__cli_wrapper import __setup, __args
 from ftg.__cli_wrapper.__constants import win32, linux, bug_report_message, unsupported_os_error_msg
 from ftg.__cli_wrapper.__paths import path_to_tags_options, path_to_config_options
 from ftg.__constants import app_name, window_title
 from ftg.__help import command_line_usage
+from ftg.config.program_config import ProgramConfigImpl
+from ftg.config.tags import Tags
 from ftg.controller.ftg_window_controller import FtgWindowController
 from ftg.exceptions import FtgException, FtgInternalException, JSONParseException
 from ftg.localization import PLEASE_CHECK_YOUR_FILES_TITLE, PLEASE_CHECK_YOUR_FILES_MSG, FILE_NOT_FOUND
-from ftg.config.program_config import ProgramConfigImpl
-from ftg.config.tags import Tags
 
 supported_platforms = [win32, linux]
 
 
 @click.command()
-@click.option(config_option, type=click.Path(exists=True))
-@click.option(tags_option, type=click.Path(exists=True))
-@click.option(verbosity_option, type=click.Choice(verbosity_choices, case_sensitive=False))
-@click.option(version_option, is_flag=True)
-@click.option(setup_option, is_flag=True)
-@click.option(help_option, is_flag=True)
+@click.option(__args.config_option, type=click.Path(exists=True))
+@click.option(__args.tags_option, type=click.Path(exists=True))
+@click.option(__args.verbosity_option, type=click.Choice(__args.verbosity_choices, case_sensitive=False))
+@click.option(__args.version_option, is_flag=True)
+@click.option(__args.setup_option, is_flag=True)
+@click.option(__args.help_option, is_flag=True)
 def cli_main(config: str = None,
              tags: str = None,
              verbosity: str = None,
@@ -101,13 +99,23 @@ def __check_platform():
 
 
 def __configure_logging(verbosity: str) -> None:
-    if verbosity == verbosity_info:
+    if verbosity == __args.verbosity_debug:
+        __add_logging_stream_handler(logging.DEBUG)
+    elif verbosity == __args.verbosity_info:
         __add_logging_stream_handler(logging.INFO)
-    elif verbosity == verbosity_debug:
-        __add_logging_stream_handler(logging.INFO)
-    else:
+    elif verbosity == __args.verbosity_error:
+        __add_logging_stream_handler(logging.ERROR)
+    elif verbosity == __args.verbosity_critical:
+        __add_logging_stream_handler(logging.CRITICAL)
+    elif verbosity == __args.verbosity_off:
         logging.disable(logging.CRITICAL)
         logging.disable(logging.ERROR)
+        logging.disable(logging.WARNING)
+        logging.disable(logging.INFO)
+        logging.disable(logging.DEBUG)
+    # warning is default
+    else:
+        __add_logging_stream_handler(logging.WARNING)
 
 
 def __add_logging_stream_handler(level: int):
