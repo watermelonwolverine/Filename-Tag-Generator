@@ -4,12 +4,12 @@ from typing import List, Dict
 
 import ftg.utils.filename_utils
 from ftg.__constants import READONLY
-from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
-from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
-from ftg.controller.workers.drop_event_data_processor import extract_paths
+from ftg.view.controller.ftg_window_controller_context import FtgWindowControllerContext
+from ftg.view.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
+from ftg.view.controller.workers.drop_event_data_processor import extract_paths
 from ftg.localization import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE, MULTIPLE_FILES_SELECTED
 from ftg.utils import tag_utils
-from ftg.utils.name_generator import NameGenerator
+from ftg.name_generator import NameGenerator
 
 
 class FtgDropper:

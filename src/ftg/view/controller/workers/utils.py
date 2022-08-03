@@ -1,5 +1,5 @@
-from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
-from ftg.utils.name_generator import NameGenerator
+from ftg.view.controller.ftg_window_controller_context import FtgWindowControllerContext
+from ftg.name_generator import NameGenerator
 
 
 class FtgUtils:

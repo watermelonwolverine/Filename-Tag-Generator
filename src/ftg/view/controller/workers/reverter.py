@@ -2,9 +2,9 @@ from tkinter import messagebox
 from typing import List
 
 from ftg.__constants import ON_STATE_VALUE
-from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
-from ftg.controller.workers.clearer import FtgClearer
-from ftg.utils.name_generator import NameGenerator, ReversionResult
+from ftg.view.controller.ftg_window_controller_context import FtgWindowControllerContext
+from ftg.view.controller.workers.clearer import FtgClearer
+from ftg.name_generator import NameGenerator, ReversionResult
 
 
 class FtgReverter:

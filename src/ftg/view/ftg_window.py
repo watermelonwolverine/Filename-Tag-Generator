@@ -1,229 +1,158 @@
-from tkinter import ttk, StringVar, BOTTOM, BOTH, Tk, Frame, X, LEFT, Entry, Button, RIGHT, TOP, IntVar
-from typing import Dict, Literal
+import sys
+from tkinter import messagebox, DISABLED, NORMAL
 
-from tkinterdnd2 import TkinterDnD
+from tkdnd import DND_FILES
+from tkinterdnd2 import TkinterDnD, Tk
 
-from ftg.__constants import window_title
-from ftg.localization import SELECTED_FILE, APPLY, CLEAR, FULL_NAME, EXTENSION, BASENAME, HELP, REVERT
-from ftg.config.program_config import UIConfig
+from ftg.config.program_config import ProgramConfig
 from ftg.config.tags import Tags
-from ftg.view.categories_widget import CategoriesWidget
-from ftg.view.styles import Styles, StylesImpl
-
-SIDE = Literal["left", "right", "top", "bottom"]
-input_label_width = 13
+from ftg.exceptions import FtgException
+from ftg.localization import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE, ERROR_TITLE
+from ftg.view.controller.ftg_window_controller_context import FtgWindowControllerContext
+from ftg.view.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
+from ftg.view.ui.ftg_widget import FtgWidget
+from ftg.view.ui.help.help_dialog import FtgHelpDialog
 
 
 class FtgWindow:
 
     def __init__(self,
-                 config: UIConfig,
+                 config: ProgramConfig,
                  tags: Tags):
-        self.__config = config
-        self.__tags = tags
 
+        self.__config = config
         self.__tk = TkinterDnD.Tk()
 
-        self.styles: Styles = StylesImpl(self.__config.get_font_size())
+        view = FtgWidget(self.__tk,
+                         config.get_ui_config(),
+                         tags)
 
-        self.__init_checkbutton_vars()
+        self.__context = FtgWindowControllerContext(tags,
+                                                    view)
 
-        self.__build_ui(self.__tk)
+        self.__workers = FtgWindowControllerWorkers(self.__tk,
+                                                    config.get_naming_config(),
+                                                    self.__context)
 
-        self.__create_path_to_selected_file_frame(self.__path_to_selected_file_container)
+        self.__check_configuration(tags,
+                                   config)
 
-    def as_tk(self):
-        return self.__tk
+        self.__configure_view(self.__tk,
+                              view)
 
-    def __init_checkbutton_vars(self):
-        self.checkbox_values: Dict[str, IntVar] = {}
+    def start(self):
 
-        for tag in self.__tags.tags:
-            self.checkbox_values[tag.letter_code] = IntVar()
+        self.__workers.clearer.clear()
+        self.__tk.mainloop()
 
-    def __build_ui(self,
-                   tk: Tk) -> None:
-        tk.title(window_title)
-        tk.minsize(width=500,
-                   height=500)
+    def stop(self):
+        self.__tk.destroy()
+        sys.exit()
 
-        root_frame = ttk.Frame(tk,
-                               padding=self.__config.get_padding_small())
+    def __check_configuration(self,
+                              tags: Tags,
+                              config: ProgramConfig):
+        try:
 
-        root_frame.pack(fill=BOTH,
-                        expand=True)
+            config.check_self()
+            tags.check_self()
 
-        self.__path_to_selected_file_container = ttk.Frame(root_frame)
+            config.get_naming_config().check_tags(tags)
 
-        self.__path_to_selected_file_container.pack(side=TOP,
-                                                    fill=X,
-                                                    expand=False)
+        except FtgException as ex:
+            messagebox.showerror(title=ERROR_TITLE,
+                                 message=F"Error: {ex}")
+            self.stop()
 
-        self.__add_basename_input(root_frame)
+    def __configure_view(self,
+                         tk: Tk,
+                         view: FtgWidget):
 
-        self.__add_extension_input(root_frame)
+        def handle_exception(*args):
+            self.__workers.exception_handler.handle_exception(*args)
 
-        self.__add_result_frame(root_frame,
-                                BOTTOM)
+        tk.report_callback_exception = handle_exception
 
-        self.__add_file_manipulation_buttons(root_frame,
-                                             BOTTOM)
+        tk.drop_target_register(DND_FILES)
+        tk.dnd_bind('<<Drop>>', lambda event: self.__workers.dropper.drop_files(event))
 
-        self.categories_widget = CategoriesWidget(root_frame,
-                                                  self.__config,
-                                                  self.__tags.categories,
-                                                  self.checkbox_values,
-                                                  self.styles)
+        def do_revert():
+            self.__workers.reverter.revert(self.__context.view.filename_result_string_var.get())
 
-        self.categories_widget.as_frame().pack(side=BOTTOM,
-                                               fill=BOTH,
-                                               padx=self.__config.get_padding_big(),
-                                               pady=self.__config.get_padding_small(),
-                                               expand=True)
+        view.revert_button.configure(command=do_revert)
+        view.apply_button.configure(command=lambda: self.__workers.applier.apply())
+        view.clear_button.configure(command=lambda: self.__workers.clearer.clear())
+        view.help_button.configure(command=lambda: self.__show_help())
 
-    def __create_path_to_selected_file_frame(self,
-                                             parent_frame: Frame) -> None:
-        frame = ttk.Frame(parent_frame)
+        self.__add_listeners()
 
-        ttk.Label(frame,
-                  text=SELECTED_FILE,
-                  font=self.styles.get_normal_font(),
-                  width=input_label_width).pack(side=LEFT)
+    def __add_listeners(self):
+        # noinspection PyUnusedLocal
+        def on_change_callback(*args, **kwargs):
+            self.__on_change_callback()
 
-        self.selected_file_string_var: StringVar = StringVar()
+        for tag_var in self.__context.view.checkbox_values.values():
+            tag_var.trace_variable(mode="w",
+                                   callback=on_change_callback)
 
-        entry = ttk.Entry(frame,
-                          textvariable=self.selected_file_string_var,
-                          font=self.styles.get_normal_font(),
-                          state="readonly")
+        self.__context.view.extension_string_var.trace_variable(mode="w",
+                                                                callback=on_change_callback)
 
-        # I just don't know where else to put this
-        self.help_button = Button(frame,
-                                  text=HELP)
-        self.help_button['font'] = self.styles.get_normal_font()
+        self.__context.view.basename_string_var.trace_variable(mode="w",
+                                                               callback=on_change_callback)
 
-        entry.pack(side=LEFT,
-                   padx=self.__config.get_padding_small(),
-                   fill=X,
-                   expand=True)
+        # noinspection PyUnusedLocal
+        def on_close_callback(*args, **kwargs):
+            self.__on_close_callback()
 
-        self.help_button.pack(side=RIGHT,
-                              padx=self.__config.get_padding_big(),
-                              fill=X)
+        self.__tk.protocol("WM_DELETE_WINDOW",
+                           on_close_callback)
 
-        frame.pack(fill=X,
-                   pady=self.__config.get_padding_small(),
-                   side=TOP)
+    def __generate(self) -> None:
 
-    def __add_basename_input(self,
-                             parent_frame: Frame) -> None:
-        frame = ttk.Frame(parent_frame)
-        frame.pack(fill=X,
-                   pady=self.__config.get_padding_small(),
-                   side=TOP)
+        single_file_selected = len(self.__context.selected_files) == 1
+        no_file_selected = len(self.__context.selected_files) == 0
 
-        ttk.Label(frame,
-                  text=BASENAME,
-                  font=self.styles.get_normal_font(),
-                  width=input_label_width).pack(side=LEFT)
+        try:
 
-        self.basename_string_var: StringVar = StringVar()
+            # might have illegal characters in basename/tags
+            self.__workers.applier.check()
 
-        self.basename_entry = Entry(frame,
-                                    textvariable=self.basename_string_var,
-                                    font=self.styles.get_normal_font())
+            # might have to re-enable rever button
+            if no_file_selected:
+                self.__context.view.revert_button.config(state=NORMAL)
+            if single_file_selected:
+                self.__context.view.apply_button.config(state=NORMAL)
 
-        self.basename_entry.pack(side=LEFT,
-                                 padx=self.__config.get_padding_small(),
-                                 fill=X,
-                                 expand=True)
+            name = self.__workers.applier.generate_full_name()
 
-    def __add_extension_input(self,
-                              parent_frame: Frame) -> None:
-        frame = Frame(parent_frame)
+        except FtgException as ex:
+            name = F'Error: {ex}'
+            if no_file_selected:
+                self.__context.view.revert_button.config(state=DISABLED)
+            if single_file_selected:
+                self.__context.view.apply_button.config(state=DISABLED)
 
-        frame.pack(fill=X,
-                   pady=self.__config.get_padding_small(),
-                   side=TOP)
+        self.__context.view.filename_result_string_var.set(name)
 
-        ttk.Label(frame,
-                  text=EXTENSION,
-                  font=self.styles.get_normal_font(),
-                  width=input_label_width).pack(side=LEFT)
+    def __on_change_callback(self):
+        if len(self.__context.selected_files) > 0:
+            self.__context.changes_are_pending = True
 
-        self.extension_string_var: StringVar = StringVar()
+        if len(self.__context.selected_files) < 2:
+            self.__generate()
 
-        self.extension_entry = Entry(frame,
-                                     textvariable=self.extension_string_var,
-                                     font=self.styles.get_normal_font())
+    def __on_close_callback(self):
+        if self.__context.changes_are_pending:
+            result = messagebox.askyesno(title=PENDING_CHANGES_TITLE,
+                                         message=PENDING_CHANGES_MESSAGE)
 
-        self.extension_entry.pack(side=LEFT,
-                                  padx=self.__config.get_padding_small(),
-                                  fill=X,
-                                  expand=True)
+            if not result:
+                return
 
-    def __add_result_frame(self,
-                           parent_frame: Frame,
-                           side: SIDE) -> None:
-        frame = ttk.Frame(parent_frame)
-        frame.pack(side=side,
-                   fill=X)
+        self.stop()
 
-        self.__add_full_name_frame(frame)
-
-    def __add_full_name_frame(self,
-                              parent_frame: Frame) -> None:
-        frame = ttk.Frame(parent_frame)
-        frame.pack(fill=X,
-                   expand=False)
-
-        ttk.Label(frame,
-                  text=FULL_NAME,
-                  font=self.styles.get_normal_font(),
-                  width=input_label_width).pack(side=LEFT)
-
-        self.filename_result_string_var: StringVar = StringVar()
-
-        self.filename_entry = Entry(frame,
-                                    textvariable=self.filename_result_string_var,
-                                    font=self.styles.get_normal_font())
-
-        self.filename_entry.pack(fill=BOTH,
-                                 expand=True,
-                                 side=LEFT)
-
-        self.revert_button = Button(frame,
-                                    text=REVERT)
-        self.revert_button['font'] = self.styles.get_normal_font()
-
-        self.revert_button.pack(side=RIGHT,
-                                padx=self.__config.get_padding_big(),
-                                fill=X)
-
-    def __add_file_manipulation_buttons(self,
-                                        parent_frame: Frame,
-                                        side: SIDE) -> None:
-        frame = ttk.Frame(parent_frame)
-        frame.pack(fill=X,
-                   pady=self.__config.get_padding_small(),
-                   side=side)
-
-        self.apply_button = Button(frame,
-                                   text=APPLY)
-
-        self.apply_button["font"] = self.styles.get_normal_font()
-
-        self.apply_button.pack(side=LEFT,
-                               padx=self.__config.get_padding_big(),
-                               expand=True,
-                               fill=BOTH)
-
-        self.clear_button = Button(frame,
-                                   text=CLEAR)
-
-        self.clear_button["font"] = self.styles.get_normal_font()
-
-        self.clear_button.pack(side=RIGHT,
-                               padx=self.__config.get_padding_big(),
-                               expand=True,
-                               fill=BOTH)
+    def __show_help(self):
+        FtgHelpDialog(self.__tk,
+                      self.__config.get_ui_config(),
+                      self.__context.view.styles)

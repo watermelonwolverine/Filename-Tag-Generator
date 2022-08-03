@@ -5,7 +5,20 @@ import ftg
 from ftg.__constants import UTF_8
 from ftg.exceptions import JSONParseException, FtgException
 from ftg.localization import WRONG_TAGS_FILE_STRUCTURE
-from ftg.utils.tag import Tag
+
+
+class Tag:
+    def __init__(self,
+                 letter_code: str,
+                 full_name: str):
+        self.letter_code = letter_code
+        self.full_name = full_name
+
+    def __lt__(self, other):
+        if type(other) != Tag:
+            raise Exception("Cannot compare")
+
+        return self.full_name < other.full_name
 
 
 class Tags:

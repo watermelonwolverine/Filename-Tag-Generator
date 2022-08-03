@@ -109,10 +109,10 @@ class NamingConfigImpl(NamingConfig):
 
             if self.get_basename_tags_separator() in tag.letter_code:
                 raise FtgException(
-                    F'Tag "{tag.letter_code}" contains text reserved for "{NamingConfigImpl.BASENAME_TAGS_SEPARATOR_KEY}": {basename_tags_sep}')
+                    F'Tag "{tag.letter_code}" contains text reserved for "{NamingConfigImpl.BASENAME_TAGS_SEPARATOR_KEY}": {self.get_basename_tags_separator()}')
             elif self.get_tags_separator() in tag.letter_code:
                 raise FtgException(
-                    F'Tag "{tag.letter_code}" contains text reserved for "{NamingConfigImpl.TAG_SEPARATOR_KEY}": {tags_sep}')
+                    F'Tag "{tag.letter_code}" contains text reserved for "{NamingConfigImpl.TAG_SEPARATOR_KEY}": {self.get_tags_separator()}')
             else:
                 for illegal_char in illegal_chars:
                     if illegal_char in tag.letter_code:

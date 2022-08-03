@@ -16,13 +16,14 @@ from ftg.__constants import app_name, window_title
 from ftg.__help import command_line_usage
 from ftg.config.program_config import ProgramConfigImpl
 from ftg.config.tags import Tags
-from ftg.controller.ftg_window_controller import FtgWindowController
+from ftg.view.ftg_window import FtgWindow
 from ftg.exceptions import FtgException, FtgInternalException, JSONParseException
 from ftg.localization import PLEASE_CHECK_YOUR_FILES_TITLE, PLEASE_CHECK_YOUR_FILES_MSG, FILE_NOT_FOUND
 
 supported_platforms = [win32, linux]
 
 
+# noinspection PyShadowingBuiltins
 @click.command()
 @click.option(__args.config_option, type=click.Path(exists=True))
 @click.option(__args.tags_option, type=click.Path(exists=True))
@@ -44,6 +45,7 @@ def cli_main(config: str = None,
          help)
 
 
+# noinspection PyShadowingBuiltins
 def main(config: str = None,
          tags: str = None,
          verbosity: str = None,
@@ -177,8 +179,8 @@ def run_with(path_to_config_file,
     config = __try_to_parse_file(path_to_config_file,
                                  lambda: __read_config_file(path_to_config_file))
 
-    ftg_window_controller = FtgWindowController(config,
-                                                tags)
+    ftg_window_controller = FtgWindow(config,
+                                      tags)
 
     ftg_window_controller.start()
     sys.exit()

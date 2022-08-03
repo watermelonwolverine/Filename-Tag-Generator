@@ -4,10 +4,10 @@ from typing import List, Dict
 
 from ftg.__constants import ON_STATE_VALUE, OFF_STATE_VALUE, MIXED_STATE_VALUE
 from ftg.config.program_config import UIConfig
-from ftg.utils.tk_scroll_config import configure_mousewheel_vertical_scrolling, \
+from ftg.view.utils.tk_scroll_config import configure_mousewheel_vertical_scrolling, \
     configure_canvas_and_interior_vertical_scroll
-from ftg.utils.tag import Tag
-from ftg.view.styles import Styles
+from ftg.config.tags import Tag
+from ftg.view.utils.styles import Styles
 
 
 class TagListWidget:

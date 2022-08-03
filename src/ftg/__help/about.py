@@ -1,5 +1,5 @@
 from ftg.__help.utils import to_link, Section
-from ftg.utils.name_generator import NameGeneratorImpl
+from ftg.name_generator import NameGeneratorImpl
 
 header = "About"
 link = to_link(header)

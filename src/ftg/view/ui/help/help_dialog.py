@@ -10,7 +10,7 @@ from tkinterweb.htmlwidgets import HtmlFrame
 
 from ftg.__help.help_texts import help_table_of_contents, help_sections_by_link, help_sections
 from ftg.utils.cross_platform import open_folder
-from ftg.view.styles import Styles
+from ftg.view.utils.styles import Styles
 from ftg.config.ui_config import UIConfig
 
 

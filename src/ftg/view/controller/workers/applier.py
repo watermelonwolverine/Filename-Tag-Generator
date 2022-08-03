@@ -2,18 +2,17 @@ import logging
 import os
 import shutil
 import sys
-import traceback
 from tkinter import messagebox
 from typing import List, Dict, Iterable, Union
 
 from ftg.__cli_wrapper.__constants import win32, linux
 from ftg.__constants import ON_STATE_VALUE
-from ftg.controller.ftg_window_controller_context import FtgWindowControllerContext
-from ftg.controller.workers.utils import FtgUtils
+from ftg.view.controller.ftg_window_controller_context import FtgWindowControllerContext
+from ftg.view.controller.workers.utils import FtgUtils
 from ftg.exceptions import FtgException
 from ftg.localization import ERROR_TITLE
 from ftg.utils import tag_utils, filename_utils
-from ftg.utils.name_generator import NameGenerator
+from ftg.name_generator import NameGenerator
 
 FILENAME_LENGTH_LIMIT = 255
 
