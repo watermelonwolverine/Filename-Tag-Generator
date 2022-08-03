@@ -2,7 +2,7 @@ from tkinter import ttk, BOTH, LEFT, Label, Checkbutton, IntVar, HORIZONTAL, X, 
 from typing import Dict, List
 
 from ftg.config.program_config import UIConfig
-from ftg.utils.scroll_config import configure_canvas_and_interior_horizontal_scroll
+from ftg.utils.tk_scroll_config import configure_canvas_and_interior_horizontal_scroll
 from ftg.utils.tag import Tag
 from ftg.view.styles import Styles
 from ftg.view.tag_list_widget import TagListWidget
