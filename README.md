@@ -11,6 +11,7 @@
 1. [Why Filenames?](#why-filenames)
 1. [Alternatives](#alternatives)
 1. [Known Issues](#known-issues)
+1. [Troubleshooting](#troubleshooting)
 
 # About
 
@@ -121,7 +122,7 @@ If you want to add or remove tags to a name paste it in `Full Name` and click th
 
 For those who want a bit more control over the program I added some command line options.
 
-    Filename-Tag-Generator [--tags <path-to-tags-file>] [--config <path-to-config-file>] [--verbosity {info|debug}] [--setup] [--version]
+    Filename-Tag-Generator [--tags <path-to-tags-file>] [--config <path-to-config-file>] [--verbosity {debug|info|warning|error|critical|off}] [--setup] [--version]
     
       --tags               specify a tags file
       --config             specify a config file
@@ -405,4 +406,21 @@ let me know, so I can link it here.
 
 # Known Issues
 
-Filesystems are quirky, and therefore so is this program.On Windows Python can't handle `&` in paths for some reason. Even weirder this problem only occurs with the prebuilt binaries, not when installed with pip. I assume this to be an issue with PyInstaller.
+Filesystems are quirky, and therefore so is this program.
+
+## Windows
+
+### Arbitrary "OSError [Errno 13] Permission Denied"
+
+This one is weird and I have spent many hours trying to fix it.
+It seems that Python sometimes can't handle `&` in paths.
+Even weirder, this problem only occurs sometimes and only with prebuilt binaries, not when installed with pip.
+Therefore, I assume that this is an issue with PyInstaller.
+This can usually be circumvented by moving the affected files into a different folder, temporarily. One without `&` in its path.
+
+# Troubleshooting
+
+1. Have a look at [Known Issues](#known-issues) and see if you can find your issue there.
+2. Check [here](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) if you have the newest version.
+3. Go to [issues](https://github.com/watermelonwolverine/Filename-Tag-Generator/issues) page on [GitHub](https://github.com/watermelonwolverine/Filename-Tag-Generator) and see if somebody else had the same problem.
+4. If nothing helped, create a new issue on [GitHub](https://github.com/watermelonwolverine/Filename-Tag-Generator/issues).

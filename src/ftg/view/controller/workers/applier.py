@@ -7,12 +7,12 @@ from typing import List, Dict, Iterable, Union
 
 from ftg.__cli_wrapper.__constants import win32, linux
 from ftg.__constants import ON_STATE_VALUE
-from ftg.view.controller.ftg_window_controller_context import FtgWindowControllerContext
-from ftg.view.controller.workers.utils import FtgUtils
 from ftg.exceptions import FtgException
 from ftg.localization import ERROR_TITLE
-from ftg.utils import tag_utils, filename_utils
 from ftg.name_generator import NameGenerator
+from ftg.utils import tag_utils, filename_utils
+from ftg.view.controller.ftg_window_controller_context import FtgWindowControllerContext
+from ftg.view.controller.workers.utils import FtgUtils
 
 FILENAME_LENGTH_LIMIT = 255
 
@@ -183,7 +183,8 @@ class FtgApplier:
                        F'- You don\'t have the permission\n'
                        F'- The file was deleted\n'
                        F'- The file was moved in the meantime\n'
-                       F'- A parent folder contains a symbol Python can\'t handle, like "&"')
+                       F'- A parent folder contains a symbol Python can\'t handle, like "&"\n'
+                       F'- Your OS being weird (Yes I\'m serious)')
 
         raise Exception("BIG OOF")
 
