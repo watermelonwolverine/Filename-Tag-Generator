@@ -1,1 +1,1 @@
-pyinstaller .\src\ftg\__cli_wrapper\main.py --onefile --clean --collect-all tkinterdnd2 --collect-all tkinterweb --no-console --name filename-tag-generator.exe
+pyinstaller .\src\ftg\__cli_wrapper\main.py --onefile --clean --collect-all tkinterdnd2 --collect-all tkinterweb --noconsole --name filename-tag-generator-no-console.exe

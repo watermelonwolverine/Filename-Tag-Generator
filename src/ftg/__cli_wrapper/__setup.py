@@ -25,7 +25,7 @@ def maybe_setup():
               "Example:\n"
               F"{app_name}{exe} {tags_option} <path-to-tags-file>\n"
               F"\n"
-              F"On the projects website you can find tags files to start with:\n"
+              F"On the project website you can find tags files to start with:\n"
               F"\n"
               F"{url}")
 
@@ -82,7 +82,7 @@ def create_file(name,
                                      "\n"
                                      F"{user_path}\n"
                                      "\n"
-                                     "Option 2/3")
+                                     "Option 1/2")
         if answer:
             path_to_file = user_path
 
@@ -93,7 +93,7 @@ def create_file(name,
                                      "\n" +
                                      F"{system_path}\n"
                                      "\n"
-                                     "Option 3/3")
+                                     "Option 2/2")
         if answer:
             path_to_file = system_path
 
