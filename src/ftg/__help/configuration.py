@@ -6,9 +6,9 @@ from ftg.__constants import default_tags_file_name, default_config_file_name, au
 from ftg.__help import command_line_usage
 from ftg.__help.utils import to_link, to_code_block, Section
 from ftg.utils.name_generator import NameGeneratorImpl
-from ftg.utils.naming_config import NamingConfigImpl
-from ftg.utils.program_config import ProgramConfigImpl
-from ftg.utils.tags import Tags
+from ftg.config.naming_config import NamingConfigImpl
+from ftg.config.program_config import ProgramConfigImpl
+from ftg.config.tags import Tags
 
 header = "Configuration"
 link = to_link(header)

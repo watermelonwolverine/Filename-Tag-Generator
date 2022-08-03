@@ -5,8 +5,8 @@ from typing import Dict
 import ftg
 from ftg.__constants import UTF_8
 from ftg.exceptions import JSONParseException
-from ftg.utils.naming_config import NamingConfig, NamingConfigImpl
-from ftg.view.ui_config import UIConfig, UIConfigImpl
+from ftg.config.naming_config import NamingConfig, NamingConfigImpl
+from ftg.config.ui_config import UIConfig, UIConfigImpl
 
 
 class ProgramConfig(ABC):

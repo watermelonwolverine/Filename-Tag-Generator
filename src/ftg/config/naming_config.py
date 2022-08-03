@@ -4,7 +4,7 @@ from typing import Dict
 from ftg.__constants import illegal_chars
 from ftg.exceptions import FtgException
 from ftg.utils.parse_utils import read_bool_value, read_str_value
-from ftg.utils.tags import Tags
+from ftg.config.tags import Tags
 
 
 class NamingConfig(ABC):

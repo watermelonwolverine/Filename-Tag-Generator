@@ -5,8 +5,8 @@ from tkinterdnd2 import TkinterDnD
 
 from ftg.__constants import window_title
 from ftg.localization import SELECTED_FILE, APPLY, CLEAR, FULL_NAME, EXTENSION, BASENAME, HELP, REVERT
-from ftg.utils.program_config import UIConfig
-from ftg.utils.tags import Tags
+from ftg.config.program_config import UIConfig
+from ftg.config.tags import Tags
 from ftg.view.categories_widget import CategoriesWidget
 from ftg.view.styles import Styles, StylesImpl
 

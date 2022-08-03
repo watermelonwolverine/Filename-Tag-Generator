@@ -3,8 +3,8 @@ from typing import List
 
 from ftg.__constants import illegal_chars
 from ftg.exceptions import FtgException
-from ftg.utils.naming_config import NamingConfigImpl
-from ftg.utils.program_config import NamingConfig
+from ftg.config.naming_config import NamingConfigImpl
+from ftg.config.program_config import NamingConfig
 
 
 class ReversionResult:

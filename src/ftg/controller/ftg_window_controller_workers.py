@@ -4,7 +4,7 @@ from ftg.controller.workers.clearer import FtgClearer
 from ftg.controller.workers.exception_handler import FtgExceptionHandler
 from ftg.controller.workers.reverter import FtgReverter
 from ftg.controller.workers.utils import FtgUtils
-from ftg.utils.naming_config import NamingConfig
+from ftg.config.naming_config import NamingConfig
 from ftg.utils.name_generator import NameGeneratorImpl
 
 

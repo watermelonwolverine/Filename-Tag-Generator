@@ -7,8 +7,8 @@ from ftg.controller.ftg_window_controller_context import FtgWindowControllerCont
 from ftg.controller.ftg_window_controller_workers import FtgWindowControllerWorkers
 from ftg.exceptions import FtgException
 from ftg.localization import PENDING_CHANGES_TITLE, PENDING_CHANGES_MESSAGE, ERROR_TITLE
-from ftg.utils.program_config import ProgramConfig
-from ftg.utils.tags import Tags
+from ftg.config.program_config import ProgramConfig
+from ftg.config.tags import Tags
 from ftg.view.ftg_window import FtgWindow
 from ftg.view.help.help_dialog import FtgHelpDialog
 

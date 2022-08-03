@@ -1,6 +1,5 @@
 import logging
 import os.path
-import shutil
 import sys
 import traceback
 from json import JSONDecodeError
@@ -20,8 +19,8 @@ from ftg.__help import command_line_usage
 from ftg.controller.ftg_window_controller import FtgWindowController
 from ftg.exceptions import FtgException, FtgInternalException, JSONParseException
 from ftg.localization import PLEASE_CHECK_YOUR_FILES_TITLE, PLEASE_CHECK_YOUR_FILES_MSG, FILE_NOT_FOUND
-from ftg.utils.program_config import ProgramConfigImpl
-from ftg.utils.tags import Tags
+from ftg.config.program_config import ProgramConfigImpl
+from ftg.config.tags import Tags
 
 supported_platforms = [win32, linux]
 

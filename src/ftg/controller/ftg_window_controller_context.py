@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from ftg.utils.tags import Tags
+from ftg.config.tags import Tags
 from ftg.view.ftg_window import FtgWindow
 
 

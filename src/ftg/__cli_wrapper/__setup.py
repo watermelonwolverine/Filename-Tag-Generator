@@ -9,8 +9,8 @@ from ftg.__cli_wrapper.__paths import user_path_to_tags, system_path_to_tags, sy
 from ftg.__constants import UTF_8, app_name, url
 from ftg.exceptions import FtgException
 from ftg.utils.cross_platform import open_folder
-from ftg.utils.program_config import ProgramConfigImpl
-from ftg.utils.tags import example_tags_dict
+from ftg.config.program_config import ProgramConfigImpl
+from ftg.config.tags import example_tags_dict
 
 
 def maybe_setup():
