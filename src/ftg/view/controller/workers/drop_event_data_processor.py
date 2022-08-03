@@ -78,4 +78,4 @@ def extract_paths(drop_event_data: str) -> List[str]:
                     result.append(next_path)
                     remaining_data = ""
 
-    return [os.path.normpath(path) for path in result]
+    return [os.path.realpath(path) for path in result]
