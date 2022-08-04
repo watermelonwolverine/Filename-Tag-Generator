@@ -51,8 +51,7 @@ text = str(
     F'\n'
     F'or\n'
     F'\n'
-    F'`{app_name} {__args.tags_option} character-tags.json`\n'
-    F'\n'
+    F'`{app_name} {__args.tags_option} character-tags.json`'
 )
 
 section = Section(link,

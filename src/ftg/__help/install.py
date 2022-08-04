@@ -51,7 +51,7 @@ text = str(
     F'    1. Either from a Python wheel file from [releases]({url + "/releases"}) with `pythonX -m pip install <link-to-whl-file-under-releases>`\n'
     F'    2. Or install directly from the repo with `pythonX -m pip install git+{url}`\n'
     F'2. You should now be able to run the program from command line with `{app_name}`.\n'
-    F'3. Either run the  program for a first time setup or go directly to [configuration]({configuration.link}) to read about configuration files.\n')
+    F'3. Either run the  program for a first time setup or go directly to [configuration]({configuration.link}) to read about configuration files.')
 
 section = Section(link,
                   header,

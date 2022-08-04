@@ -1,1 +1,1 @@
-pyinstaller .\src\ftg\__cli_wrapper\main.py --onefile --clean --collect-all tkinterdnd2 --collect-all tkinterweb --name filename-tag-generator.exe
+pyinstaller .\src\ftg\__cli_wrapper\main.py --onefile --clean --collect-all tkinterdnd2 --collect-all tkinterweb --upx-dir ..\upx --name filename-tag-generator.exe

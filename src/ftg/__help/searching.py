@@ -20,7 +20,7 @@ text = str(
     F'\n'
     F'`"tag1"("tag2"|"tag3")-type:folder`\n'
     F'\n'
-    F'would be equal to the above. It\'s important to not use whitespaces. `|` operates as (logical) or. `-` excludes stuff.\n'
+    F'would be equal to the above. It\'s important to not use whitespaces. `|` operates as (logical) or. `-` excludes stuff.'
 )
 
 section = Section(link,

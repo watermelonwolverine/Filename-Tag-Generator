@@ -8,10 +8,11 @@
 1. [Searching](#searching)
 1. [Install](#install)
 1. [Configuration](#configuration)
-1. [Why Filenames?](#why-filenames)
-1. [Alternatives](#alternatives)
 1. [Known Issues](#known-issues)
 1. [Troubleshooting](#troubleshooting)
+1. [Build](#build)
+1. [Why Filenames?](#why-filenames)
+1. [Alternatives](#alternatives)
 
 # About
 
@@ -144,8 +145,6 @@ or
 
 `Filename-Tag-Generator --tags character-tags.json`
 
-
-
 # Searching
 
 This program does not have any search functionality. Instead, you use whatever file browser your system has which usually has all the features you need. Windows, Ubuntu, GDrive, Dropbox, etc. all provide thumbnail views and indexed search.
@@ -163,7 +162,6 @@ The Google Drive search syntax is different, and I couldn't find any good refere
 `"tag1"("tag2"|"tag3")-type:folder`
 
 would be equal to the above. It's important to not use whitespaces. `|` operates as (logical) or. `-` excludes stuff.
-
 
 # Install
 
@@ -210,7 +208,6 @@ You must also install tkinter for your Python version. Under Ubuntu that can usu
 2. You should now be able to run the program from command line with `Filename-Tag-Generator`.
 3. Either run the  program for a first time setup or go directly to [configuration](#configuration) to read about configuration files.
 
-
 # Configuration
 
 Two files are used to configure the program
@@ -243,7 +240,7 @@ The program can run without a config file, but it needs a tags file.
 The tags usually live in a `tags.json` file that follows the following structure:
 
     {
-      "ftg-version": "0.1.0",
+      "ftg-version": "0.1.2",
 
       "categories": {
         "category-name1": {
@@ -266,6 +263,7 @@ One tag can be in multiple categories as long as it has the same display-name ev
 For example: `"dungeon" : "Dungeon"` may fit into both categories `Nature` and `Civilization`.
 
 If you need more examples or starting point look at the [source repository](https://github.com/watermelonwolverine/Filename-Tag-Generator/tree/main/configs)
+
 ## UI and Behaviour
 
 You can configure the UI and the naming behaviour using a config file which is usually named `config.json`.
@@ -273,7 +271,7 @@ You can configure the UI and the naming behaviour using a config file which is u
 The config file with the default values would look like this:
 
     {
-      "ftg-version": "0.1.0",
+      "ftg-version": "0.1.2",
       "ui-config": {
         "font-size": 14,
         "padding-small": 5,
@@ -301,6 +299,7 @@ The most important ones are:
 - `basename-spacer` : the text that will replace any spacers in the basename. See `replace-basename-spacer`.
 
 ## Example
+
 For the basename `This is some_base-name` and the tags `tag1, tag2, tag3` the default config would generate:
 
 `THIS-IS-SOME-BASE-NAME;tag1_tag2_tag3.png`
@@ -331,6 +330,50 @@ and you should avoid:
 `*, <, >, |, ?, :, "`
 
 You should also avoid having the same text as `basename-spacer` and `tag-separator`.
+
+# Known Issues
+
+Filesystems are quirky, and therefore so is this program.
+
+## Windows
+
+### Arbitrary "OSError [Errno 13] Permission Denied"
+
+This one is weird and I have spent many hours trying to fix it.
+It seems that Python sometimes can't handle `&` in paths.
+Even weirder, this problem only occurs sometimes and only with prebuilt binaries, not when installed with pip.
+I assume that this is either an issue with PyInstaller or with antivirus software thinking that the program is suspicious and denying it access to files.
+This can usually be circumvented by moving the affected files into a different folder, temporarily. One without `&` in its path.
+
+### Anti-Virus Provider Flags Program As Virus"
+
+Binaries created with PyInstaller are known for being falsely flagged as malware by antivirus software. (Just google pyInstaller an VirusTotal)
+This program is no exception and to this day I still haven't found a way to eliminate all positives on VirusTotal.
+Still, you should not just simply disregard those warnings and use the tool anyway.
+Don't believe a person on the internet who says their program is not a virus.
+If you are suspicious you can install the program with Python Pip, see [Install](#install).
+Or you can build the program yourself, see [Build](#build)
+
+# Troubleshooting
+
+1. Have a look at [Known Issues](#known-issues) and see if you can find your issue there.
+2. Check [here](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) if you have the newest version.
+3. Go to [issues](https://github.com/watermelonwolverine/Filename-Tag-Generator/issues) page on [GitHub](https://github.com/watermelonwolverine/Filename-Tag-Generator) and see if somebody else had the same problem.
+4. If nothing helped, create a new issue on [GitHub](https://github.com/watermelonwolverine/Filename-Tag-Generator/issues).
+
+# Build
+
+This section assumes you have extensive programming and Python experience as I will not explain every single detail.
+If you want to build the program yourself, these are the steps:
+
+1. Clone repository
+2. Install requirements (see requirements.txt)
+3. On Windows ..
+    1. .. EITHER download [UPX](https://upx.github.io/) and extract it into a folder called `upx` next to the project directory.
+    2. .. OR remove the `--upx-dir ..\upx` part from any build_for_windows_*_console.ps1 script
+4. Build
+    1. On Windows run one of the build_for_windows_*_console.ps1 files
+    2. On Ubuntu run one of the build_for_ubuntu_*_console.sh files
 
 # Why Filenames?
 
@@ -403,24 +446,3 @@ There is an abundance of tagging tools out there. If you find one that is
 - can manage dozens of tags per file
 
 let me know, so I can link it here.
-
-# Known Issues
-
-Filesystems are quirky, and therefore so is this program.
-
-## Windows
-
-### Arbitrary "OSError [Errno 13] Permission Denied"
-
-This one is weird and I have spent many hours trying to fix it.
-It seems that Python sometimes can't handle `&` in paths.
-Even weirder, this problem only occurs sometimes and only with prebuilt binaries, not when installed with pip.
-Therefore, I assume that this is an issue with PyInstaller.
-This can usually be circumvented by moving the affected files into a different folder, temporarily. One without `&` in its path.
-
-# Troubleshooting
-
-1. Have a look at [Known Issues](#known-issues) and see if you can find your issue there.
-2. Check [here](https://github.com/watermelonwolverine/Filename-Tag-Generator/releases) if you have the newest version.
-3. Go to [issues](https://github.com/watermelonwolverine/Filename-Tag-Generator/issues) page on [GitHub](https://github.com/watermelonwolverine/Filename-Tag-Generator) and see if somebody else had the same problem.
-4. If nothing helped, create a new issue on [GitHub](https://github.com/watermelonwolverine/Filename-Tag-Generator/issues).
